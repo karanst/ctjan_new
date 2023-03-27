@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/models/comments_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ctjan/models/get_profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ctjan/resources/firestore_methods.dart';
 import 'package:ctjan/utils/colors.dart';
@@ -31,8 +32,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getComments();
-    loadComments();
+    getProfileData();
+    Future.delayed(const Duration(milliseconds: 200), (){
+      getComments();
+      loadComments();
+    });
+
+
 
   }
   // @override
@@ -40,12 +46,58 @@ class _CommentsScreenState extends State<CommentsScreen> {
   //   _commentController.dispose();
   //   super.dispose();
   // }
+  String? userName;
   String? userid;
+  String? userProfile;
   List<Comments>? comments = [];
+  getProfileData()async{
+    // setState(() {
+    //   loadingData = true;
+    // });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString(TokenString.userid);
+    var headers = {
+      'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.getUserProfile));
+    request.fields.addAll({
+      'user_id': userid.toString()
+      // 'seeker_email': '$userid'
+    });
+    print("this is profile request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var finalResponse = await response.stream.bytesToString();
+      final jsonResponse = GetProfileModel.fromJson(json.decode(finalResponse));
+      if(jsonResponse.responseCode == "1") {
 
+        setState(() {
+          userProfile = jsonResponse.userId!.profilePic.toString();
+          userName = jsonResponse.userId!.username.toString();
+          // userName = jsonResponse.userId!.username.toString();
+          // email = jsonResponse.userId!.email.toString();
+          // seekerProfileModel = jsonResponse;
+          // firstNameController = TextEditingController(text: seekerProfileModel!.data![0].name);
+          // emailController = TextEditingController(text: seekerProfileModel!.data![0].email);
+          // mobileController = TextEditingController(text: seekerProfileModel!.data![0].mobile);
+          // profileImage = '${seekerProfileModel!.data![0].image}';
+        });
+      }else{
+        // setState(() {
+        //   loadingData = false;
+        // });
+      }
+      // print("select qualification here ${selectedQualification}");
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
   StreamController<List<Comments>> _streamController = StreamController<List<Comments>>();
 
   Future<List<Comments>?> getComments()async{
+
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
     };
@@ -61,7 +113,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
     final jsonResponse = CommentsModel.fromJson(json.decode(finalResponse));
     if (response.statusCode == 200) {
       if(jsonResponse.responseCode == "1") {
-        comments = jsonResponse.data! ;
+        comments = jsonResponse.data!;
         print("this is posts list ${comments.toString()}");
       }else{
 
@@ -166,7 +218,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(
-                  user.photoUrl,
+                  userProfile.toString(),
                 ),
                 radius: 18,
               ),
@@ -179,7 +231,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     ),
                     controller: _commentController,
                     decoration: InputDecoration(
-                      hintText: 'Comment as ${user.username}',
+                      hintText: 'Comment as ${userName.toString()}',
                       hintStyle: const TextStyle(
                         color: primaryColor
                       ),

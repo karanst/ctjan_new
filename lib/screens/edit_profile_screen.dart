@@ -53,7 +53,7 @@ class _LoginScreenState extends State<EditProfileScreen> {
     _userNameController.dispose();
   }
 
-  void selectImage() async {
+  selectImage() async {
     PickedFile? pickedFile = await ImagePicker().getImage(
       source: ImageSource.gallery,
     );
@@ -65,6 +65,8 @@ class _LoginScreenState extends State<EditProfileScreen> {
       });
     }
   }
+
+
 
   void navigateToLoginScreen() {
     Navigator.of(context).push(
@@ -90,19 +92,15 @@ class _LoginScreenState extends State<EditProfileScreen> {
      'first_name': _userNameController.text.toString(),
        'mobile' : _mobileController.text.toString(),
        'email': _emailController.text.toString(),
-     // 'last_name':'',
-     // 'address':'',
-     // 'gender':'',
-     // 'dob':'',
      'about_us':_bioController.text.toString()
 
      });
      if(_profileImage != null) {
        request.files.add(await http.MultipartFile.fromPath(
-           'profile_pic:', _profileImage!.path));
+           'profile_pic:', _profileImage!.path.toString()));
      }
 
-     print("this is profile request ${request.fields.toString()}");
+     print("this is update profile request ${request.fields.toString()} and ${request.files.toString()}");
      request.headers.addAll(headers);
      http.StreamedResponse response = await request.send();
      if (response.statusCode == 200) {
@@ -114,7 +112,7 @@ class _LoginScreenState extends State<EditProfileScreen> {
          setState(() {
            loading = false;
          });
-         Navigator.pop(context);
+         Navigator.pop(context, true);
        }else{
          showSnackbar(jsonResponse['message'], context);
          setState(() {
@@ -293,7 +291,7 @@ class _LoginScreenState extends State<EditProfileScreen> {
                     height: 34,
                   ),
                   CustomTextField(textEditingController: _userNameController, hintText: "Name", textInputType: TextInputType.text, title: "Name", ),
-                  CustomTextField(textEditingController: _mobileController, hintText: "Contact No", textInputType: TextInputType.number, title: "Contact No.", ),
+                  CustomTextField(textEditingController: _mobileController, hintText: "Contact No", textInputType: TextInputType.number, title: "Contact No.", maxLngth: 10,),
                   CustomTextField(textEditingController: _emailController, hintText: "Email", textInputType: TextInputType.emailAddress, title: "Email", ),
                   CustomTextField(textEditingController: _bioController, hintText: "About me", textInputType: TextInputType.text, title: "About me", ),
 

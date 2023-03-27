@@ -58,7 +58,7 @@ class _TermsConditionsState extends State<TermsConditions> {
             appBar: AppBar(
               elevation: 0,
               centerTitle: true,
-              backgroundColor: primaryColor,
+              backgroundColor: primaryClr,
               leading: GestureDetector(
                 onTap: (){
                   Navigator.pop(context);
@@ -66,7 +66,7 @@ class _TermsConditionsState extends State<TermsConditions> {
                 child: Icon(Icons.arrow_back_ios, color: whiteColor, size: 20),
                 //Icon(Icons.arrow_back_ios, color: whiteColor, size: 22),
               ),
-              title:  Text('Privacy Policy', style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.bold),),
+              title:  Text('Terms & Conditions', style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.bold),),
 
             ),
             body: Container(

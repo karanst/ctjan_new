@@ -57,7 +57,7 @@ class _FaqScreenState extends State<FaqScreen> {
             appBar: AppBar(
               elevation: 0,
               centerTitle: true,
-              backgroundColor: primaryColor,
+              backgroundColor: primaryClr ,
               leading: GestureDetector(
                 onTap: (){
                   Navigator.pop(context);
@@ -91,15 +91,19 @@ class _FaqScreenState extends State<FaqScreen> {
                                   borderRadius: BorderRadius.circular(12)
                               ),
                               child: ExpansionTile(
-                                title: Text(Faq[index]['title'], style: const TextStyle(
+                                title: Text(Faq[index]['title'], style:  TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 16
+                                    fontSize: 16,
+                                  color: whiteColor
                                 ),),
                                 children: [
-                                  Text(Faq[index]['description'],
-                                    style: const TextStyle(
-                                      color: primaryColor
-                                  ),),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(Faq[index]['description'],
+                                      style:  TextStyle(
+                                        color: whiteColor
+                                    ),),
+                                  ),
                                 ],)
                           );
 

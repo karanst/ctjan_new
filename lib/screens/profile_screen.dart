@@ -1,26 +1,19 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctjan/models/myposts_model.dart';
-import 'package:ctjan/models/wishlist_model.dart';
-import 'package:ctjan/responsive/mobile_screen_layout.dart';
 import 'package:ctjan/screens/bottom_bar.dart';
 import 'package:ctjan/screens/faq.dart';
+import 'package:ctjan/screens/my_posts.dart';
 import 'package:ctjan/screens/privacy_policy.dart';
 import 'package:ctjan/screens/terms_conditions.dart';
 import 'package:ctjan/screens/wishlist.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/models/get_profile_model.dart';
-import 'package:ctjan/resources/auth_methods.dart';
-import 'package:ctjan/resources/firestore_methods.dart';
 import 'package:ctjan/screens/edit_profile_screen.dart';
 import 'package:ctjan/screens/send_otp.dart';
 import 'package:ctjan/utils/colors.dart';
 import 'package:ctjan/utils/global_variables.dart';
-import 'package:ctjan/widgets/follow_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Helper/api_path.dart';
@@ -42,8 +35,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool loadingData = false;
   @override
   void initState() {
-    getProfileData();
     super.initState();
+    Future.delayed(Duration(milliseconds: 200), (){
+      getProfileData();
+    });
+    Future.delayed(const Duration(seconds: 1), (){
+      myPosts();
+    });
   }
   String? profileImage;
   String? userName;
@@ -51,6 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? userid;
   String? userPic;
   String? grpId;
+
   getProfileData()async{
     setState(() {
       loadingData = true;
@@ -97,7 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  List<Data> posts = [];
+  List<MyPosts> posts = [];
   myPosts()async{
     setState(() {
       loadingData = true;
@@ -112,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       'user_id': userid.toString(),
       'group_id': '$grpId'
     });
-    print("this is profile request ${request.fields.toString()}");
+    print("this is my posts request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -574,42 +573,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 
 
-                FutureBuilder(
-                  future: myPosts(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: Text("No posts found!", style: TextStyle(
-                          color: Colors.black
-                        ),)
-                      );
-                    }
-                    return posts.isNotEmpty ?
+                // FutureBuilder(
+                //   future: myPosts(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const Center(
+                //         child: Text("No posts found!", style: TextStyle(
+                //           color: Colors.black
+                //         ),)
+                //       );
+                //     }
+                //     return
+                posts.isNotEmpty ?
                       GridView.builder(
                         shrinkWrap: true,
                         itemCount: posts.length,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 1.5,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
                           childAspectRatio: 1,
                         ),
                         itemBuilder: (context, index) {
-                          DocumentSnapshot snap =
-                              (snapshot.data! as dynamic).docs[index];
-                          return Image(
-                            image: NetworkImage(
-                              posts[index].img.toString(),
+                          // DocumentSnapshot snap =
+                          //     (snapshot.data! as dynamic).docs[index];
+                          return InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyPostScreen(
+                                grpId: grpId.toString(),
+                              )));
+                            },
+                            child: Image(
+                              image: NetworkImage(
+                                posts[index].img![0].toString(),
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           );
                         })
-                    : Center(
+                    : const Center(
                       child: Text("No posts found!", style: TextStyle(color: Colors.black),),
-                    );
-                  },
-                )
+                    ),
+                //   },
+                // )
               ],
             ),
           )
@@ -896,7 +903,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: primaryClr
                       ),
                         child: IconButton(onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen()));
+                         var result =  Navigator.push(context, MaterialPageRoute(builder: (context)=> EditProfileScreen()));
+                         print("this is result ${result.toString()}");
+                         if(result != null){
+                          getProfileData();
+                         }
                         }, icon:  Icon(Icons.edit, color: mobileBackgroundColor,)))
                   ],
                 ),

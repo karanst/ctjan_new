@@ -21,12 +21,12 @@ class _CommentCardState extends State<CommentCard> {
       ),
       child: Row(
         children: [
-          // CircleAvatar(
-          //   backgroundImage: NetworkImage(
-          //     widget.snap['profilePic'],
-          //   ),
-          //   radius: 18,
-          // ),
+          CircleAvatar(
+            backgroundImage: NetworkImage(
+              widget.data!.profilePic.toString()
+            ),
+            radius: 18,
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(
@@ -40,7 +40,7 @@ class _CommentCardState extends State<CommentCard> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'Karan',
+                          text: widget.data!.username,
                           //widget.snap['name'],
                           style: const TextStyle(
                             color: primaryColor,
@@ -49,7 +49,7 @@ class _CommentCardState extends State<CommentCard> {
                         ),
                         TextSpan(
                           text: '  ${widget.data!.comment}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: primaryColor,
                           )
                         ),

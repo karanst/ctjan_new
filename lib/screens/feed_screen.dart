@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ctjan/Helper/token_strings.dart';
+import 'package:ctjan/models/get_profile_model.dart';
 import 'package:ctjan/models/posts_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctjan/models/wishlist_model.dart';
@@ -52,8 +53,53 @@ class _FeedScreenState extends State<FeedScreen> {
     // fetchData();
   }
 
-
+  String? grpId;
   String? userid;
+  getProfileData()async{
+    // setState(() {
+    //   loadingData = true;
+    // });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString(TokenString.userid);
+    var headers = {
+      'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.getUserProfile));
+    request.fields.addAll({
+      'user_id': userid.toString()
+      // 'seeker_email': '$userid'
+    });
+    print("this is profile request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var finalResponse = await response.stream.bytesToString();
+      final jsonResponse = GetProfileModel.fromJson(json.decode(finalResponse));
+      if(jsonResponse.responseCode == "1") {
+
+        setState(() {
+          grpId = jsonResponse.userId!.groupId.toString();
+          // userName = jsonResponse.userId!.username.toString();
+          // email = jsonResponse.userId!.email.toString();
+          // seekerProfileModel = jsonResponse;
+          // firstNameController = TextEditingController(text: seekerProfileModel!.data![0].name);
+          // emailController = TextEditingController(text: seekerProfileModel!.data![0].email);
+          // mobileController = TextEditingController(text: seekerProfileModel!.data![0].mobile);
+          // profileImage = '${seekerProfileModel!.data![0].image}';
+        });
+      }else{
+        // setState(() {
+        //   loadingData = false;
+        // });
+      }
+      // print("select qualification here ${selectedQualification}");
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
+
 
   List<GroupList> list = [];
 
@@ -99,7 +145,7 @@ class _FeedScreenState extends State<FeedScreen> {
     };
     var request = http.MultipartRequest('POST', Uri.parse(ApiPath.allPostsUrl));
     request.fields.addAll({
-      'group_id': '5'
+      'group_id': grpId.toString()
     });
 
     print("this is feed request ${request.fields.toString()}");
@@ -185,6 +231,8 @@ class _FeedScreenState extends State<FeedScreen> {
           }
           return snapshot.data!.isNotEmpty ?
           ListView.builder(
+            reverse: true,
+            shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) =>
                 snapshot.connectionState == ConnectionState.active &&

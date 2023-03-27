@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ctjan/screens/bottom_bar.dart';
+import 'package:ctjan/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -59,10 +60,7 @@ class _OTPScreenState extends State<OTPScreen> {
         print("new otp ${newOtp.toString()}");
       });
       print("sdsdsdsds ${widget.code}");
-      var snackBar = SnackBar(
-        content: Text('${jsonResponse['message']}'),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      showSnackbar("${jsonResponse['message']}", context);
     }
     else {
       print(response.reasonPhrase);
@@ -80,7 +78,7 @@ class _OTPScreenState extends State<OTPScreen> {
     var request = http.MultipartRequest('POST', Uri.parse(ApiPath.verifyOtp));
     request.fields.addAll({
       'mobile': '${widget.mobile}',
-      'otp': newOtp == null || newOtp == "" ? '${widget.code }': newOtp.toString()
+      'otp': newOtp == null || newOtp == "" ? '${enteredOtp.toString()}': newOtp.toString()
     });
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -90,6 +88,7 @@ class _OTPScreenState extends State<OTPScreen> {
       // print("final json response ${jsonResponse}");
 
       final jsonResponse = GetProfileModel.fromJson(json.decode(finalResponse));
+      print("this is response code ${jsonResponse.responseCode}");
         if(jsonResponse.responseCode == "1") {
           setState(() {
             loading = false;
@@ -109,10 +108,7 @@ class _OTPScreenState extends State<OTPScreen> {
           await prefs.setString(TokenString.userProfile, userProfile);
           await prefs.setString(TokenString.groupJoined, isGroupJoined);
 
-          var snackBar = SnackBar(
-            content: Text(jsonResponse.message.toString()),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          showSnackbar("${jsonResponse.message.toString()}", context);
           Navigator.push(context, MaterialPageRoute(builder: (context) =>  BottomBar(groupJoined: isGroupJoined.toString(),)));
 
           // Navigator.push(context, MaterialPageRoute(builder: (context) => const MobileScreenLayout()));
@@ -138,7 +134,7 @@ class _OTPScreenState extends State<OTPScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
         child: Scaffold(
-          backgroundColor: mobileBackgroundColor,
+          backgroundColor: whiteColor,
             appBar: AppBar(
               elevation: 0,
               centerTitle: true,

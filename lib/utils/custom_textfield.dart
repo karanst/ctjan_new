@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPassword;
   final String hintText;
   final String? title;
+  final int? maxLngth;
   final TextInputType textInputType;
   const CustomTextField(
       {Key? key,
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
         this.isPassword = false,
         required this.hintText,
         required this.title,
+        this.maxLngth,
         required this.textInputType})
       : super(key: key);
 
@@ -31,7 +33,7 @@ class CustomTextField extends StatelessWidget {
             padding: const EdgeInsets.all(6.0),
             child: Text(title.toString(), style: TextStyle(
               color: primaryClr,
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
 
             ),),
@@ -56,6 +58,7 @@ class CustomTextField extends StatelessWidget {
                   ]
               ),
               child: TextField(
+                maxLength: maxLngth,
                 keyboardType: textInputType,
                 decoration:  InputDecoration(
                   hintText: hintText,

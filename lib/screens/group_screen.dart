@@ -30,10 +30,10 @@ class _GroupScreenState extends State<GroupScreen> {
   void initState() {
     super.initState();
     getProfileData();
-    Future.delayed(Duration(milliseconds: 200), (){
+    Future.delayed(Duration(seconds: 1), (){
       getGroupList();
     });
-    Future.delayed(Duration(milliseconds: 200), (){
+    Future.delayed(Duration(seconds: 1), (){
       loadPosts();
     });
 
@@ -96,7 +96,7 @@ class _GroupScreenState extends State<GroupScreen> {
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.allPostsUrl));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.getGroupPosts));
     request.fields.addAll({
       'group_id': grpId.toString()
     });
@@ -120,6 +120,7 @@ class _GroupScreenState extends State<GroupScreen> {
     }
     return PostsModel.fromJson(json.decode(finalResponse)).data;
   }
+
 
   loadPosts() async {
     getFeedData().then((res) async {
@@ -151,7 +152,7 @@ class _GroupScreenState extends State<GroupScreen> {
         setState(() {
           list = jsonResponse.data!;
         });
-        print("this is group list length ${list!.length}");
+        print("this is group list length ${list.length}");
       }else{
 
       }
@@ -202,11 +203,14 @@ class _GroupScreenState extends State<GroupScreen> {
               stream: _streamController.stream,
               builder: (context, AsyncSnapshot<List<PostList>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                      child: Text("No Posts found!", style: TextStyle(color: primaryColor),)
-                    // CircularProgressIndicator(
-                    //   color: primaryColor,
-                    // ),
+                  return Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    child: const Center(
+                        child: Text("No Posts found!", style: TextStyle(color: primaryColor),)
+                      // CircularProgressIndicator(
+                      //   color: primaryColor,
+                      // ),
+                    ),
                   );
                 }
                 return snapshot.data!.isNotEmpty ?

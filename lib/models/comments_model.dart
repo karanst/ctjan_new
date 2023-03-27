@@ -1,7 +1,7 @@
 /// response_code : "1"
 /// message : "get data succesfully"
 /// status : "success"
-/// data : [{"id":"2","user_id":"1","comment":"rtest","group_id":"5","post_id":"2","like_status":"1","date":"2023-03-23 08:30:08","user_comment":""},{"id":"3","user_id":"1","comment":"1","group_id":"5","post_id":"2","like_status":"1","date":"2023-03-23 10:43:53","user_comment":""}]
+/// data : [{"id":"12","user_id":"88","comment":"","group_id":"5","post_id":"7","like_status":"1","date":"2023-03-24 11:01:49","user_comment":"","username":" karan Tomar","profile_pic":"https://developmentalphawizz.com/social_media/uploads/profile_pics/"}]
 
 class CommentsModel {
   CommentsModel({
@@ -57,14 +57,16 @@ CommentsModel copyWith({  String? responseCode,
 
 }
 
-/// id : "2"
-/// user_id : "1"
-/// comment : "rtest"
+/// id : "12"
+/// user_id : "88"
+/// comment : ""
 /// group_id : "5"
-/// post_id : "2"
+/// post_id : "7"
 /// like_status : "1"
-/// date : "2023-03-23 08:30:08"
+/// date : "2023-03-24 11:01:49"
 /// user_comment : ""
+/// username : " karan Tomar"
+/// profile_pic : "https://developmentalphawizz.com/social_media/uploads/profile_pics/"
 
 class Comments {
   Comments({
@@ -75,7 +77,9 @@ class Comments {
       String? postId, 
       String? likeStatus, 
       String? date, 
-      String? userComment,}){
+      String? userComment, 
+      String? username, 
+      String? profilePic,}){
     _id = id;
     _userId = userId;
     _comment = comment;
@@ -84,6 +88,8 @@ class Comments {
     _likeStatus = likeStatus;
     _date = date;
     _userComment = userComment;
+    _username = username;
+    _profilePic = profilePic;
 }
 
   Comments.fromJson(dynamic json) {
@@ -95,6 +101,8 @@ class Comments {
     _likeStatus = json['like_status'];
     _date = json['date'];
     _userComment = json['user_comment'];
+    _username = json['username'];
+    _profilePic = json['profile_pic'];
   }
   String? _id;
   String? _userId;
@@ -104,6 +112,8 @@ class Comments {
   String? _likeStatus;
   String? _date;
   String? _userComment;
+  String? _username;
+  String? _profilePic;
 Comments copyWith({  String? id,
   String? userId,
   String? comment,
@@ -112,6 +122,8 @@ Comments copyWith({  String? id,
   String? likeStatus,
   String? date,
   String? userComment,
+  String? username,
+  String? profilePic,
 }) => Comments(  id: id ?? _id,
   userId: userId ?? _userId,
   comment: comment ?? _comment,
@@ -120,6 +132,8 @@ Comments copyWith({  String? id,
   likeStatus: likeStatus ?? _likeStatus,
   date: date ?? _date,
   userComment: userComment ?? _userComment,
+  username: username ?? _username,
+  profilePic: profilePic ?? _profilePic,
 );
   String? get id => _id;
   String? get userId => _userId;
@@ -129,6 +143,8 @@ Comments copyWith({  String? id,
   String? get likeStatus => _likeStatus;
   String? get date => _date;
   String? get userComment => _userComment;
+  String? get username => _username;
+  String? get profilePic => _profilePic;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -140,6 +156,8 @@ Comments copyWith({  String? id,
     map['like_status'] = _likeStatus;
     map['date'] = _date;
     map['user_comment'] = _userComment;
+    map['username'] = _username;
+    map['profile_pic'] = _profilePic;
     return map;
   }
 

@@ -107,6 +107,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           );
           if (pickedFile != null) {
             setState(() {
+              isImages = false;
               cameraImage = File(pickedFile.path);
               // imagePath = File(pickedFile.path) ;
               // filePath = imagePath!.path.toString();
@@ -133,13 +134,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   // });
                 },
               ),
-              SimpleDialogOption(
-                padding: const EdgeInsets.all(20),
-                child: const Text('Choose Video from gallery'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+              // SimpleDialogOption(
+              //   padding: const EdgeInsets.all(20),
+              //   child: const Text('Choose Video from gallery'),
+              //   onPressed: () {
+              //     Navigator.of(context).pop();
+              //   },
+              // ),
 
               // SimpleDialogOption(
               //   padding: const EdgeInsets.all(20),
@@ -302,6 +303,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                     controller: _descriptionController,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 8),
                         hintStyle: TextStyle(color: primaryColor),
                         hintText: 'Write a caption..', border: InputBorder.none),
                   ),
@@ -496,29 +498,21 @@ class _AddPostScreenState extends State<AddPostScreen> {
           ) :
               const SizedBox.shrink()
               : const SizedBox.shrink(),
-          isImages || cameraImage != null ?
-          GestureDetector(
+          // isImages || cameraImage != null ?
+           GestureDetector(
             onTap: (){
               setState(() {
                 isLoading = true;
               });
-              uploadPost();
+              if(grpId != '0') {
+                uploadPost();
+              }else{
+                setState(() {
+                  isLoading = false;
+                });
+                showSnackbar("Please join any group first to post!", context);
+              }
 
-              // if(mobileController.text.length != 10){
-              //   setState(() {
-              //     loading = false;
-              //   });
-              //   var snackBar = SnackBar(
-              //     backgroundColor: primaryClr,
-              //     content:  Text('Please enter valid mobile number'),
-              //   );
-              //
-              //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              // }
-              // else{
-              //
-              //   mobileLogin(_value1.toString());
-              // }
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 1.1,
@@ -586,7 +580,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
           //     ),
           //   ),
           // )
-          : const SizedBox.shrink(),
+          // : const SizedBox.shrink(),
 
         ],
       ),
@@ -736,14 +730,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
         imagePathList == null
             ? null
             : request.files.add(await http.MultipartFile.fromPath(
-            'img', imagePathList[i].toString()));
+            'img[]', imagePathList[i].toString()));
       }
     }else {
       request.files.add(await http.MultipartFile.fromPath(
-          'img', cameraImage!.path));
+          'img[]', cameraImage!.path.toString()));
     }
     request.headers.addAll(headers);
-    print("checking request of api here ${request.fields} aand");
+    print("checking request of api here ${request.fields} aand ${request.files.toString()}");
 
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
@@ -822,75 +816,78 @@ class _AddPostScreenState extends State<AddPostScreen> {
           // )
         ],
       ),
-      body: _file == null
-          ? Center(
+      body:
+      // _file == null
+      //     ?
+      Center(
               child: Column(
               children: [
                 uploadMultiImage(),
               ],
             ))
           // uploadMultiImage()
-          : Column(
-              children: [
-                _isLoading
-                    ? const LinearProgressIndicator()
-                    : const Padding(
-                        padding: EdgeInsets.only(
-                          top: 0,
-                        ),
-                      ),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      child: TextField(
-                        controller: _descriptionController,
-                        decoration: InputDecoration(
-                          hintText: 'Write a caption..',
-                          hintStyle: TextStyle(color: primaryClr),
-                          border: InputBorder.none,
-                        ),
-                        maxLines: 8,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      width: 45,
-                      child: AspectRatio(
-                        aspectRatio: 487 / 451,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: MemoryImage(_file!),
-                              fit: BoxFit.fill,
-                              alignment: FractionalOffset.topCenter,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Divider(),
-                  ],
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryClr,
-                        fixedSize:
-                            Size(MediaQuery.of(context).size.width / 2, 40)),
-                    onPressed: () {},
-                    child: Text(
-                      "Post",
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ))
-              ],
-            ),
+          // : Column(
+          //     children: [
+          //       _isLoading
+          //           ? const LinearProgressIndicator()
+          //           : const Padding(
+          //               padding: EdgeInsets.only(
+          //                 top: 0,
+          //               ),
+          //             ),
+          //       const Divider(),
+          //       Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           CircleAvatar(),
+          //           SizedBox(
+          //             width: MediaQuery.of(context).size.width * 0.45,
+          //             child: TextField(
+          //               controller: _descriptionController,
+          //               decoration: InputDecoration(
+          //                 contentPadding: EdgeInsets.only(left: 8),
+          //                 hintText: 'Write a caption..',
+          //                 hintStyle: TextStyle(color: primaryClr),
+          //                 border: InputBorder.none,
+          //               ),
+          //               maxLines: 8,
+          //             ),
+          //           ),
+          //           SizedBox(
+          //             height: 45,
+          //             width: 45,
+          //             child: AspectRatio(
+          //               aspectRatio: 487 / 451,
+          //               child: Container(
+          //                 decoration: BoxDecoration(
+          //                   image: DecorationImage(
+          //                     image: MemoryImage(_file!),
+          //                     fit: BoxFit.fill,
+          //                     alignment: FractionalOffset.topCenter,
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //           const Divider(),
+          //         ],
+          //       ),
+          //       ElevatedButton(
+          //           style: ElevatedButton.styleFrom(
+          //               backgroundColor: primaryClr,
+          //               fixedSize:
+          //                   Size(MediaQuery.of(context).size.width / 2, 40)),
+          //           onPressed: () {},
+          //           child: Text(
+          //             "Post",
+          //             style: TextStyle(
+          //                 color: primaryColor,
+          //                 fontWeight: FontWeight.w600,
+          //                 fontSize: 16),
+          //           ))
+          //     ],
+          //   ),
     );
   }
 }

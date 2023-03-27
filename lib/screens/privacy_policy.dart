@@ -59,7 +59,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
             appBar: AppBar(
               elevation: 0,
               centerTitle: true,
-              backgroundColor: primaryColor,
+              backgroundColor: primaryClr,
               leading: GestureDetector(
                 onTap: (){
                   Navigator.pop(context);

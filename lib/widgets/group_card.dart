@@ -36,7 +36,7 @@ class _GroupCardState extends State<GroupCard> {
   }
   bool loadingData = false;
   String? userid;
-  String? groupJoined;
+  String? groupData;
   bool loading = false;
 
 
@@ -63,7 +63,7 @@ class _GroupCardState extends State<GroupCard> {
       if(jsonResponse.responseCode == "1") {
 
         setState(() {
-          groupJoined = jsonResponse.userId!.groupId.toString();
+          groupData = jsonResponse.userId!.groupId.toString();
           // loadingData = false;
           // profileImage = jsonResponse.userId!.profilePic.toString();
           // userName = jsonResponse.userId!.username.toString();
@@ -74,7 +74,7 @@ class _GroupCardState extends State<GroupCard> {
           // mobileController = TextEditingController(text: seekerProfileModel!.data![0].mobile);
           // profileImage = '${seekerProfileModel!.data![0].image}';
         });
-        print("this is group status $groupJoined");
+        print("this is group status $groupData");
       }else{
         setState(() {
           loadingData = false;
@@ -209,37 +209,37 @@ class _GroupCardState extends State<GroupCard> {
                         ),
                       ),
                     ),
-                    Container(
-                      // width: 150,
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children:  [
-                           Text("Date added : ",
-                            // DateFormat.yMMMd().format(
-                            //   // widget.snap['datePublished'].toDate(),
-                            // ),
-                            style:  TextStyle(
-                              fontSize: 14,
-                              color: secondaryClr,
-                            ),
-                          ),
-                          Container(width: 90,
-                            child: Text( widget.data.createdDate.toString(),
-                              maxLines: 1,
-                              style: TextStyle(
-                              color: secondaryClr,
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 14
-                            ),),
-                          )
-                        ],
-                      ),
-                    ),
+                    // Container(
+                    //   // width: 150,
+                    //   padding: const EdgeInsets.symmetric(vertical: 4),
+                    //   child: Row(
+                    //     children:  [
+                    //        Text("Date added : ",
+                    //         // DateFormat.yMMMd().format(
+                    //         //   // widget.snap['datePublished'].toDate(),
+                    //         // ),
+                    //         style:  TextStyle(
+                    //           fontSize: 14,
+                    //           color: secondaryClr,
+                    //         ),
+                    //       ),
+                    //       Container(width: 90,
+                    //         child: Text( widget.data.createdDate.toString(),
+                    //           maxLines: 1,
+                    //           style: TextStyle(
+                    //           color: secondaryClr,
+                    //           overflow: TextOverflow.ellipsis,
+                    //           fontSize: 14
+                    //         ),),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(
                         children: [
-                           Text("No. of users : ",
+                           Text("Joined users : ",
                             style:  TextStyle(
                               fontSize: 14,
                               color: secondaryClr,
@@ -253,41 +253,45 @@ class _GroupCardState extends State<GroupCard> {
                         ],
                       ),
                     ),
-                    GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          loading = false;
-                        });
-                        String groupId = widget.data.id.toString();
-                        if(groupJoined == "0"){
-                          joinGroup(groupId);
-                        }else{
-                          showSnackbar("Already joined an group!", context);
-                        }
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        height: 35,
-                        alignment: Alignment.center,
-                        //padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            color: primaryClr,
-                            borderRadius: BorderRadius.circular(10)
-                        ),
-                        child: loading ? Center(
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            child: CircularProgressIndicator(
-                              color: whiteColor,
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15.0),
+                      child: GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            loading = false;
+                          });
+                          String groupId = widget.data.id.toString();
+                          print("this is group ids ${groupData.toString()} aand ${groupId}");
+                          if(groupData != groupId) {
+                            joinGroup(groupId);
+                          }else{
+                            showSnackbar("Already joined an group!", context);
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 2.5,
+                          height: 35,
+                          alignment: Alignment.center,
+                          //padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                              color: primaryClr,
+                              borderRadius: BorderRadius.circular(10)
                           ),
-                        ): const Text("Join Group", style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600
-                        ),),
+                          child: loading ? Center(
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                color: whiteColor,
+                              ),
+                            ),
+                          ): const Text("Join Group", style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600
+                          ),),
 
+                        ),
                       ),
                     ),
                     // Container(

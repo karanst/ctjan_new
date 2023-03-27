@@ -20,6 +20,7 @@ class ApiPath {
   static const String getPostLikes = '${baseUrl}get_post_like';
   static const String addToWishlist = '${baseUrl}addWishList';
   static const String removeFromWishList = '${baseUrl}removeWishlist';
+  static const String getWishlistData = '${baseUrl}get_wishlist_data';
   static const String faq = '${baseUrl}faq';
   static const String privacyPolicy = '${baseUrl}parivacy_policy';
   static const String termsAndConditions = '${baseUrl}terms_condition';

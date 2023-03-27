@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:ctjan/Helper/token_strings.dart';
+import 'package:ctjan/models/get_profile_model.dart';
 import 'package:ctjan/screens/faq.dart';
 import 'package:ctjan/widgets/post_card.dart';
 import 'package:ctjan/widgets/wishlist_card.dart';
@@ -8,6 +10,7 @@ import 'package:ctjan/models/posts_model.dart';
 import 'package:ctjan/models/wishlist_model.dart';
 import 'package:flutter/material.dart';
 import 'package:ctjan/utils/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Helper/api_path.dart';
 import '../utils/global_variables.dart';
@@ -22,20 +25,22 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   List<WishList> postList = [];
   String? userid;
+  String? grpId;
 
   StreamController<List<WishList>> _streamController = StreamController<List<WishList>>();
 
   Future<List<WishList>?> getWishListData()async{
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString(TokenString.userid);
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
     };
-    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.allPostsUrl));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.getWishlistData));
     request.fields.addAll({
-      'group_id': '5'
+      'user_id': userid.toString()
     });
 
-    print("this is feed request ${request.fields.toString()}");
+    print("this is wishlist data request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     var finalResponse = await response.stream.bytesToString();
@@ -62,12 +67,59 @@ class _WishlistScreenState extends State<WishlistScreen> {
       return res;
     });
   }
+  getProfileData()async{
+    // setState(() {
+    //   loadingData = true;
+    // });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString(TokenString.userid);
+    var headers = {
+      'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.getUserProfile));
+    request.fields.addAll({
+      'user_id': userid.toString()
+      // 'seeker_email': '$userid'
+    });
+    print("this is profile request ${request.fields.toString()}");
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var finalResponse = await response.stream.bytesToString();
+      final jsonResponse = GetProfileModel.fromJson(json.decode(finalResponse));
+      if(jsonResponse.responseCode == "1") {
+
+        setState(() {
+          grpId = jsonResponse.userId!.groupId.toString();
+          // userName = jsonResponse.userId!.username.toString();
+          // email = jsonResponse.userId!.email.toString();
+          // seekerProfileModel = jsonResponse;
+          // firstNameController = TextEditingController(text: seekerProfileModel!.data![0].name);
+          // emailController = TextEditingController(text: seekerProfileModel!.data![0].email);
+          // mobileController = TextEditingController(text: seekerProfileModel!.data![0].mobile);
+          // profileImage = '${seekerProfileModel!.data![0].image}';
+        });
+      }else{
+        // setState(() {
+        //   loadingData = false;
+        // });
+      }
+      // print("select qualification here ${selectedQualification}");
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getWishListData();
-    loadWishlists();
+    getProfileData();
+    Future.delayed(const Duration(milliseconds: 300), (){
+      getWishListData();
+      loadWishlists();
+    });
+
   }
   
   @override
@@ -91,13 +143,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
       builder: (context, AsyncSnapshot<List<WishList>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: primaryColor,
-            ),
+            child: Text("No data in wishlist!", style: TextStyle(
+              color: primaryColor
+            ),)
           );
         }
         return snapshot.data!.isNotEmpty ?
-        GridView.builder(
+        ListView.builder(
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) =>
           snapshot.connectionState == ConnectionState.active &&
@@ -112,11 +164,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
               data: snapshot.data![index],
             ),
           )
-              : Container(), gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 0.75
-        ),
+              : Container(),
+        //   gridDelegate:
+        // SliverGridDelegateWithFixedCrossAxisCount(
+        //   crossAxisCount: 3,
+        //   childAspectRatio: 0.75
+        // ),
         )
             : const Center(
           child: Text('Wishlist empty!', style: TextStyle(

@@ -174,12 +174,8 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     List<dynamic> _handlePages = [
        const GroupScreen(),
-      // GroupScreen(groupJoined: widget.groupJoined,),
       const AddPostScreen(),
-      // const Wishlist(),
-      const ProfileScreen(
-        // uid: FirebaseAuth.instance.currentUser!.uid,
-      ),
+      const ProfileScreen(),
     ];
     // [
     //   HomeScreen(bookingId: widget.bookingId,), ProductsServicesScreen(),  ManageService(index: 0, isIcon: false,), Profile() ];

@@ -1,68 +1,63 @@
-import 'dart:convert';
-
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ctjan/Helper/api_path.dart';
-import 'package:ctjan/Helper/token_strings.dart';
-import 'package:ctjan/models/wishlist_model.dart';
+import 'package:ctjan/models/myposts_model.dart';
+
 import 'package:ctjan/utils/colors.dart';
-import 'package:ctjan/utils/utils.dart';
+
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 
-class WishlistCard extends StatefulWidget {
-  final WishList? data;
-  const WishlistCard({Key? key, this.data}) : super(key: key);
+class MyPostCard extends StatefulWidget {
+  final MyPosts? data;
+  const MyPostCard({Key? key, this.data}) : super(key: key);
 
   @override
-  State<WishlistCard> createState() => _WishlistCardState();
+  State<MyPostCard> createState() => _MyPostCardState();
 }
 
-class _WishlistCardState extends State<WishlistCard> {
+class _MyPostCardState extends State<MyPostCard> {
 
 
-  String? userid;
-
-  removeFromWishList()async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userid = prefs.getString(TokenString.userid);
-    var headers = {
-      'Cookie': 'ci_session=0eaf4ebac75de632de1c0763f08419b4a3c1bdec'
-    };
-    var request = http.MultipartRequest('POST',
-        Uri.parse(ApiPath.removeFromWishList));
-
-    request.fields.addAll({
-      'user_id': userid.toString(),
-      'post_id':widget.data!.postId!.toString(),
-    });
-
-    print("this is send comment request ${request.fields.toString()}");
-
-    request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-
-      var finalResponse = await response.stream.bytesToString();
-      final jsonResponse = json.decode(finalResponse);
-      if(jsonResponse['response_code'] == '1'){
-        showSnackbar("${jsonResponse['message']}", context);
-        // setState(() {
-        //   _commentController.clear();
-        // });
-        // loadComments();
-        // showSnackbar("${jsonResponse['message']}", context);
-
-      }
-      else{
-        showSnackbar("${jsonResponse['message']}", context);
-      }
-    }
-    else {
-      print(response.reasonPhrase);
-    }
-  }
+  // String? userid;
+  //
+  // removeFromWishList()async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   userid = prefs.getString(TokenString.userid);
+  //   var headers = {
+  //     'Cookie': 'ci_session=0eaf4ebac75de632de1c0763f08419b4a3c1bdec'
+  //   };
+  //   var request = http.MultipartRequest('POST',
+  //       Uri.parse(ApiPath.removeFromWishList));
+  //
+  //   request.fields.addAll({
+  //     'user_id': userid.toString(),
+  //     'post_id':widget.data!.postid!.toString(),
+  //   });
+  //
+  //   print("this is send comment request ${request.fields.toString()}");
+  //
+  //   request.headers.addAll(headers);
+  //   http.StreamedResponse response = await request.send();
+  //   if (response.statusCode == 200) {
+  //
+  //     var finalResponse = await response.stream.bytesToString();
+  //     final jsonResponse = json.decode(finalResponse);
+  //     if(jsonResponse['response_code'] == '1'){
+  //       showSnackbar("${jsonResponse['message']}", context);
+  //       // setState(() {
+  //       //   _commentController.clear();
+  //       // });
+  //       // loadComments();
+  //       // showSnackbar("${jsonResponse['message']}", context);
+  //
+  //     }
+  //     else{
+  //       showSnackbar("${jsonResponse['message']}", context);
+  //     }
+  //   }
+  //   else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
 
 
   @override
@@ -117,28 +112,42 @@ class _WishlistCardState extends State<WishlistCard> {
                     showDialog(
                       context: context,
                       builder: (context) => Dialog(
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
+                        child: Container(
+                          height: 150,
+                          width: MediaQuery.of(context). size.width ,
+                          decoration: BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadius.circular(15)
                           ),
-                          shrinkWrap: true,
-                          children: ['Remove from wishlist']
-                              .map(
-                                (e) => InkWell(
-                                  onTap: () async {
-                                    removeFromWishList();
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 12,
-                                      horizontal: 16,
-                                    ),
-                                    child: Text(e),
-                                  ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text("Remove from wishlist", style: TextStyle(color: primaryClr),),
+                              const SizedBox(height: 40,),
+                              Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(onPressed: (){
+                                      // removeFromWishList();
+                                      Navigator.pop(context);
+                                    }, child:  Text("Remove", style: TextStyle(color: whiteColor),),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: primaryClr
+                                      ),),
+                                    ElevatedButton(onPressed: (){
+                                      Navigator.pop(context);
+                                    }, child:  Text("Cancel", style: TextStyle(color: primaryClr),),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: secondaryColor
+                                      ),),
+                                  ],
                                 ),
-                              )
-                              .toList(),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -183,59 +192,59 @@ class _WishlistCardState extends State<WishlistCard> {
                 // :
                 widget.data!.img!.length > 1
                     ? CarouselSlider(
-                        options: CarouselOptions(
-                          height: 200.0,
-                          enlargeCenterPage: true,
-                          autoPlay: true,
-                          aspectRatio: 16 / 9,
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enableInfiniteScroll: true,
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 1000),
-                          viewportFraction: 0.8,
-                        ),
-                        items: widget.data!.img!.map((item) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  // margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                  decoration: const BoxDecoration(),
-                                  child: SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.35,
-                                    width: double.infinity,
-                                    child: item.isEmpty
-                                        ? Image.asset(
-                                            'assets/placeholder.png',
-                                            // widget.snap['postUrl'],
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.network(
-                                            item,
-                                            // widget.snap['postUrl'],
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ));
-                            },
-                          );
-                        }).toList(),
-                      )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.35,
-                        width: double.infinity,
-                        child: widget.data!.img!.isEmpty
-                            ? Image.asset(
+                  options: CarouselOptions(
+                    height: 200.0,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                    aspectRatio: 16 / 9,
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enableInfiniteScroll: true,
+                    autoPlayAnimationDuration:
+                    Duration(milliseconds: 1000),
+                    viewportFraction: 0.8,
+                  ),
+                  items: widget.data!.img!.map((item) {
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
+                            width: MediaQuery.of(context).size.width,
+                            // margin: EdgeInsets.symmetric(horizontal: 5.0),
+                            decoration: const BoxDecoration(),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height *
+                                  0.35,
+                              width: double.infinity,
+                              child: item.isEmpty
+                                  ? Image.asset(
                                 'assets/placeholder.png',
                                 // widget.snap['postUrl'],
                                 fit: BoxFit.cover,
                               )
-                            : Image.network(
-                                widget.data!.img![0].toString(),
+                                  : Image.network(
+                                item,
                                 // widget.snap['postUrl'],
                                 fit: BoxFit.cover,
                               ),
-                      ),
+                            ));
+                      },
+                    );
+                  }).toList(),
+                )
+                    : SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.35,
+                  width: double.infinity,
+                  child: widget.data!.img!.isEmpty
+                      ? Image.asset(
+                    'assets/placeholder.png',
+                    // widget.snap['postUrl'],
+                    fit: BoxFit.cover,
+                  )
+                      : Image.network(
+                    widget.data!.img![0].toString(),
+                    // widget.snap['postUrl'],
+                    fit: BoxFit.cover,
+                  ),
+                ),
 
                 // AnimatedOpacity(
                 //   duration: const Duration(milliseconds: 200),
@@ -345,19 +354,19 @@ class _WishlistCardState extends State<WishlistCard> {
               children: [
                 // DefaultTextStyle(
                 //   style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                //         fontWeight: FontWeight.bold,
-                //       ),
+                //     fontWeight: FontWeight.bold,
+                //   ),
                 //   child: Text(
                 //       widget.data!.totalLikes.toString() != '0' ||
-                //               widget.data!.totalLikes.toString() != null
+                //           widget.data!.totalLikes.toString() != null
                 //           ? '${widget.data!.totalLikes.toString()} likes'
                 //           : '0 likes',
                 //       //'${widget.data!.} likes',
                 //       style: const TextStyle(
                 //         color: primaryColor,
                 //       )
-                //       //Theme.of(context).textTheme.bodyText2,
-                //       ),
+                //     //Theme.of(context).textTheme.bodyText2,
+                //   ),
                 // ),
                 // Container(
                 //   width: double.infinity,
@@ -368,19 +377,19 @@ class _WishlistCardState extends State<WishlistCard> {
                 //       text: TextSpan(
                 //           style: const TextStyle(color: primaryColor),
                 //           children: [
-                //         TextSpan(
-                //           text: widget.data!.username.toString(),
-                //           style: const TextStyle(
-                //             fontWeight: FontWeight.bold,
-                //             color: primaryColor,
-                //           ),
-                //         ),
-                //         TextSpan(
-                //             text: '  ${widget.data!.description.toString()}',
-                //             style: const TextStyle(
-                //               color: primaryColor,
-                //             )),
-                //       ])),
+                //             TextSpan(
+                //               text: widget.data!.username.toString(),
+                //               style: const TextStyle(
+                //                 fontWeight: FontWeight.bold,
+                //                 color: primaryColor,
+                //               ),
+                //             ),
+                //             TextSpan(
+                //                 text: '  ${widget.data!.description.toString()}',
+                //                 style: const TextStyle(
+                //                   color: primaryColor,
+                //                 )),
+                //           ])),
                 // ),
                 // InkWell(
                 //   onTap: () {},
