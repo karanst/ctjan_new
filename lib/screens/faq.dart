@@ -70,7 +70,7 @@ class _FaqScreenState extends State<FaqScreen> {
             body: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(90)),
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(0)),
                     color: Colors.white
                 ),
                 width: size.width,

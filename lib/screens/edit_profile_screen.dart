@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/Helper/token_strings.dart';
@@ -16,7 +18,9 @@ import 'package:ctjan/screens/login_screen.dart';
 import 'package:ctjan/screens/send_otp.dart';
 import 'package:ctjan/utils/custom_textfield.dart';
 import 'package:ctjan/utils/utils.dart';
+import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/colors.dart';
 import '../widgets/text_field_input.dart';
@@ -66,6 +70,87 @@ class _LoginScreenState extends State<EditProfileScreen> {
     }
   }
 
+   _selectImage(BuildContext context) async {
+     return showDialog(
+         context: context,
+         builder: (context) {
+           return SimpleDialog(
+             title: const Text('Create a Post'),
+             children: [
+               SimpleDialogOption(
+                 padding: const EdgeInsets.all(20),
+                 child: const Text('Click Image from Camera'),
+                 onPressed: () async {
+                   Navigator.of(context).pop();
+                   PickedFile? pickedFile = await ImagePicker().getImage(
+                     source: ImageSource.camera,
+                       maxHeight: 240.0,
+                       maxWidth: 240.0,
+                   );
+                   if (pickedFile != null) {
+                     setState(() {
+                       _profileImage = File(pickedFile.path);
+                       // imagePath = File(pickedFile.path) ;
+                       // filePath = imagePath!.path.toString();
+                     });
+                     print("profile pic from camera ${_profileImage}");
+                   }
+                 },
+               ),
+               SimpleDialogOption(
+                 padding: const EdgeInsets.all(20),
+                 child: const Text('Choose image from gallery'),
+                 onPressed: () async {
+                   Navigator.of(context).pop();
+                   selectImage();
+                   // getFromGallery();
+                   // setState(() {
+                   //   // _file = file;Start
+                   // });
+                 },
+               ),
+               // SimpleDialogOption(
+               //   padding: const EdgeInsets.all(20),
+               //   child: const Text('Choose Video from gallery'),
+               //   onPressed: () {
+               //     Navigator.of(context).pop();
+               //   },
+               // ),
+
+               // SimpleDialogOption(
+               //   padding: const EdgeInsets.all(20),
+               //   child: const Text('Cancel'),
+               //   onPressed: () {
+               //     Navigator.of(context).pop();
+               //   },
+               // ),
+             ],
+           );
+         });
+   }
+
+   Future<void> getFromGallery() async {
+     PickedFile? pickedFile = await ImagePicker().getImage(
+       source: ImageSource.gallery,
+     );
+     // var result = await FilePicker.platform.pickFiles(
+     //   type: FileType.image,
+     //   allowMultiple: false,
+     // );
+     if (pickedFile != null) {
+       // setState(() {
+       //   isImages = true;
+       //   // servicePic = File(result.files.single.path.toString());
+       // });
+       _profileImage = File(pickedFile.path);
+       // imagePathList.add(result.paths.toString()).toList();
+       print("SERVICE PIC Gallery === ${_profileImage}");
+     }
+     // } else {
+     //   // User canceled the picker
+     // }
+   }
+
 
 
   void navigateToLoginScreen() {
@@ -89,16 +174,16 @@ class _LoginScreenState extends State<EditProfileScreen> {
      var request = http.MultipartRequest('POST', Uri.parse(ApiPath.updateProfile));
      request.fields.addAll({
        'user_id': userid.toString(),
-     'first_name': _userNameController.text.toString(),
+       'first_name': _userNameController.text.toString(),
        'mobile' : _mobileController.text.toString(),
        'email': _emailController.text.toString(),
      'about_us':_bioController.text.toString()
-
      });
-     if(_profileImage != null) {
+
+     // if(_profileImage != null) {
        request.files.add(await http.MultipartFile.fromPath(
-           'profile_pic:', _profileImage!.path.toString()));
-     }
+           'profile_pic', _profileImage!.path.toString()));
+     // }
 
      print("this is update profile request ${request.fields.toString()} and ${request.files.toString()}");
      request.headers.addAll(headers);
@@ -149,7 +234,7 @@ class _LoginScreenState extends State<EditProfileScreen> {
           _userNameController = TextEditingController(text: jsonResponse.userId!.username.toString());
           _emailController = TextEditingController(text: jsonResponse.userId!.email.toString());
           _mobileController = TextEditingController(text: jsonResponse.userId!.mobile.toString());
-
+          _bioController = TextEditingController(text: jsonResponse.userId!.aboutUs.toString());
           // seekerProfileModel = jsonResponse;
           // firstNameController = TextEditingController(text: seekerProfileModel!.data![0].name);
           // emailController = TextEditingController(text: seekerProfileModel!.data![0].email);
@@ -191,6 +276,7 @@ class _LoginScreenState extends State<EditProfileScreen> {
   //   });
   // }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,37 +314,23 @@ class _LoginScreenState extends State<EditProfileScreen> {
                   ),
                   Stack(
                     children: [
-                      // profileImage != null || profileImage != '' ?
-                      // CircleAvatar(
-                      //   backgroundColor: Colors.grey,
-                      //   backgroundImage: NetworkImage(
-                      //     profileImage != '' || profileImage != null?
-                      //     profileImage.toString()
-                      //         : 'https://dreamvilla.life/wp-content/uploads/2017/07/dummy-profile-pic.png',
-                      //   ),
-                      //   radius: MediaQuery.of(context).size.width * 0.08,
-                      // )
-                      //     :
                       _profileImage != null ?
-                  //         ? Container(
-                  // width: 150,
-                  //   height: 150,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(100)
-                  //   ),
-                  //   child: ClipRRect(
-                  //     borderRadius: BorderRadius.all(Radius.circular(15)),
-                  //     child: Image.file(File(_profileImage!.path.toString()),
-                  //         fit: BoxFit.cover),
-                  //   ),
-                  //     )
-                      ClipRRect(
+                      ClipRRect
+                        (
                           borderRadius: BorderRadius.circular(100.0),
                               // radius: 64,
                               child: Container(
                                 width: 150,
                                   height: 150,
                                   child: Image.file(File(_profileImage!.path), fit: BoxFit.fill,)))
+                      :     profileImage != null || profileImage != '' ?
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          // radius: 64,
+                          child: Container(
+                              width: 150,
+                              height: 150,
+                              child: Image.network(profileImage.toString(), fit: BoxFit.fill,)))
                           : const CircleAvatar(
                               backgroundColor: Colors.grey,
                               radius: 64,
@@ -277,7 +349,10 @@ class _LoginScreenState extends State<EditProfileScreen> {
                             color: blueColor,
                           ),
                           child: IconButton(
-                            onPressed: selectImage,
+                            onPressed: (){
+                              _selectImage(context);
+                              // requestPermission(context, 1);
+                            },
                             splashColor: Colors.blue,
                             icon: const Icon(
                               Icons.add_a_photo,

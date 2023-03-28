@@ -25,8 +25,5 @@ class ApiPath {
   static const String privacyPolicy = '${baseUrl}parivacy_policy';
   static const String termsAndConditions = '${baseUrl}terms_condition';
 
-
-
-
-
 }
+ const String imageUrl = 'https://developmentalphawizz.com/social_media/uploads/';

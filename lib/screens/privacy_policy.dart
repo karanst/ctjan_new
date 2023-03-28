@@ -73,7 +73,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
             body: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(90)),
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(0)),
                   color: Colors.white
               ),
               width: size.width,
@@ -83,7 +83,15 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
               ),) : ListView(
                 children: [
                   // Text("${TermConditionData}", style:  TextStyle(fontSize: 14,),),
-                  Html(data: TermConditionData),
+                  Html(data: TermConditionData,
+                  style:{
+                    "body": Style(
+                      fontSize: const FontSize(14.0),
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  },
+                  ),
                 ],
               ),
             )

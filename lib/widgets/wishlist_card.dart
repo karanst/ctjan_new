@@ -48,6 +48,7 @@ class _WishlistCardState extends State<WishlistCard> {
       final jsonResponse = json.decode(finalResponse);
       if(jsonResponse['response_code'] == '1'){
         showSnackbar("${jsonResponse['message']}", context);
+        Navigator.pop(context, 'true');
         // setState(() {
         //   _commentController.clear();
         // });
@@ -192,7 +193,7 @@ class _WishlistCardState extends State<WishlistCard> {
                           enableInfiniteScroll: true,
                           autoPlayAnimationDuration:
                               Duration(milliseconds: 1000),
-                          viewportFraction: 0.8,
+                          viewportFraction: 1.0,
                         ),
                         items: widget.data!.img!.map((item) {
                           return Builder(
@@ -335,97 +336,97 @@ class _WishlistCardState extends State<WishlistCard> {
           //   ],
           // ),
           //Description and comment count
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // DefaultTextStyle(
-                //   style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                //         fontWeight: FontWeight.bold,
-                //       ),
-                //   child: Text(
-                //       widget.data!.totalLikes.toString() != '0' ||
-                //               widget.data!.totalLikes.toString() != null
-                //           ? '${widget.data!.totalLikes.toString()} likes'
-                //           : '0 likes',
-                //       //'${widget.data!.} likes',
-                //       style: const TextStyle(
-                //         color: primaryColor,
-                //       )
-                //       //Theme.of(context).textTheme.bodyText2,
-                //       ),
-                // ),
-                // Container(
-                //   width: double.infinity,
-                //   padding: const EdgeInsets.only(
-                //     top: 8,
-                //   ),
-                //   child: RichText(
-                //       text: TextSpan(
-                //           style: const TextStyle(color: primaryColor),
-                //           children: [
-                //         TextSpan(
-                //           text: widget.data!.username.toString(),
-                //           style: const TextStyle(
-                //             fontWeight: FontWeight.bold,
-                //             color: primaryColor,
-                //           ),
-                //         ),
-                //         TextSpan(
-                //             text: '  ${widget.data!.description.toString()}',
-                //             style: const TextStyle(
-                //               color: primaryColor,
-                //             )),
-                //       ])),
-                // ),
-                // InkWell(
-                //   onTap: () {},
-                //   child: Container(
-                //     padding: const EdgeInsets.symmetric(vertical: 4),
-                //     child: GestureDetector(
-                //       onTap: () {
-                //         //   Navigator.push(
-                //         //   context,
-                //         //   MaterialPageRoute(
-                //         //     builder: (context) => CommentsScreen(
-                //         //       snap: widget.snap,
-                //         //     ),
-                //         //   ),
-                //         // );
-                //       },
-                //       child: commentLen > 0
-                //           ? Text(
-                //         'View all $commentLen comments',
-                //         style: const TextStyle(
-                //           fontSize: 16,
-                //           color: secondaryColor,
-                //         ),
-                //       )
-                //           : Container(),
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    widget.data!.date.toString(),
-                    // DateFormat.yMMMd().format(
-                    //   widget.data!.date.
-                    //  // widget.snap['datePublished'].toDate(),
-                    // ),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: secondaryColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
+          // Container(
+          //   padding: const EdgeInsets.symmetric(
+          //     horizontal: 16,
+          //   ),
+          //   child: Column(
+          //     mainAxisSize: MainAxisSize.min,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       // DefaultTextStyle(
+          //       //   style: Theme.of(context).textTheme.subtitle2!.copyWith(
+          //       //         fontWeight: FontWeight.bold,
+          //       //       ),
+          //       //   child: Text(
+          //       //       widget.data!.totalLikes.toString() != '0' ||
+          //       //               widget.data!.totalLikes.toString() != null
+          //       //           ? '${widget.data!.totalLikes.toString()} likes'
+          //       //           : '0 likes',
+          //       //       //'${widget.data!.} likes',
+          //       //       style: const TextStyle(
+          //       //         color: primaryColor,
+          //       //       )
+          //       //       //Theme.of(context).textTheme.bodyText2,
+          //       //       ),
+          //       // ),
+          //       // Container(
+          //       //   width: double.infinity,
+          //       //   padding: const EdgeInsets.only(
+          //       //     top: 8,
+          //       //   ),
+          //       //   child: RichText(
+          //       //       text: TextSpan(
+          //       //           style: const TextStyle(color: primaryColor),
+          //       //           children: [
+          //       //         TextSpan(
+          //       //           text: widget.data!.username.toString(),
+          //       //           style: const TextStyle(
+          //       //             fontWeight: FontWeight.bold,
+          //       //             color: primaryColor,
+          //       //           ),
+          //       //         ),
+          //       //         TextSpan(
+          //       //             text: '  ${widget.data!.description.toString()}',
+          //       //             style: const TextStyle(
+          //       //               color: primaryColor,
+          //       //             )),
+          //       //       ])),
+          //       // ),
+          //       // InkWell(
+          //       //   onTap: () {},
+          //       //   child: Container(
+          //       //     padding: const EdgeInsets.symmetric(vertical: 4),
+          //       //     child: GestureDetector(
+          //       //       onTap: () {
+          //       //         //   Navigator.push(
+          //       //         //   context,
+          //       //         //   MaterialPageRoute(
+          //       //         //     builder: (context) => CommentsScreen(
+          //       //         //       snap: widget.snap,
+          //       //         //     ),
+          //       //         //   ),
+          //       //         // );
+          //       //       },
+          //       //       child: commentLen > 0
+          //       //           ? Text(
+          //       //         'View all $commentLen comments',
+          //       //         style: const TextStyle(
+          //       //           fontSize: 16,
+          //       //           color: secondaryColor,
+          //       //         ),
+          //       //       )
+          //       //           : Container(),
+          //       //     ),
+          //       //   ),
+          //       // ),
+          //       Container(
+          //         padding: const EdgeInsets.symmetric(vertical: 4),
+          //         child: Text(
+          //           widget.data!.date.toString(),
+          //           // DateFormat.yMMMd().format(
+          //           //   widget.data!.date.
+          //           //  // widget.snap['datePublished'].toDate(),
+          //           // ),
+          //           style: const TextStyle(
+          //             fontSize: 12,
+          //             color: secondaryColor,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // )
         ],
       ),
     );

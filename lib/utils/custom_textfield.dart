@@ -61,6 +61,7 @@ class CustomTextField extends StatelessWidget {
                 maxLength: maxLngth,
                 keyboardType: textInputType,
                 decoration:  InputDecoration(
+                  counterText: '',
                   hintText: hintText,
                     hintStyle: TextStyle(
                       color: greyColor

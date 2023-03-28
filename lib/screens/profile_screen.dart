@@ -36,12 +36,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 200), (){
+    Future.delayed(Duration(milliseconds: 100), (){
       getProfileData();
-    });
-    Future.delayed(const Duration(seconds: 1), (){
       myPosts();
+
     });
+    // Future.delayed(const Duration(seconds: 1), (){
+    //   myPosts();
+    // });
   }
   String? profileImage;
   String? userName;
@@ -542,14 +544,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           : AppBar(
         leading: Icon(Icons.arrow_back_ios, color: primaryClr,),
               backgroundColor: primaryClr,
-              title: userName == null || userName == ""?
-                 const CircularProgressIndicator(
-                    color: Colors.white,
-                  )
+        titleSpacing: 0.0,
+        title:  Transform(
+          // you can forcefully translate values left side using Transform
+          transform:  Matrix4.translationValues(-20.0, 0.0, 0.0),
+          child: userName == null || userName == ""?
+          const CircularProgressIndicator(
+            color: Colors.white,
+          )
               : Text(userName != null || userName != ""?
-                   userName.toString()
-                  : 'Loading'),
-              centerTitle: true,
+          userName.toString()
+              : 'Loading'),
+        ),
+              centerTitle: false,
             ),
       body: ListView(
         children: [
@@ -604,7 +611,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 grpId: grpId.toString(),
                               )));
                             },
-                            child: Image(
+                            child:  posts[index].img![0].toString() == "" ||  posts[index].img![0].toString() == imageUrl ?
+                                Image.asset('assets/placeholder.png'):
+                            Image(
                               image: NetworkImage(
                                 posts[index].img![0].toString(),
                               ),

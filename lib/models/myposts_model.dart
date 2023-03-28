@@ -1,7 +1,7 @@
 /// response_code : "1"
 /// message : "Join Group Successfully"
 /// status : "success"
-/// data : [{"id":"1","name":"cvgghhhggg","description":"ppppkbbbbvv","img":["https://developmentalphawizz.com/social_media/uploads/"],"group_id":"1","user_id":"1","like_status":"0","end_date":"","start_date":"","post_type":"1","date":"2023-03-27 14:34:06","username":"","email":"karanstomar@icloud.com","f_name":"Karan ","l_name":"Tomar","countrycode":"","mobile":"8770496665","dob":"1998-01-02","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"https://developmentalphawizz.com/social_media/uploads/","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"9072","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:36:02","updated_at":"2023-03-27 15:04:29","refferal_code":"","friend_code":"","about_us":""},{"id":"1","name":"hccyxyx","description":"ucicuxux7x","img":["https://developmentalphawizz.com/social_media/uploads/1679925683Screenshot_20230301-181706.jpg","https://developmentalphawizz.com/social_media/uploads/1679925683Screenshot_20230206-105814.jpg","https://developmentalphawizz.com/social_media/uploads/1679925683Screenshot_20230206-105728.jpg","https://developmentalphawizz.com/social_media/uploads/1679925683Screenshot_20230127-163438.jpg"],"group_id":"1","user_id":"1","like_status":"0","end_date":"","start_date":"","post_type":"1","date":"2023-03-27 14:01:23","username":"","email":"karanstomar@icloud.com","f_name":"Karan ","l_name":"Tomar","countrycode":"","mobile":"8770496665","dob":"1998-01-02","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"https://developmentalphawizz.com/social_media/uploads/","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"9072","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:36:02","updated_at":"2023-03-27 15:04:29","refferal_code":"","friend_code":"","about_us":""}]
+/// data : [{"id":"1","name":"camera test 2","description":"camera test description ","img":["https://developmentalphawizz.com/social_media/uploads/1680001245scaled_18382ed0-b595-4b14-b1b4-9a973b7ad4cb3994190884655133755.jpg"],"group_id":"1","user_id":"1","like_status":"0","end_date":"","start_date":"","post_type":"Normal Post","date":"28/03/2023","username":"","email":" karanstomar@icloud.com","f_name":" Karan Tomar","l_name":"","countrycode":"","mobile":" 8770496665","dob":"1998-01-02","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"https://developmentalphawizz.com/social_media/uploads/1680000264scaled_ee5311fc-f9c7-48fc-92cf-eb48e5fb3c3f8713016494170766358.jpg","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"4390","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:36:02","updated_at":"2023-03-28 10:44:24","refferal_code":"","friend_code":"","about_us":" this is my intro"},{"id":"1","name":"My event post ","description":"free for everyone..","img":["https://developmentalphawizz.com/social_media/uploads/1680000357scaled_870dd4b6-3ba8-4d0c-b9c0-f5d4703bc8095540719945971247948.jpg"],"group_id":"1","user_id":"1","like_status":"0","end_date":"2023-03-31","start_date":"2023-03-29","post_type":"Event Post","date":"28/03/2023","username":"","email":" karanstomar@icloud.com","f_name":" Karan Tomar","l_name":"","countrycode":"","mobile":" 8770496665","dob":"1998-01-02","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"https://developmentalphawizz.com/social_media/uploads/1680000264scaled_ee5311fc-f9c7-48fc-92cf-eb48e5fb3c3f8713016494170766358.jpg","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"4390","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:36:02","updated_at":"2023-03-28 10:44:24","refferal_code":"","friend_code":"","about_us":" this is my intro"},{"id":"1","name":"new post","description":"hello everyone ","img":["https://developmentalphawizz.com/social_media/uploads/"],"group_id":"1","user_id":"1","like_status":"0","end_date":"","start_date":"","post_type":"Normal Post","date":"28/03/2023","username":"","email":" karanstomar@icloud.com","f_name":" Karan Tomar","l_name":"","countrycode":"","mobile":" 8770496665","dob":"1998-01-02","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"https://developmentalphawizz.com/social_media/uploads/1680000264scaled_ee5311fc-f9c7-48fc-92cf-eb48e5fb3c3f8713016494170766358.jpg","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"4390","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:36:02","updated_at":"2023-03-28 10:44:24","refferal_code":"","friend_code":"","about_us":" this is my intro"}]
 
 class MypostsModel {
   MypostsModel({
@@ -58,22 +58,22 @@ MypostsModel copyWith({  String? responseCode,
 }
 
 /// id : "1"
-/// name : "cvgghhhggg"
-/// description : "ppppkbbbbvv"
-/// img : ["https://developmentalphawizz.com/social_media/uploads/"]
+/// name : "camera test 2"
+/// description : "camera test description "
+/// img : ["https://developmentalphawizz.com/social_media/uploads/1680001245scaled_18382ed0-b595-4b14-b1b4-9a973b7ad4cb3994190884655133755.jpg"]
 /// group_id : "1"
 /// user_id : "1"
 /// like_status : "0"
 /// end_date : ""
 /// start_date : ""
-/// post_type : "1"
-/// date : "2023-03-27 14:34:06"
+/// post_type : "Normal Post"
+/// date : "28/03/2023"
 /// username : ""
-/// email : "karanstomar@icloud.com"
-/// f_name : "Karan "
-/// l_name : "Tomar"
+/// email : " karanstomar@icloud.com"
+/// f_name : " Karan Tomar"
+/// l_name : ""
 /// countrycode : ""
-/// mobile : "8770496665"
+/// mobile : " 8770496665"
 /// dob : "1998-01-02"
 /// gender : "Male"
 /// profession : ""
@@ -96,7 +96,7 @@ MypostsModel copyWith({  String? responseCode,
 /// accomplishments_des : ""
 /// finalize_des : ""
 /// password : ""
-/// profile_pic : "https://developmentalphawizz.com/social_media/uploads/"
+/// profile_pic : "https://developmentalphawizz.com/social_media/uploads/1680000264scaled_ee5311fc-f9c7-48fc-92cf-eb48e5fb3c3f8713016494170766358.jpg"
 /// facebook_id : ""
 /// type : ""
 /// isGold : "0"
@@ -105,17 +105,17 @@ MypostsModel copyWith({  String? responseCode,
 /// country : ""
 /// device_token : ""
 /// agreecheck : "0"
-/// otp : "9072"
+/// otp : "4390"
 /// status : "1"
 /// wallet : "0.00"
 /// oauth_provider : null
 /// oauth_uid : null
 /// last_login : null
 /// created_at : "2023-03-27 12:36:02"
-/// updated_at : "2023-03-27 15:04:29"
+/// updated_at : "2023-03-28 10:44:24"
 /// refferal_code : ""
 /// friend_code : ""
-/// about_us : ""
+/// about_us : " this is my intro"
 
 class MyPosts {
   MyPosts({

@@ -25,10 +25,21 @@ class GroupScreen extends StatefulWidget {
 
 class _GroupScreenState extends State<GroupScreen> {
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
+    callApi();
+
+
+    // if(widget.groupJoined == "1"){
+    //   Navigator.push(context, MaterialPageRoute(builder: (context)=> FeedScreen()));
+    // }
+  }
+
+  callApi()async{
     getProfileData();
     Future.delayed(Duration(seconds: 1), (){
       getGroupList();
@@ -36,11 +47,6 @@ class _GroupScreenState extends State<GroupScreen> {
     Future.delayed(Duration(seconds: 1), (){
       loadPosts();
     });
-
-
-    // if(widget.groupJoined == "1"){
-    //   Navigator.push(context, MaterialPageRoute(builder: (context)=> FeedScreen()));
-    // }
   }
 
   String? grpId;
@@ -121,7 +127,6 @@ class _GroupScreenState extends State<GroupScreen> {
     return PostsModel.fromJson(json.decode(finalResponse)).data;
   }
 
-
   loadPosts() async {
     getFeedData().then((res) async {
       _streamController.add(res!);
@@ -163,18 +168,31 @@ class _GroupScreenState extends State<GroupScreen> {
     }
   }
 
+
+  Future _refresh() async {
+    return callApi();
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return RefreshIndicator(
+        color: primaryClr,
+    key: _refreshIndicatorKey,
+    onRefresh: _refresh,
+    child: Scaffold(
       appBar: AppBar(
         leading: Image.asset('assets/applogo.png' ,height: 50, width: 50,),
         //Icon(Icons.arrow_back_ios, color:  primaryClr,),
         backgroundColor: primaryClr,
         centerTitle: false,
-        title: Text("CTjan", style: TextStyle(
+        title: Transform(
+    // you can forcefully translate values left side using Transform
+    transform:  Matrix4.translationValues(-20.0, 0.0, 0.0),
+        child:  Text("CTjan", style: TextStyle(
            color: mobileBackgroundColor
             ),),
+        ),
         actions: [IconButton(onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const WishlistScreen()));
         }, icon:
@@ -280,6 +298,7 @@ class _GroupScreenState extends State<GroupScreen> {
       //     color: primaryColor
       //   ),),
       // ),
+    )
     );
   }
 }

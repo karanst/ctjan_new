@@ -104,6 +104,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   Navigator.of(context).pop();
           PickedFile? pickedFile = await ImagePicker().getImage(
           source: ImageSource.camera,
+            maxHeight: 500.0,
+            maxWidth: 500.0,
           );
           if (pickedFile != null) {
             setState(() {
@@ -156,7 +158,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   Future<void> getFromGallery() async {
     var result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
+      type: FileType.any,
       allowMultiple: true,
     );
     if (result != null) {
@@ -505,7 +507,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 isLoading = true;
               });
               if(grpId != '0') {
-                uploadPost();
+                if(
+                titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty &&
+                cameraImage != null || imagePathList != null ) {
+                  uploadPost();
+                }else{
+                  setState(() {
+                    isLoading = false;
+                  });
+                  showSnackbar("Please select images and fill title and description!", context);
+                }
               }else{
                 setState(() {
                   isLoading = false;
@@ -798,33 +809,35 @@ class _AddPostScreenState extends State<AddPostScreen> {
         ),
         title: const Text('Add Post'),
         centerTitle: true,
-        actions: [
-          // TextButton(
-          //   onPressed: () => postImage(
-          //     user.uid,
-          //     user.username,
-          //     user.photoUrl,
-          //   ),
-          //   child: const Text(
-          //     'Post',
-          //     style: TextStyle(
-          //       color: Colors.white,
-          //       fontWeight: FontWeight.bold,
-          //       fontSize: 16,
-          //     ),
-          //   ),
-          // )
-        ],
+        // actions: [
+        //   // TextButton(
+        //   //   onPressed: () => postImage(
+        //   //     user.uid,
+        //   //     user.username,
+        //   //     user.photoUrl,
+        //   //   ),
+        //   //   child: const Text(
+        //   //     'Post',
+        //   //     style: TextStyle(
+        //   //       color: Colors.white,
+        //   //       fontWeight: FontWeight.bold,
+        //   //       fontSize: 16,
+        //   //     ),
+        //   //   ),
+        //   // )
+        // ],
       ),
       body:
       // _file == null
       //     ?
-      Center(
-              child: Column(
-              children: [
-                uploadMultiImage(),
-              ],
-            ))
+      SingleChildScrollView(
+        child: Center(
+                child: Column(
+                children: [
+                  uploadMultiImage(),
+                ],
+              )),
+      )
           // uploadMultiImage()
           // : Column(
           //     children: [

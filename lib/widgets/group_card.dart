@@ -274,7 +274,8 @@ class _GroupCardState extends State<GroupCard> {
                           alignment: Alignment.center,
                           //padding: EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                              color: primaryClr,
+                            border: Border.all(color: groupData != widget.data.id.toString() ? Colors.transparent : primaryClr),
+                              color: groupData != widget.data.id.toString() ? primaryClr : whiteColor,
                               borderRadius: BorderRadius.circular(10)
                           ),
                           child: loading ? Center(
@@ -285,8 +286,11 @@ class _GroupCardState extends State<GroupCard> {
                                 color: whiteColor,
                               ),
                             ),
-                          ): const Text("Join Group", style: TextStyle(
-                              color: Colors.white,
+                          ):  Text(
+                            groupData != widget.data.id.toString() ?
+                            "Join Group"
+                            : "Joined", style:  TextStyle(
+                              color: groupData != widget.data.id.toString() ? Colors.white : primaryClr,
                               fontSize: 16,
                               fontWeight: FontWeight.w600
                           ),),

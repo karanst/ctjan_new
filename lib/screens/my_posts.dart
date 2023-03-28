@@ -81,7 +81,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(milliseconds: 200), (){
+    myPosts();
+    Future.delayed(Duration(milliseconds: 1000), (){
       loadPosts();
     });
   }

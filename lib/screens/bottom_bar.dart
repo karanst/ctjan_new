@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ctjan/screens/home_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -187,16 +189,17 @@ class _BottomBarState extends State<BottomBar> {
                 barrierDismissible: false,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text("Confirm Exit"),
-                    content: Text("Are you sure you want to exit?"),
+                    title: const Text("Confirm Exit"),
+                    content: const Text("Are you sure you want to exit?"),
                     actions: <Widget>[
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: primaryClr
                         ),
-                        child: Text("YES"),
+                        child: const Text("YES"),
                         onPressed: () {
 
+                          exit(0);
                           // SystemNavigator.pop();
                         },
                       ),

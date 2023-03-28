@@ -91,6 +91,7 @@ class _PostCardState extends State<PostCard> {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = json.decode(finalResponse);
       if (jsonResponse['response_code'] == '1') {
+        print("like response message ${jsonResponse['message']}");
         // showSnackbar("${jsonResponse['message']}", context);
       } else {}
     } else {
@@ -224,6 +225,11 @@ class _PostCardState extends State<PostCard> {
             ).copyWith(right: 0),
             child: Row(
               children: [
+                widget.data!.profilePic.toString() == imageUrl || widget.data!.profilePic.toString() ==''?
+                   const  CircleAvatar(
+                     radius: 16,
+                      child: Icon(Icons.person, color: Colors.white,),
+                    ) :
                 CircleAvatar(
                   radius: 16,
                   backgroundImage: NetworkImage(
@@ -240,12 +246,21 @@ class _PostCardState extends State<PostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.data!.username.toString(),
+                          '${widget.data!.fName.toString()} ${widget.data!.lName.toString()}',
                           style: const TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
-                        )
+                        ),
+                        const SizedBox(height: 3,),
+                        Text(
+                          widget.data!.postType.toString(),
+                          style: const TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 10
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -321,60 +336,62 @@ class _PostCardState extends State<PostCard> {
                 //   ),
                 // )
                 // :
-                widget.data!.img!.length > 1 ?
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: 200.0,
-                    enlargeCenterPage: false,
-                    autoPlay: true,
-                    aspectRatio: 1,
-                    // 16 / 9,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: true,
-                    autoPlayAnimationDuration: Duration(milliseconds: 1000),
-                    viewportFraction: 1.0,
-                  ),
-                  items: widget.data!.img!.map((item) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return Container(
-                            width: MediaQuery.of(context).size.width,
-                            // margin: EdgeInsets.symmetric(horizontal: 5.0),
-                            decoration: const BoxDecoration(),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              width: MediaQuery.of(context).size.width,
-                              child: item.isEmpty
-                                  ? Image.asset(
-                                      'assets/placeholder.png',
-                                      // widget.snap['postUrl'],
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.network(
-                                      item,
-                                      // widget.snap['postUrl'],
-                                      fit: BoxFit.cover,
-                                    ),
-                            ));
-                      },
-                    );
-                  }).toList(),
-                )
-                : SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.35,
-                  width: double.infinity,
-                  child: widget.data!.img!.isEmpty
-                      ? Image.asset(
-                    'assets/placeholder.png',
-                    // widget.snap['postUrl'],
-                    fit: BoxFit.cover,
-                  )
-                      : Image.network(
-                    widget.data!.img![0].toString(),
-                    // widget.snap['postUrl'],
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                widget.data!.img!.length > 1
+                    ? CarouselSlider(
+                        options: CarouselOptions(
+                          height: 200.0,
+                          enlargeCenterPage: false,
+                          autoPlay: true,
+                          aspectRatio: 1,
+                          // 16 / 9,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enableInfiniteScroll: true,
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 1000),
+                          viewportFraction: 1.0,
+                        ),
+                        items: widget.data!.img!.map((item) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  // margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: const BoxDecoration(),
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.35,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: item.isEmpty || widget.data!.img![0].toString() == imageUrl
+                                        ? Image.asset(
+                                            'assets/placeholder.png',
+                                            // widget.snap['postUrl'],
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.network(
+                                            item,
+                                            // widget.snap['postUrl'],
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ));
+                            },
+                          );
+                        }).toList(),
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.35,
+                        width: double.infinity,
+                        child: widget.data!.img!.isEmpty || widget.data!.img![0].toString() == imageUrl
+                            ? Image.asset(
+                                'assets/placeholder.png',
+                                // widget.snap['postUrl'],
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                widget.data!.img![0].toString(),
+                                // widget.snap['postUrl'],
+                                fit: BoxFit.cover,
+                              ),
+                      ),
 
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
@@ -500,28 +517,45 @@ class _PostCardState extends State<PostCard> {
                       ),
                 ),
                 Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(
-                    top: 8,
-                  ),
-                  child: RichText(
-                      text: TextSpan(
-                          style: const TextStyle(color: primaryColor),
-                          children: [
-                        TextSpan(
-                          text: widget.data!.username.toString(),
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(
+                      top: 8,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.data!.name.toString(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: primaryColor,
                           ),
                         ),
-                        TextSpan(
-                            text: '  ${widget.data!.description.toString()}',
+                        Text(widget.data!.description.toString(),
                             style: const TextStyle(
+                              fontSize: 12,
                               color: primaryColor,
                             )),
-                      ])),
-                ),
+                      ],
+                    )),
+
+                // RichText(
+                //     text: TextSpan(
+                //         style: const TextStyle(color: primaryColor),
+                //         children: [
+                //       TextSpan(
+                //         text: widget.data!.name.toString(),
+                //         style: const TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //           color: primaryColor,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //           text: '  ${widget.data!.description.toString()}',
+                //           style: const TextStyle(
+                //             color: primaryColor,
+                //           )),
+                //     ])),
                 InkWell(
                   onTap: () {},
                   child: Container(
@@ -549,20 +583,20 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    widget.data!.date.toString(),
-                    // DateFormat.yMMMd().format(
-                    //   widget.data!.date.
-                    //  // widget.snap['datePublished'].toDate(),
-                    // ),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: secondaryColor,
-                    ),
-                  ),
-                ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(vertical: 4),
+                //   child: Text(
+                //     widget.data!.date.toString(),
+                //     // DateFormat.yMMMd().format(
+                //     //   widget.data!.date.
+                //     //  // widget.snap['datePublished'].toDate(),
+                //     // ),
+                //     style: const TextStyle(
+                //       fontSize: 12,
+                //       color: secondaryColor,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           )

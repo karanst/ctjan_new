@@ -135,7 +135,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         )),
         backgroundColor: primaryClr,
         centerTitle: true,
-        title: const Text("Wishlist"),
+        title: const Text("Shortlist"),
       ),
      body:
      StreamBuilder<List<WishList>>(

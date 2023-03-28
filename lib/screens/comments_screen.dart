@@ -181,7 +181,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: primaryClr,
         title: const Text('Comments', style: TextStyle(fontSize: 18),),
         centerTitle: false,
@@ -206,6 +205,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
+          decoration: BoxDecoration(
+            color: whiteColor,
+            border: Border.all(color: Colors.black54)
+          ),
           height: kToolbarHeight,
           margin: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -225,17 +228,23 @@ class _CommentsScreenState extends State<CommentsScreen> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 8),
-                  child: TextField(
-                    style: const TextStyle(
-                      color: primaryColor,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white
                     ),
-                    controller: _commentController,
-                    decoration: InputDecoration(
-                      hintText: 'Comment as ${userName.toString()}',
-                      hintStyle: const TextStyle(
-                        color: primaryColor
+                    child: TextField(
+                      style: const TextStyle(
+                        color: primaryColor,
                       ),
-                      border: InputBorder.none,
+                      controller: _commentController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        hintText: 'Comment as ${userName.toString()}',
+                        hintStyle: const TextStyle(
+                          color: primaryColor
+                        ),
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
                 ),
