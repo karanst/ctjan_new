@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ctjan/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,7 @@ class _SignUpState extends State<SignUp> {
     };
     var request = http.MultipartRequest('POST', Uri.parse(ApiPath.registerUser));
     request.fields.addAll({
-    'first_name': '${jfirstNameController.text.toString()} ' ,
+    'first_name': jfirstNameController.text.toString() ,
     'last_name': jlastNameController.text.toString() ,
     'mobile': jmobileController.text.toString() ,
     'email': jemailController.text.toString(),
@@ -154,7 +155,7 @@ class _SignUpState extends State<SignUp> {
           child: Scaffold(
               backgroundColor: primaryClr,
               body: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -175,7 +176,7 @@ class _SignUpState extends State<SignUp> {
                     Container(
                       padding: const EdgeInsets.all(14),
                       width: size.width,
-                      // height: size.height,
+                      height: size.height,
                       decoration: BoxDecoration(
                           color: whiteColor,
                           borderRadius:
@@ -191,55 +192,13 @@ class _SignUpState extends State<SignUp> {
                                 fontWeight: FontWeight.bold, fontSize: 32),
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 30,
                           ),
                           Container(
                             child: Form(
                               key: _formkey,
                               child: Column(
                                 children: [
-
-                                  AuthTextField(
-                                    validatior: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Enter your First name';
-                                      }
-                                    },
-                                    obsecureText: false,
-                                    iconImage: Icon(Icons.person, color: mobileBackgroundColor,),
-                                    // Image.asset(
-                                    //   'assets/AuthAssets/Icon awesome-user.png',
-                                    //   scale: 1.3,
-                                    //   color: primaryClr,
-                                    // ),
-                                    hintText: "First Name",
-                                    controller: jfirstNameController,
-                                  ),
-                                  AuthTextField(
-                                    validatior: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Enter your last name';
-                                      }
-                                    },
-                                    obsecureText: false,
-                                    iconImage:  Icon(Icons.person, color: mobileBackgroundColor,),
-                                    hintText: "Last Name",
-                                    controller: jlastNameController,
-                                  ),
-                                  AuthTextField(
-                                    validatior: (input) => input!.isValidEmail() ? null : "Please Enter Valid email",
-                                    //   (value) {
-                                    // if (value!.isEmpty) {
-                                    //   return "Enter valid email";
-                                    //   print("Email");
-                                    // }
-                                    // return null;
-                                    obsecureText: false,
-                                    iconImage: Icon(Icons.email_outlined, color: mobileBackgroundColor,),
-                                    hintText: "Email",
-                                    keyboardtype: TextInputType.emailAddress,
-                                    controller: jemailController,
-                                  ),
                                   AuthTextField(
                                     validatior: (value) {
                                       if (value == null || value.isEmpty || value.length != 10) {
@@ -252,6 +211,165 @@ class _SignUpState extends State<SignUp> {
                                     keyboardtype: TextInputType.number,
                                     length: 10,
                                     controller: jmobileController,
+                                  ),
+
+                                  // Row(
+                                  //   children: [
+                                  //     AuthTextField(
+                                  //       validatior: (value) {
+                                  //         if (value == null || value.isEmpty) {
+                                  //           return 'Enter your First name';
+                                  //         }
+                                  //       },
+                                  //       obsecureText: false,
+                                  //       iconImage: Icon(Icons.person, color: mobileBackgroundColor,),
+                                  //       // Image.asset(
+                                  //       //   'assets/AuthAssets/Icon awesome-user.png',
+                                  //       //   scale: 1.3,
+                                  //       //   color: primaryClr,
+                                  //       // ),
+                                  //       hintText: "First Name",
+                                  //       controller: jfirstNameController,
+                                  //     ),
+                                  //     // TextFormField(
+                                  //     //   onTap: onTap,
+                                  //     //   enabled: enabled,
+                                  //     //   validator: validatior,
+                                  //     //   obscureText: obsecureText,
+                                  //     //   obscuringCharacter: '*',
+                                  //     //   controller: controller,
+                                  //     //   maxLength: length,
+                                  //     //   keyboardType: keyboardtype,
+                                  //     //   style: const TextStyle(
+                                  //     //       color: webBackgroundColor
+                                  //     //   ),
+                                  //     //   decoration: InputDecoration(
+                                  //     //       counterText: "",
+                                  //     //       suffixIcon:suffixIcons,
+                                  //     //       contentPadding: const EdgeInsets.symmetric(vertical: 5,horizontal: 5),
+                                  //     //       border: const OutlineInputBorder(
+                                  //     //           borderSide: BorderSide.none
+                                  //     //       ),
+                                  //     //       // errorBorder: OutlineInputBorder(
+                                  //     //       //   borderSide: BorderSide(
+                                  //     //       //     width: 3,
+                                  //     //       //     color: Colors.
+                                  //     //       //   )
+                                  //     //       // ),
+                                  //     //       hintText: hintText,
+                                  //     //       hintStyle: const TextStyle(
+                                  //     //           color: webBackgroundColor
+                                  //     //       )
+                                  //     //   ),
+                                  //     // ),
+                                  //   ],
+                                  // ),
+
+
+                                  // AuthTextField(
+                                  //   validatior: (input) => input!.isValidEmail() ? null : "Please Enter Valid email",
+                                  //   //   (value) {
+                                  //   // if (value!.isEmpty) {
+                                  //   //   return "Enter valid email";
+                                  //   //   print("Email");
+                                  //   // }
+                                  //   // return null;
+                                  //   obsecureText: false,
+                                  //   iconImage: Icon(Icons.email_outlined, color: mobileBackgroundColor,),
+                                  //   hintText: "Email",
+                                  //   keyboardtype: TextInputType.emailAddress,
+                                  //   controller: jemailController,
+                                  // ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 7.0, right: 7, top: 8, bottom: 8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 0.0),
+                                          child: Material(
+                                            elevation: 4,
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: primaryClr,
+                                                  borderRadius: BorderRadius.circular(10)
+                                              ),
+
+                                              width: 40,
+                                              height: 40,
+                                              child: Icon(Icons.person),
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          width: MediaQuery.of(context).size.width/ 2 - 50,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(8),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  offset:  Offset(
+                                                    1.0,
+                                                    1.0,
+                                                  ),
+                                                  blurRadius: 0.5,
+                                                  spreadRadius: 0.5,
+                                                ),
+                                              ]
+                                          ),
+                                          child: TextFormField(
+                                            controller: jfirstNameController,
+                                            style: const TextStyle(
+                                                color: primaryColor
+                                            ),
+                                            decoration: const InputDecoration(
+                                              border: InputBorder.none,
+                                                contentPadding: EdgeInsets.only(left: 10),
+                                                hintText: "First Name",
+                                                hintStyle:  TextStyle(
+                                                    color: primaryColor
+                                                )
+                                            ),),
+                                        ),
+
+                                        Container(
+                                          width: MediaQuery.of(context).size.width/ 2 - 50,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(8),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.grey,
+                                                  offset:  Offset(
+                                                    1.0,
+                                                    1.0,
+                                                  ),
+                                                  blurRadius: 0.5,
+                                                  spreadRadius: 0.5,
+                                                ),
+                                              ]
+                                          ),
+                                          child: TextFormField(
+                                            controller: jlastNameController,
+                                          style: const TextStyle(
+                                            color: primaryColor
+                                          ),
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.only(left: 10),
+                                            hintText: "Last Name",
+                                              border: InputBorder.none,
+                                            hintStyle:  TextStyle(
+                                              color: primaryColor
+                                          )
+                                          ),),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   AuthTextField(
                                     onTap: (){
@@ -271,7 +389,9 @@ class _SignUpState extends State<SignUp> {
                                     // length: 10,
                                     controller: birthDateController,
                                   ),
-
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
                                   Container(
                                     padding: const EdgeInsets.all(8),
                                     child: Row(
@@ -281,8 +401,8 @@ class _SignUpState extends State<SignUp> {
                                           elevation: 4,
                                           borderRadius: BorderRadius.circular(10),
                                           child: Container(
-                                            width: 48,
-                                            height: 48,
+                                            width: 40,
+                                            height: 40,
                                             decoration: BoxDecoration(
                                               color: primaryClr,
                                               borderRadius: BorderRadius.circular(10)
@@ -296,7 +416,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(width: 18,),
+                                        const SizedBox(width: 8,),
                                         Expanded(
                                           child: Container(
                                             padding: EdgeInsets.only(left: 5),
@@ -482,7 +602,7 @@ class _SignUpState extends State<SignUp> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       GestureDetector(onTap: (){
-                                        // Get.to(SignInScreen());
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> SignInScreen()));
                                         },child: Text("  Sign In", style: TextStyle(color: primaryClr, fontWeight: FontWeight.bold),))
                                     ],
                                   ),

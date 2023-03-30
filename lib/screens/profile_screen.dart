@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:ctjan/models/myposts_model.dart';
 import 'package:ctjan/screens/bottom_bar.dart';
 import 'package:ctjan/screens/faq.dart';
+import 'package:ctjan/screens/feed_screen.dart';
 import 'package:ctjan/screens/my_posts.dart';
 import 'package:ctjan/screens/privacy_policy.dart';
 import 'package:ctjan/screens/terms_conditions.dart';
@@ -404,6 +405,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //     );
           //   },
           // ),
+          ListTile(
+            // leading: Icon(Icons.report),
+            leading: Icon(Icons.people_outline, color: primaryClr, size: 25,),
+            // leading: const ImageIcon(AssetImage("assets/Icons/Emergancy contect.png")),
+            title:  Text('Change Group', style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500)),
+            onTap: () {
+              Navigator.push(
+                context,
+                // MaterialPageRoute(builder: (context) => ChatPage( chatId: "1", title: "Karan")),
+                MaterialPageRoute(builder: (context)=> ChangeGroupScreen()),
+              );
+            },
+          ),
 
           ListTile(
             // leading: Icon(Icons.security),
@@ -419,9 +433,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
           ),
 
+
+
           ListTile(
             // leading: Icon(Icons.report),
-            leading: Icon(Icons.people_alt_outlined, color: primaryClr, size: 25,),
+            leading: Icon(Icons.people, color: primaryClr, size: 25,),
             // leading: const ImageIcon(AssetImage("assets/Icons/Emergancy contect.png")),
             title:  Text('Terms and Conditions', style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500)),
             onTap: () {

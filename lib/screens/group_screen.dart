@@ -257,37 +257,38 @@ class _GroupScreenState extends State<GroupScreen> {
                 );
               },
             ),
-            const Padding(
-              padding:  EdgeInsets.only(left: 12.0, top: 10, bottom: 10),
-              child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
-            ),
-            list.isNotEmpty ?
-            Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
-              ),
-              elevation: 5,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: list.length,
-                        itemBuilder: (context, index){
-                      return GroupCard(
-                        data: list[index],
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            )
-             : Center(child: CircularProgressIndicator(
-              color: primaryClr,
-            )),
+
+            // const Padding(
+            //   padding:  EdgeInsets.only(left: 12.0, top: 10, bottom: 10),
+            //   child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
+            // ),
+            // list.isNotEmpty ?
+            // Card(
+            //   color: Colors.white,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(20)
+            //   ),
+            //   elevation: 5,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(12.0),
+            //     child: Column(
+            //       children: [
+            //         ListView.builder(
+            //           physics: const NeverScrollableScrollPhysics(),
+            //           shrinkWrap: true,
+            //           itemCount: list.length,
+            //             itemBuilder: (context, index){
+            //           return GroupCard(
+            //             data: list[index],
+            //           );
+            //         }),
+            //       ],
+            //     ),
+            //   ),
+            // )
+            //  : Center(child: CircularProgressIndicator(
+            //   color: primaryClr,
+            // )),
 
           ],
         ),

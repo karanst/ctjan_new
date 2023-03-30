@@ -30,12 +30,12 @@ class AuthTextField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10)
                 ),
 
-                width: 48,
-                height: 48,
+                width: 40,
+                height: 40,
                 child: iconImage,
               ),
             ),
-            SizedBox(width: 18,),
+            const SizedBox(width: 8,),
             Expanded(
               child: Container(
                 width: MediaQuery.of(context).size.width,

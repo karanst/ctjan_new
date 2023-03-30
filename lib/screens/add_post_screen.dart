@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/models/get_profile_model.dart';
-import 'package:ctjan/responsive/mobile_screen_layout.dart';
 import 'package:ctjan/screens/bottom_bar.dart';
 import 'package:ctjan/utils/colors.dart';
 import 'package:ctjan/utils/utils.dart';
@@ -13,12 +12,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:neopop/neopop.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddPostScreen extends StatefulWidget {
-  const AddPostScreen({Key? key}) : super(key: key);
+  final String? type;
+  const AddPostScreen({Key? key, this.type}) : super(key: key);
 
   @override
   State<AddPostScreen> createState() => _AddPostScreenState();
@@ -183,89 +182,89 @@ class _AddPostScreenState extends State<AddPostScreen> {
           const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectIndex = 1;
-                      });
-                    },
-                    child: Container(
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: selectIndex == 1 ? primaryClr : Colors.grey),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text(
-                          "Normal",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectIndex = 2;
-
-                      });
-                    },
-                    child: Container(
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: selectIndex == 2 ? primaryClr : Colors.grey),
-                      child: const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text(
-                          "Event",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectIndex = 3;
-                      });
-                    },
-                    child: Container(
-                      height: 35,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: selectIndex == 3 ? primaryClr : Colors.grey),
-                      child: const Padding(
-                        padding:  EdgeInsets.all(8.0),
-                        child: Center(
-                            child: Text(
-                          "Public",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: InkWell(
+          //           onTap: () {
+          //             setState(() {
+          //               selectIndex = 1;
+          //             });
+          //           },
+          //           child: Container(
+          //             height: 35,
+          //             decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(10),
+          //                 color: selectIndex == 1 ? primaryClr : Colors.grey),
+          //             child: const Padding(
+          //               padding: EdgeInsets.all(8.0),
+          //               child: Center(
+          //                   child: Text(
+          //                 "Normal",
+          //                 style: TextStyle(color: Colors.white),
+          //               )),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //       const SizedBox(
+          //         width: 10,
+          //       ),
+          //       Expanded(
+          //         child: InkWell(
+          //           onTap: () {
+          //             setState(() {
+          //               selectIndex = 2;
+          //
+          //             });
+          //           },
+          //           child: Container(
+          //             height: 35,
+          //             decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(10),
+          //                 color: selectIndex == 2 ? primaryClr : Colors.grey),
+          //             child: const Padding(
+          //               padding: EdgeInsets.all(8.0),
+          //               child: Center(
+          //                   child: Text(
+          //                 "Event",
+          //                 style: TextStyle(color: Colors.white),
+          //               )),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //       const SizedBox(
+          //         width: 10,
+          //       ),
+          //       Expanded(
+          //         child: InkWell(
+          //           onTap: () {
+          //             setState(() {
+          //               selectIndex = 3;
+          //             });
+          //           },
+          //           child: Container(
+          //             height: 35,
+          //             decoration: BoxDecoration(
+          //                 borderRadius: BorderRadius.circular(10),
+          //                 color: selectIndex == 3 ? primaryClr : Colors.grey),
+          //             child: const Padding(
+          //               padding:  EdgeInsets.all(8.0),
+          //               child: Center(
+          //                   child: Text(
+          //                 "Public",
+          //                 style: TextStyle(color: Colors.white),
+          //               )),
+          //             ),
+          //           ),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // ),
 
           Column(
             children: [
@@ -780,6 +779,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.type == "Event"){
+      setState(() {
+        selectIndex = 2;
+      });
+    }else if(widget.type == "Public"){
+      setState(() {
+        selectIndex = 3;
+      });
+    }else{
+      setState(() {
+        selectIndex = 1;
+      });
+    }
     getProfileData();
   }
 
@@ -803,9 +815,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: primaryClr,
+            color: whiteColor,
           ),
-          onPressed: clearImage,
+          onPressed: (){
+            Navigator.pop(context);
+          },
         ),
         title: const Text('Add Post'),
         centerTitle: true,

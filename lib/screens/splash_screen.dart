@@ -1,4 +1,5 @@
 import 'package:ctjan/screens/bottom_bar.dart';
+import 'package:ctjan/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/responsive/mobile_screen_layout.dart';
@@ -23,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
 
   String? userId;
+  String? groupId;
   getUserData()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userId = prefs.getString(TokenString.userid);
@@ -32,10 +34,17 @@ class _SplashScreenState extends State<SplashScreen> {
             context, MaterialPageRoute(builder: (context) => SignInScreen()));
       });
     }else{
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) =>  BottomBar()));
-      });
+      if(groupId == "0"){
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) =>  SearchScreen()));
+        });
+      }else{
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) =>  BottomBar()));
+        });
+      }
     }
 
   }
@@ -47,17 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Container(
           width: MediaQuery.of(context).size.width/2,
           height: MediaQuery.of(context).size.height/2,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/appicon.png'),
-              const Text("Jan", style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-                fontSize: 36
-              ),)
-            ],
-          ),
+          child: Image.asset('assets/appicon.png'),
         ),
       ),
     );

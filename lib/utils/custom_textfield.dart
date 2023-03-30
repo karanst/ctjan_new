@@ -6,6 +6,7 @@ import 'package:ctjan/utils/colors.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController textEditingController;
   final bool isPassword;
+  final bool isEnabled;
   final String hintText;
   final String? title;
   final int? maxLngth;
@@ -14,6 +15,7 @@ class CustomTextField extends StatelessWidget {
       {Key? key,
         required this.textEditingController,
         this.isPassword = false,
+        this.isEnabled = true,
         required this.hintText,
         required this.title,
         this.maxLngth,
@@ -58,9 +60,11 @@ class CustomTextField extends StatelessWidget {
                   ]
               ),
               child: TextField(
+                enabled: isEnabled,
                 maxLength: maxLngth,
                 keyboardType: textInputType,
                 decoration:  InputDecoration(
+
                   counterText: '',
                   hintText: hintText,
                     hintStyle: TextStyle(

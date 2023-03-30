@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ctjan/screens/add_post.dart';
 import 'package:ctjan/screens/home_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -162,21 +163,14 @@ class _BottomBarState extends State<BottomBar> {
   }
 
 
-  List<dynamic> _handlePages1 = [
-    const FeedScreen(),
-    // const SearchScreen(),
-    const AddPostScreen(),
-    // Wishlist(),
-    const ProfileScreen(
-      // uid: FirebaseAuth.instance.currentUser!.uid,
-    ),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
     List<dynamic> _handlePages = [
        const GroupScreen(),
-      const AddPostScreen(),
+      const AddPosts(),
+      //AddPostScreen(),
       const ProfileScreen(),
     ];
     // [

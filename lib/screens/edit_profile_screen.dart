@@ -1,26 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ctjan/screens/feed_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
-import 'package:flutter_svg/svg.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/models/get_profile_model.dart';
-import 'package:ctjan/resources/auth_methods.dart';
-import 'package:ctjan/responsive/mobile_screen_layout.dart';
-import 'package:ctjan/responsive/responsive_layout_screen.dart';
-import 'package:ctjan/responsive/web_screen_layout.dart';
-import 'package:ctjan/screens/login_screen.dart';
 import 'package:ctjan/screens/send_otp.dart';
 import 'package:ctjan/utils/custom_textfield.dart';
 import 'package:ctjan/utils/utils.dart';
-import 'package:image_picker_gallery_camera/image_picker_gallery_camera.dart';
-import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/colors.dart';
 import '../widgets/text_field_input.dart';
@@ -37,6 +27,8 @@ class _LoginScreenState extends State<EditProfileScreen> {
    TextEditingController _mobileController = TextEditingController();
    TextEditingController _bioController = TextEditingController();
    TextEditingController _userNameController = TextEditingController();
+   TextEditingController _genderController = TextEditingController();
+   TextEditingController _dobController = TextEditingController();
   File? _profileImage;
   bool _isLoading = false;
   bool loading = false;
@@ -176,14 +168,14 @@ class _LoginScreenState extends State<EditProfileScreen> {
        'user_id': userid.toString(),
        'first_name': _userNameController.text.toString(),
        'mobile' : _mobileController.text.toString(),
-       'email': _emailController.text.toString(),
+       // 'email': _emailController.text.toString(),
      'about_us':_bioController.text.toString()
      });
 
-     // if(_profileImage != null) {
+     if(_profileImage != null) {
        request.files.add(await http.MultipartFile.fromPath(
            'profile_pic', _profileImage!.path.toString()));
-     // }
+     }
 
      print("this is update profile request ${request.fields.toString()} and ${request.files.toString()}");
      request.headers.addAll(headers);
@@ -235,6 +227,8 @@ class _LoginScreenState extends State<EditProfileScreen> {
           _emailController = TextEditingController(text: jsonResponse.userId!.email.toString());
           _mobileController = TextEditingController(text: jsonResponse.userId!.mobile.toString());
           _bioController = TextEditingController(text: jsonResponse.userId!.aboutUs.toString());
+          _genderController =TextEditingController(text: jsonResponse.userId!.gender.toString());
+          _dobController =TextEditingController(text: jsonResponse.userId!.dob.toString());
           // seekerProfileModel = jsonResponse;
           // firstNameController = TextEditingController(text: seekerProfileModel!.data![0].name);
           // emailController = TextEditingController(text: seekerProfileModel!.data![0].email);
@@ -293,236 +287,274 @@ class _LoginScreenState extends State<EditProfileScreen> {
           centerTitle: false,
         ),
         body: SingleChildScrollView(
-          child: Container(
-            height: 800,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Flexible(
-                  //   flex: 2,
-                  //   child: Container(),
-                  // ),
-                  // SvgPicture.asset(
-                  //   'assets/ic_instagram.svg',
-                  //   color: primaryColor,
-                  //   height: 64,
-                  // ),
-                  const SizedBox(
-                    height: 64,
-                  ),
-                  Stack(
-                    children: [
-                      _profileImage != null ?
-                      ClipRRect
-                        (
-                          borderRadius: BorderRadius.circular(100.0),
-                              // radius: 64,
-                              child: Container(
-                                width: 150,
-                                  height: 150,
-                                  child: Image.file(File(_profileImage!.path), fit: BoxFit.fill,)))
-                      :     profileImage != null || profileImage != '' ?
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(100.0),
-                          // radius: 64,
-                          child: Container(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Flexible(
+                //   flex: 2,
+                //   child: Container(),
+                // ),
+                // SvgPicture.asset(
+                //   'assets/ic_instagram.svg',
+                //   color: primaryColor,
+                //   height: 64,
+                // ),
+                const SizedBox(
+                  height: 64,
+                ),
+                Stack(
+                  children: [
+                    _profileImage != null ?
+                    ClipRRect
+                      (
+                        borderRadius: BorderRadius.circular(100.0),
+                            // radius: 64,
+                            child: Container(
                               width: 150,
-                              height: 150,
-                              child: Image.network(profileImage.toString(), fit: BoxFit.fill,)))
-                          : const CircleAvatar(
-                              backgroundColor: Colors.grey,
-                              radius: 64,
-                              backgroundImage: NetworkImage(
-                                'https://180dc.org/wp-content/uploads/2016/08/default-profile.png',
-                              ),
-                            ),
-                      Positioned(
-                        bottom: 0,
-                        left: 80,
+                                height: 150,
+                                child: Image.file(File(_profileImage!.path), fit: BoxFit.fill,)))
+                    :     profileImage != null || profileImage != '' || profileImage != imageUrl ?
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(100.0),
+                        // radius: 64,
                         child: Container(
-                          decoration: const ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(100)),
-                            ),
-                            color: blueColor,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)
                           ),
-                          child: IconButton(
-                            onPressed: (){
-                              _selectImage(context);
-                              // requestPermission(context, 1);
-                            },
-                            splashColor: Colors.blue,
-                            icon: const Icon(
-                              Icons.add_a_photo,
-                            ),
+                            width: 150,
+                            height: 150,
+                            child: Image.network(profileImage.toString(), fit: BoxFit.fill,)))
+                        : const CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: 64,
+                            child: Icon(Icons.person, size: 50,)
+                            // NetworkImage(
+                            //   'https://180dc.org/wp-content/uploads/2016/08/default-profile.png',
+                            // ),
+                          ),
+                    Positioned(
+                      bottom: 0,
+                      left: 80,
+                      child: Container(
+                        decoration: const ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(100)),
+                          ),
+                          color: blueColor,
+                        ),
+                        child: IconButton(
+                          onPressed: (){
+                            _selectImage(context);
+                            // requestPermission(context, 1);
+                          },
+                          splashColor: Colors.blue,
+                          icon: const Icon(
+                            Icons.add_a_photo,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 34,
-                  ),
-                  CustomTextField(textEditingController: _userNameController, hintText: "Name", textInputType: TextInputType.text, title: "Name", ),
-                  CustomTextField(textEditingController: _mobileController, hintText: "Contact No", textInputType: TextInputType.number, title: "Contact No.", maxLngth: 10,),
-                  CustomTextField(textEditingController: _emailController, hintText: "Email", textInputType: TextInputType.emailAddress, title: "Email", ),
-                  CustomTextField(textEditingController: _bioController, hintText: "About me", textInputType: TextInputType.text, title: "About me", ),
-
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  // Container(
-                  //   width: MediaQuery.of(context).size.width - 30,
-                  //   child: NeoPopTiltedButton(
-                  //     isFloating: true,
-                  //     onTapUp: () {
-                  //       setState(() {
-                  //         loading = true;
-                  //       });
-                  //     updateUserProfile();
-                  //       // AppRouter.pushNamed(Routes.LoginScreenRoute);
-                  //     },
-                  //     decoration:  NeoPopTiltedButtonDecoration(
-                  //         color: primaryClr,
-                  //         plunkColor: Colors.black,
-                  //         shadowColor: Colors.grey,
-                  //         showShimmer: true,
-                  //         shimmerColor: Colors.white,
-                  //         shimmerWidth: 10),
-                  //     child:   Center(
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.symmetric(
-                  //           horizontal: 30.0,
-                  //           vertical: 15,
-                  //         ),
-                  //         child: loading ? Center(
-                  //           child: Container(
-                  //             height: 30,
-                  //             width: 30,
-                  //             child: CircularProgressIndicator(
-                  //               color: whiteColor,
-                  //             ),
-                  //           ),
-                  //         ):
-                  //         const  Text('Update Profile',
-                  //             style: TextStyle(
-                  //               color: mobileBackgroundColor,
-                  //               //ThemeDate.isDark? AppColors.txtPrmyLightColor:AppColors.txtPrmydarkColor,
-                  //               fontWeight: FontWeight.bold,
-                  //
-                  //             )),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        loading = true;
-                      });
-                      updateUserProfile();
-                      // if(mobileController.text.length != 10){
-                      //   setState(() {
-                      //     loading = false;
-                      //   });
-                      //   var snackBar = SnackBar(
-                      //     backgroundColor: primaryClr,
-                      //     content:  Text('Please enter valid mobile number'),
-                      //   );
-                      //
-                      //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      // }
-                      // else{
-                      //
-                      //   mobileLogin(_value1.toString());
-                      // }
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width / 1.1,
-                      height: 52,
-                      alignment: Alignment.center,
-                      //padding: EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                          color: primaryClr,
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: loading ? Center(
-                        child: Container(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(
-                            color: whiteColor,
-                          ),
-                        ),
-                      ): const Text("Update Profile", style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600
-                      ),),
                     ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 34,
+                ),
+                CustomTextField(textEditingController: _userNameController, hintText: "Name", textInputType: TextInputType.text, title: "Name", ),
+                CustomTextField(textEditingController: _mobileController, hintText: "Contact No", textInputType: TextInputType.number, title: "Contact No.", maxLngth: 10,),
+                // CustomTextField(textEditingController: _emailController, hintText: "Email", textInputType: TextInputType.emailAddress, title: "Email", ),
+                CustomTextField(textEditingController: _bioController, hintText: "About me", textInputType: TextInputType.text, title: "About me", ),
+                CustomTextField(textEditingController: _genderController, hintText: "Gender", textInputType: TextInputType.text, title: "Gender", ),
+                CustomTextField(textEditingController: _dobController, hintText: "DOB", textInputType: TextInputType.text, title: "DOB", ),
+
+                const SizedBox(
+                  height: 25,
+                ),
+                // Container(
+                //   width: MediaQuery.of(context).size.width - 30,
+                //   child: NeoPopTiltedButton(
+                //     isFloating: true,
+                //     onTapUp: () {
+                //       setState(() {
+                //         loading = true;
+                //       });
+                //     updateUserProfile();
+                //       // AppRouter.pushNamed(Routes.LoginScreenRoute);
+                //     },
+                //     decoration:  NeoPopTiltedButtonDecoration(
+                //         color: primaryClr,
+                //         plunkColor: Colors.black,
+                //         shadowColor: Colors.grey,
+                //         showShimmer: true,
+                //         shimmerColor: Colors.white,
+                //         shimmerWidth: 10),
+                //     child:   Center(
+                //       child: Padding(
+                //         padding: const EdgeInsets.symmetric(
+                //           horizontal: 30.0,
+                //           vertical: 15,
+                //         ),
+                //         child: loading ? Center(
+                //           child: Container(
+                //             height: 30,
+                //             width: 30,
+                //             child: CircularProgressIndicator(
+                //               color: whiteColor,
+                //             ),
+                //           ),
+                //         ):
+                //         const  Text('Update Profile',
+                //             style: TextStyle(
+                //               color: mobileBackgroundColor,
+                //               //ThemeDate.isDark? AppColors.txtPrmyLightColor:AppColors.txtPrmydarkColor,
+                //               fontWeight: FontWeight.bold,
+                //
+                //             )),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      loading = true;
+                    });
+                    updateUserProfile();
+                    // if(mobileController.text.length != 10){
+                    //   setState(() {
+                    //     loading = false;
+                    //   });
+                    //   var snackBar = SnackBar(
+                    //     backgroundColor: primaryClr,
+                    //     content:  Text('Please enter valid mobile number'),
+                    //   );
+                    //
+                    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    // }
+                    // else{
+                    //
+                    //   mobileLogin(_value1.toString());
+                    // }
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    height: 52,
+                    alignment: Alignment.center,
+                    //padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                        color: primaryClr,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: loading ? Center(
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          color: whiteColor,
+                        ),
+                      ),
+                    ): const Text("Update Profile", style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600
+                    ),),
                   ),
-                  // InkWell(
-                  //   onTap: signUpUser,
-                  //   child: Container(
-                  //     width: double.infinity,
-                  //     alignment: Alignment.center,
-                  //     padding: const EdgeInsets.symmetric(vertical: 12),
-                  //     decoration: const ShapeDecoration(
-                  //       shape: RoundedRectangleBorder(
-                  //         borderRadius: BorderRadius.all(
-                  //           Radius.circular(
-                  //             4,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       color: blueColor,
-                  //     ),
-                  //     child: _isLoading
-                  //         ? const Center(
-                  //             child: CircularProgressIndicator(
-                  //               color: primaryColor,
-                  //             ),
-                  //           )
-                  //         : const Text("Sign Up"),
-                  //   ),
-                  // ),
-                  // const SizedBox(
-                  //   height: 12,
-                  // ),
-                  // Flexible(
-                  //   flex: 2,
-                  //   child: Container(),
-                  // ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: [
-                  //     Container(
-                  //       padding: const EdgeInsets.symmetric(
-                  //         vertical: 8,
-                  //       ),
-                  //       child: const Text("Already have an account? "),
-                  //     ),
-                  //     GestureDetector(
-                  //       onTap: navigateToLoginScreen,
-                  //       child: Container(
-                  //         padding: const EdgeInsets.symmetric(
-                  //           vertical: 8,
-                  //         ),
-                  //         child: const Text(
-                  //           "Sign In",
-                  //           style: TextStyle(
-                  //             fontWeight: FontWeight.bold,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // )
-                  //textfield for email
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      loading = true;
+                    });
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangeGroupScreen()));
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    height: 52,
+                    alignment: Alignment.center,
+                    //padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: primaryClr),
+                        color: whiteColor,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: loading ? Center(
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          color: whiteColor,
+                        ),
+                      ),
+                    ):  Text("Update Profile", style: TextStyle(
+                        color: primaryClr,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600
+                    ),),
+                  ),
+                ),
+                // InkWell(
+                //   onTap: signUpUser,
+                //   child: Container(
+                //     width: double.infinity,
+                //     alignment: Alignment.center,
+                //     padding: const EdgeInsets.symmetric(vertical: 12),
+                //     decoration: const ShapeDecoration(
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.all(
+                //           Radius.circular(
+                //             4,
+                //           ),
+                //         ),
+                //       ),
+                //       color: blueColor,
+                //     ),
+                //     child: _isLoading
+                //         ? const Center(
+                //             child: CircularProgressIndicator(
+                //               color: primaryColor,
+                //             ),
+                //           )
+                //         : const Text("Sign Up"),
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 12,
+                // ),
+                // Flexible(
+                //   flex: 2,
+                //   child: Container(),
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Container(
+                //       padding: const EdgeInsets.symmetric(
+                //         vertical: 8,
+                //       ),
+                //       child: const Text("Already have an account? "),
+                //     ),
+                //     GestureDetector(
+                //       onTap: navigateToLoginScreen,
+                //       child: Container(
+                //         padding: const EdgeInsets.symmetric(
+                //           vertical: 8,
+                //         ),
+                //         child: const Text(
+                //           "Sign In",
+                //           style: TextStyle(
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //         ),
+                //       ),
+                //     )
+                //   ],
+                // )
+                //textfield for email
+              ],
             ),
           ),
         ));

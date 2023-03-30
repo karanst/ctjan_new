@@ -1,7 +1,7 @@
 class ApiPath {
 
   static const String baseUrl = "https://developmentalphawizz.com/social_media/api/";
-  static const String imageUrl = "https://developmentalphawizz.com/assignment-portal/";
+
 
   static const String loginWithOtp = '${baseUrl}send_otp';
   static const String verifyOtp = '${baseUrl}u_verify_otp';
@@ -15,6 +15,7 @@ class ApiPath {
   static const String getMyPost = '${baseUrl}get_my_post';
   static const String deletePost = '${baseUrl}delete_post';
   static const String getGroupPosts = '${baseUrl}get_groups_post';
+  static const String searchGroups = '${baseUrl}serach_group';
   static const String likeUnlike = '${baseUrl}lik_dislike';
   static const String getComments = '${baseUrl}get_comment';
   static const String sendComment = '${baseUrl}comment';

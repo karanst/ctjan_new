@@ -1,3 +1,5 @@
+import 'package:ctjan/screens/bottom_bar.dart';
+import 'package:ctjan/screens/search_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +75,10 @@ class MyApp extends StatelessWidget {
                   ),
                 );
               }
-              return SplashScreen();
+              return
+                // SearchScreen();
+                //BottomBar();
+                SplashScreen();
               //   userId != null || userId != ''?
               //    const BottomBar()
               // : const SignInScreen();

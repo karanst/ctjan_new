@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ctjan/screens/bottom_bar.dart';
+import 'package:ctjan/screens/search_screen.dart';
 import 'package:ctjan/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -109,8 +110,13 @@ class _OTPScreenState extends State<OTPScreen> {
           await prefs.setString(TokenString.groupJoined, isGroupJoined);
 
           showSnackbar("${jsonResponse.message.toString()}", context);
-          Navigator.push(context, MaterialPageRoute(builder: (context) =>  BottomBar(groupJoined: isGroupJoined.toString(),)));
-
+          if(isGroupJoined == "0"){
+             Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                SearchScreen()));
+          }else {
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                BottomBar(groupJoined: isGroupJoined.toString(),)));
+          }
           // Navigator.push(context, MaterialPageRoute(builder: (context) => const MobileScreenLayout()));
       }
         else{
