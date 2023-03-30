@@ -1,14 +1,23 @@
+import 'dart:convert';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/models/myposts_model.dart';
 
 import 'package:ctjan/utils/colors.dart';
-
+import 'package:ctjan/utils/utils.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Helper/token_strings.dart';
 
 
 class MyPostCard extends StatefulWidget {
   final MyPosts? data;
-  const MyPostCard({Key? key, this.data}) : super(key: key);
+  final String? postId;
+  const MyPostCard({Key? key, this.data, this.postId}) : super(key: key);
 
   @override
   State<MyPostCard> createState() => _MyPostCardState();
@@ -60,6 +69,47 @@ class _MyPostCardState extends State<MyPostCard> {
   // }
 
 
+  String? userid;
+
+  deletePosts()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userid = prefs.getString(TokenString.userid);
+    var headers = {
+      'Cookie': 'ci_session=0eaf4ebac75de632de1c0763f08419b4a3c1bdec'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.deletePost));
+
+    request.fields.addAll({
+      // 'user_id': userid.toString(),
+      'post_id':widget.postId!.toString(),
+    });
+
+    print("this is delete post request ${request.fields.toString()}");
+
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+
+      var finalResponse = await response.stream.bytesToString();
+      final jsonResponse = json.decode(finalResponse);
+      if(jsonResponse['response_code'] == '1'){
+        showSnackbar("${jsonResponse['message']}", context);
+        Navigator.pop(context, 'true');
+        // setState(() {
+        //   _commentController.clear();
+        // });
+        // loadComments();
+        // showSnackbar("${jsonResponse['message']}", context);
+      }
+      else{
+        showSnackbar("${jsonResponse['message']}", context);
+      }
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // user = Provider.of<UserProvider>(context).getUser;
@@ -97,7 +147,7 @@ class _MyPostCardState extends State<MyPostCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.data!.username.toString(),
+                          '${widget.data!.fName.toString()} ${widget.data!.lName.toString()}',
                           style: const TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
@@ -112,42 +162,27 @@ class _MyPostCardState extends State<MyPostCard> {
                     showDialog(
                       context: context,
                       builder: (context) => Dialog(
-                        child: Container(
-                          height: 150,
-                          width: MediaQuery.of(context). size.width ,
-                          decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.circular(15)
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text("Remove from wishlist", style: TextStyle(color: primaryClr),),
-                              const SizedBox(height: 40,),
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(onPressed: (){
-                                      // removeFromWishList();
-                                      Navigator.pop(context);
-                                    }, child:  Text("Remove", style: TextStyle(color: whiteColor),),
-                                      style: ElevatedButton.styleFrom(
-                                          primary: primaryClr
-                                      ),),
-                                    ElevatedButton(onPressed: (){
-                                      Navigator.pop(context);
-                                    }, child:  Text("Cancel", style: TextStyle(color: primaryClr),),
-                                      style: ElevatedButton.styleFrom(
-                                          primary: secondaryColor
-                                      ),),
-                                  ],
+                          shrinkWrap: true,
+                          children: ['Delete Post']
+                              .map(
+                                (e) => InkWell(
+                              onTap: () async {
+                                deletePosts();
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                  horizontal: 16,
                                 ),
+                                child: Text(e),
                               ),
-                            ],
-                          ),
+                            ),
+                          ).toList(),
                         ),
                       ),
                     );
@@ -157,6 +192,56 @@ class _MyPostCardState extends State<MyPostCard> {
                     color: primaryColor,
                   ),
                 )
+                // IconButton(
+                //   onPressed: () {
+                //     showDialog(
+                //       context: context,
+                //       builder: (context) => Dialog(
+                //         child: Container(
+                //           height: 150,
+                //           width: MediaQuery.of(context). size.width ,
+                //           decoration: BoxDecoration(
+                //               color: whiteColor,
+                //               borderRadius: BorderRadius.circular(15)
+                //           ),
+                //           child: Column(
+                //             mainAxisAlignment: MainAxisAlignment.center,
+                //             crossAxisAlignment: CrossAxisAlignment.center,
+                //             children: [
+                //               Text("Remove from wishlist", style: TextStyle(color: primaryClr),),
+                //               const SizedBox(height: 40,),
+                //               Padding(
+                //                 padding: const EdgeInsets.all(8),
+                //                 child: Row(
+                //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //                   children: [
+                //                     ElevatedButton(onPressed: (){
+                //                       // removeFromWishList();
+                //                       Navigator.pop(context);
+                //                     }, child:  Text("Remove", style: TextStyle(color: whiteColor),),
+                //                       style: ElevatedButton.styleFrom(
+                //                           primary: primaryClr
+                //                       ),),
+                //                     ElevatedButton(onPressed: (){
+                //                       Navigator.pop(context);
+                //                     }, child:  Text("Cancel", style: TextStyle(color: primaryClr),),
+                //                       style: ElevatedButton.styleFrom(
+                //                           primary: secondaryColor
+                //                       ),),
+                //                   ],
+                //                 ),
+                //               ),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     );
+                //   },
+                //   icon: const Icon(
+                //     Icons.more_vert,
+                //     color: primaryColor,
+                //   ),
+                // )
               ],
             ),
           ),
@@ -193,7 +278,7 @@ class _MyPostCardState extends State<MyPostCard> {
                 widget.data!.img!.length > 1
                     ? CarouselSlider(
                   options: CarouselOptions(
-                    height: 200.0,
+                    height: 250,
                     enlargeCenterPage: true,
                     autoPlay: true,
                     aspectRatio: 16 / 9,
@@ -214,7 +299,7 @@ class _MyPostCardState extends State<MyPostCard> {
                               height: MediaQuery.of(context).size.height *
                                   0.35,
                               width: double.infinity,
-                              child: item.isEmpty
+                              child: item.isEmpty || item == imageUrl
                                   ? Image.asset(
                                 'assets/placeholder.png',
                                 // widget.snap['postUrl'],
@@ -233,7 +318,7 @@ class _MyPostCardState extends State<MyPostCard> {
                     : SizedBox(
                   height: MediaQuery.of(context).size.height * 0.35,
                   width: double.infinity,
-                  child: widget.data!.img!.isEmpty
+                  child: widget.data!.img!.isEmpty || widget.data!.img![0].toString() == imageUrl
                       ? Image.asset(
                     'assets/placeholder.png',
                     // widget.snap['postUrl'],
@@ -245,6 +330,18 @@ class _MyPostCardState extends State<MyPostCard> {
                     fit: BoxFit.cover,
                   ),
                 ),
+                // Container(
+                //   height: 40,
+                //   child: ListView.builder(
+                //     itemCount: widget.data!.img!.length,
+                //       itemBuilder: (context, index){
+                //     return DotsIndicator(
+                //       dotsCount: widget.data!.img!.length,
+                //       position: 1,
+                //     );
+                //   }),
+                // )
+
 
                 // AnimatedOpacity(
                 //   duration: const Duration(milliseconds: 200),
@@ -344,97 +441,6 @@ class _MyPostCardState extends State<MyPostCard> {
           //   ],
           // ),
           //Description and comment count
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // DefaultTextStyle(
-                //   style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                //   child: Text(
-                //       widget.data!.totalLikes.toString() != '0' ||
-                //           widget.data!.totalLikes.toString() != null
-                //           ? '${widget.data!.totalLikes.toString()} likes'
-                //           : '0 likes',
-                //       //'${widget.data!.} likes',
-                //       style: const TextStyle(
-                //         color: primaryColor,
-                //       )
-                //     //Theme.of(context).textTheme.bodyText2,
-                //   ),
-                // ),
-                // Container(
-                //   width: double.infinity,
-                //   padding: const EdgeInsets.only(
-                //     top: 8,
-                //   ),
-                //   child: RichText(
-                //       text: TextSpan(
-                //           style: const TextStyle(color: primaryColor),
-                //           children: [
-                //             TextSpan(
-                //               text: widget.data!.username.toString(),
-                //               style: const TextStyle(
-                //                 fontWeight: FontWeight.bold,
-                //                 color: primaryColor,
-                //               ),
-                //             ),
-                //             TextSpan(
-                //                 text: '  ${widget.data!.description.toString()}',
-                //                 style: const TextStyle(
-                //                   color: primaryColor,
-                //                 )),
-                //           ])),
-                // ),
-                // InkWell(
-                //   onTap: () {},
-                //   child: Container(
-                //     padding: const EdgeInsets.symmetric(vertical: 4),
-                //     child: GestureDetector(
-                //       onTap: () {
-                //         //   Navigator.push(
-                //         //   context,
-                //         //   MaterialPageRoute(
-                //         //     builder: (context) => CommentsScreen(
-                //         //       snap: widget.snap,
-                //         //     ),
-                //         //   ),
-                //         // );
-                //       },
-                //       child: commentLen > 0
-                //           ? Text(
-                //         'View all $commentLen comments',
-                //         style: const TextStyle(
-                //           fontSize: 16,
-                //           color: secondaryColor,
-                //         ),
-                //       )
-                //           : Container(),
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text(
-                    widget.data!.date.toString(),
-                    // DateFormat.yMMMd().format(
-                    //   widget.data!.date.
-                    //  // widget.snap['datePublished'].toDate(),
-                    // ),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: secondaryColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
         ],
       ),
     );

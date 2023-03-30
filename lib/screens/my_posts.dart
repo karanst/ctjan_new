@@ -26,7 +26,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
   StreamController<List<MyPosts>> _streamController = StreamController<List<MyPosts>>();
   List<MyPosts> posts = [];
 
-  myPosts()async{
+  Future<List<MyPosts>?> myPosts()async{
     setState(() {
       loadingData = true;
     });
@@ -43,8 +43,8 @@ class _MyPostScreenState extends State<MyPostScreen> {
     print("this is my posts request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
+    var finalResponse = await response.stream.bytesToString();
     if (response.statusCode == 200) {
-      var finalResponse = await response.stream.bytesToString();
       final jsonResponse = MypostsModel.fromJson(json.decode(finalResponse));
       if(jsonResponse.responseCode == "1") {
 
@@ -68,6 +68,7 @@ class _MyPostScreenState extends State<MyPostScreen> {
     else {
       print(response.reasonPhrase);
     }
+    return MypostsModel.fromJson(json.decode(finalResponse)).data;
   }
 
   loadPosts() async {
@@ -118,20 +119,25 @@ class _MyPostScreenState extends State<MyPostScreen> {
             reverse: true,
             shrinkWrap: true,
             itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) =>
-            snapshot.connectionState == ConnectionState.active &&
-                snapshot.hasData
-                ?
-            Container(
-              // margin: EdgeInsets.symmetric(
-              //   horizontal: width >= webScreenSize ? width * 0.3 : 0,
-              //   vertical: width >= webScreenSize ? 15 : 0,
-              // ),
-              child: MyPostCard(
-                data: snapshot.data![index],
-              ),
-            )
-                : Container(),
+            itemBuilder: (context, index) {
+              print("this is post id ${snapshot.data![index].id}");
+              return
+              snapshot.connectionState == ConnectionState.active &&
+                  snapshot.hasData
+                  ?
+              Container(
+                // margin: EdgeInsets.symmetric(
+                //   horizontal: width >= webScreenSize ? width * 0.3 : 0,
+                //   vertical: width >= webScreenSize ? 15 : 0,
+                // ),
+                child: MyPostCard(
+                  data: snapshot.data![index],
+                  postId: snapshot.data![index].id.toString(),
+
+                ),
+              )
+                  : Container();
+            }
           )
               : const Center(
             child: Text('No Posts found!', style: TextStyle(

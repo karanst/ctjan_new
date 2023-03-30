@@ -13,6 +13,7 @@ class ApiPath {
   static const String allPostsUrl = '${baseUrl}get_all_post';
   static const String addPosts = '${baseUrl}post_add';
   static const String getMyPost = '${baseUrl}get_my_post';
+  static const String deletePost = '${baseUrl}delete_post';
   static const String getGroupPosts = '${baseUrl}get_groups_post';
   static const String likeUnlike = '${baseUrl}lik_dislike';
   static const String getComments = '${baseUrl}get_comment';

@@ -36,9 +36,9 @@ class _BottomBarState extends State<BottomBar> {
     if (widget.index != null) {
       setState(() {
         _currentIndex = widget.index!;
+        currentIndex = widget.index!;
       });
     }
-
     // setState(() {
     //   userId = preferences.getString(TokenString.userid);
     //   isGroupJoined = preferences.getString(TokenString.groupJoined);
