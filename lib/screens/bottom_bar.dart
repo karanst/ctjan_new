@@ -2,13 +2,15 @@ import 'dart:io';
 
 import 'package:ctjan/screens/add_post.dart';
 import 'package:ctjan/screens/home_screen.dart';
+import 'package:ctjan/screens/people_screen.dart';
+import 'package:ctjan/screens/places_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/screens/add_post_screen.dart';
-import 'package:ctjan/screens/feed_screen.dart';
 import 'package:ctjan/screens/group_screen.dart';
+import 'package:ctjan/screens/feed_screen.dart';
 import 'package:ctjan/screens/profile_screen.dart';
 import 'package:ctjan/screens/wishlist.dart';
 import 'package:ctjan/utils/colors.dart';
@@ -90,8 +92,22 @@ class _BottomBarState extends State<BottomBar> {
           Padding(
               padding: const EdgeInsets.all(4.0),
               child: Icon(
-                Icons.add_box_outlined,
+                Icons.place,
                 color: _currentIndex == 1 ? whiteColor : blackClr,
+              )
+            // ImageIcon(
+            //   AssetImage(
+            //       _currentIndex == 1?
+            //       'images/icons/product_fill.png'
+            //           : 'images/icons/product_fill.png'),
+            //   color: AppColor().colorPrimary(),
+            // ),
+          ),
+          Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Icon(
+                Icons.people_alt_outlined,
+                color: _currentIndex == 2 ? whiteColor : blackClr,
               )
             // ImageIcon(
             //   AssetImage(
@@ -125,7 +141,7 @@ class _BottomBarState extends State<BottomBar> {
               // _currentIndex == 3 ?
               Icons.person,
               // : Icons.person_3_outlined,
-              color: _currentIndex == 2 ? whiteColor : blackClr,
+              color: _currentIndex == 3 ? whiteColor : blackClr,
             ),
             // child:
             // ImageIcon(
@@ -169,7 +185,9 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     List<dynamic> _handlePages = [
        const GroupScreen(),
-      const AddPosts(),
+      // const AddPosts(),
+      const ChangeGroupScreen(),
+      const PeopleScreen(),
       //AddPostScreen(),
       const ProfileScreen(),
     ];

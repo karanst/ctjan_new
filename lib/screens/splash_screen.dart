@@ -30,18 +30,18 @@ class _SplashScreenState extends State<SplashScreen> {
     userId = prefs.getString(TokenString.userid);
     if(userId == null || userId == "") {
       Future.delayed(Duration(seconds: 3), () {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignInScreen()));
       });
     }else{
       if(groupId == "0"){
         Future.delayed(Duration(seconds: 3), () {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) =>  SearchScreen()));
         });
       }else{
         Future.delayed(Duration(seconds: 3), () {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) =>  BottomBar()));
         });
       }

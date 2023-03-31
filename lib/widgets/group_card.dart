@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/models/get_profile_model.dart';
 import 'package:ctjan/models/group_list_model.dart';
-import 'package:ctjan/screens/feed_screen.dart';
+import 'package:ctjan/screens/group_screen.dart';
 import 'package:ctjan/utils/colors.dart';
 import 'package:ctjan/utils/utils.dart';
 import 'package:neopop/widgets/buttons/neopop_tilted_button/neopop_tilted_button.dart';

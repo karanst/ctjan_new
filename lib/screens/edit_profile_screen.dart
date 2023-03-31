@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:ctjan/screens/feed_screen.dart';
+import 'package:ctjan/screens/group_screen.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -489,12 +489,15 @@ class _LoginScreenState extends State<EditProfileScreen> {
                           color: whiteColor,
                         ),
                       ),
-                    ):  Text("Update Profile", style: TextStyle(
+                    ):  Text("Change Group", style: TextStyle(
                         color: primaryClr,
                         fontSize: 16,
                         fontWeight: FontWeight.w600
                     ),),
                   ),
+                ),
+                const SizedBox(
+                  height: 30,
                 ),
                 // InkWell(
                 //   onTap: signUpUser,

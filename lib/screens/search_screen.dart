@@ -72,13 +72,13 @@ class _SearchScreenState extends State<SearchScreen> {
   //   }
   // }
 
-    GroupListModel? model;
-  searchGroups(String keyword)async{
+  searchGroups(String? keyword)async{
+    searchList.clear();
 
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
     };
-    var request = http.MultipartRequest('GET', Uri.parse(ApiPath.searchGroups));
+    var request = http.MultipartRequest('POST', Uri.parse(ApiPath.searchGroups));
     request.fields.addAll({
       'search_keyword': keyword.toString()
       //_searchController.text.toString()
@@ -96,7 +96,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
         setState(() {
           searchList = jsonResponse.data!;
-          model = jsonResponse;
         });
 
         print("this is group list length ${list.length}");
@@ -114,162 +113,178 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        leading: Icon(Icons.search, color: primaryClr,),
-        title: TextFormField(
-          maxLines: 1,
-          controller: _searchController,
-          onChanged: (val){
-            // if(val.length >=4) {
-             setState(() {
-               searchGroups(val);
-             });
-            // }
+        backgroundColor: primaryClr,
+        leading: InkWell(
+          onTap: (){
+            Navigator.pop(context);
           },
-          onFieldSubmitted: ( val){
-            _searchController.clear();
-            searchGroups(val);
-          },
-          style: const TextStyle(color: primaryColor),
-          decoration: const InputDecoration(
-            hintText: 'Search for a group or area',
-            hintStyle:  TextStyle(
-              color: primaryColor
-            ),
-            border: InputBorder.none,
-            // icon: Icon(Icons.search_outlined, color: primaryClr,),
-          ),
-          // onFieldSubmitted: (String _) {
-          //   setState(() {
-          //     _isShowUser = true;
-          //   });
-          // },
-        ),
+            child: Icon(Icons.arrow_back_ios, color: whiteColor,)),
+        title: Text("Search")
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // FutureBuilder(
-            //         future: FirebaseFirestore.instance
-            //             .collection('users')
-            //             .where(
-            //               'username',
-            //               isGreaterThanOrEqualTo: _searchController.text,
-            //             )
-            //             .get(),
-            //         builder: (context, snapshot) {
-            //           if (!snapshot.hasData) {
-            //             return const Center(
-            //               child: CircularProgressIndicator(
-            //                 color: primaryColor,
-            //               ),
-            //             );
-            //           }
-            //           return ListView.builder(
-            //             itemCount: (snapshot.data! as dynamic).docs.length,
-            //             itemBuilder: (context, index) {
-            //               return InkWell(
-            //                 onTap: () => Navigator.of(context).push(
-            //                   MaterialPageRoute(
-            //                     builder: (context) => const ProfileScreen(
-            //                       // uid: (snapshot.data! as dynamic).docs[index]
-            //                       //     ['uid'],
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 child: ListTile(
-            //                   leading: CircleAvatar(
-            //                     backgroundImage: NetworkImage(
-            //                       (snapshot.data! as dynamic)
-            //                               .docs[index]
-            //                               .data()
-            //                               .containsKey('photoUrl')
-            //                           ? (snapshot.data! as dynamic).docs[index]
-            //                               ['photoUrl']
-            //                           : 'https://dreamvilla.life/wp-content/uploads/2017/07/dummy-profile-pic.png',
-            //                     ),
-            //                   ),
-            //                   title: Text(
-            //                     (snapshot.data! as dynamic).docs[index]['username'],
-            //                   ),
-            //                 ),
-            //               );
-            //             },
-            //           );
-            //         },
-            //       ),
-
-            model != null ?
-            Container(
-              // height: MediaQuery.of(context).size.height,
-              child: Card(
-                color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10,),
+              Card(
+                color: whiteColor,
+                elevation: 2,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
+                  borderRadius: BorderRadius.circular(12)
                 ),
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: model!.data!.length,
-                          itemBuilder: (context, index){
-                            return  Text("${model!.data![index].name}",style: TextStyle(color: Colors.black),);
-                            //   GroupCard(
-                            //   data: model,
-                            //   index: index,
-                            // );
-                          }),
-                    ],
+                child: TextField(
+                  maxLines: 1,
+                  controller: _searchController,
+                  onChanged: (String val){
+                    // if(val.length >=4) {
+                    setState(() {
+                      searchGroups(val);
+                    });
+                    // }
+                  },
+                  onSubmitted: (String? val){
+                    _searchController.clear();
+                    searchGroups(val);
+                  },
+                  style: const TextStyle(color: primaryColor),
+                  decoration:  InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 12, top: 14),
+                    hintText: 'Search for a group or area',
+                    hintStyle: const TextStyle(
+                        color: primaryColor
+                    ),
+                    border: InputBorder.none,
+                    suffixIcon: Icon(Icons.search_outlined, color: primaryClr,)
+                    // icon: Icon(Icons.search_outlined, color: primaryClr,),
                   ),
+                  // onFieldSubmitted: (String _) {
+                  //   setState(() {
+                  //     _isShowUser = true;
+                  //   });
+                  // },
                 ),
               ),
-            )
-                :  Container(
-              width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: const Center(
-                    child:  Text("No results found!", style: TextStyle(color: primaryColor),))),
+              // FutureBuilder(
+              //         future: FirebaseFirestore.instance
+              //             .collection('users')
+              //             .where(
+              //               'username',
+              //               isGreaterThanOrEqualTo: _searchController.text,
+              //             )
+              //             .get(),
+              //         builder: (context, snapshot) {
+              //           if (!snapshot.hasData) {
+              //             return const Center(
+              //               child: CircularProgressIndicator(
+              //                 color: primaryColor,
+              //               ),
+              //             );
+              //           }
+              //           return ListView.builder(
+              //             itemCount: (snapshot.data! as dynamic).docs.length,
+              //             itemBuilder: (context, index) {
+              //               return InkWell(
+              //                 onTap: () => Navigator.of(context).push(
+              //                   MaterialPageRoute(
+              //                     builder: (context) => const ProfileScreen(
+              //                       // uid: (snapshot.data! as dynamic).docs[index]
+              //                       //     ['uid'],
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 child: ListTile(
+              //                   leading: CircleAvatar(
+              //                     backgroundImage: NetworkImage(
+              //                       (snapshot.data! as dynamic)
+              //                               .docs[index]
+              //                               .data()
+              //                               .containsKey('photoUrl')
+              //                           ? (snapshot.data! as dynamic).docs[index]
+              //                               ['photoUrl']
+              //                           : 'https://dreamvilla.life/wp-content/uploads/2017/07/dummy-profile-pic.png',
+              //                     ),
+              //                   ),
+              //                   title: Text(
+              //                     (snapshot.data! as dynamic).docs[index]['username'],
+              //                   ),
+              //                 ),
+              //               );
+              //             },
+              //           );
+              //         },
+              //       ),
 
-            // const Padding(
-            //   padding:  EdgeInsets.only(left: 12.0, top: 10, bottom: 10),
-            //   child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
-            // ),
-            // list.isNotEmpty ?
-            // Container(
-            //   height: MediaQuery.of(context).size.height,
-            //   child: Card(
-            //     color: Colors.white,
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20)
-            //     ),
-            //     elevation: 5,
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(12.0),
-            //       child: Column(
-            //         children: [
-            //           ListView.builder(
-            //               physics: const NeverScrollableScrollPhysics(),
-            //               shrinkWrap: true,
-            //               itemCount: list.length,
-            //               itemBuilder: (context, index){
-            //                 return GroupCard(
-            //                   data: list[index],
-            //                 );
-            //               }),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // )
-            //     : Center(child: CircularProgressIndicator(
-            //   color: primaryClr,
-            // )),
-          ],
+              searchList.isNotEmpty ?
+              Container(
+                // height: MediaQuery.of(context).size.height,
+                child: Card(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)
+                  ),
+                  elevation: 5,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: searchList.length,
+                            itemBuilder: (context, index){
+                              return GroupCard(
+                                data: searchList[index],
+                              );
+                            }),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+                  :  Container(
+                width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                      child:  Text("No results found!", style: TextStyle(color: primaryColor),))),
+
+              // const Padding(
+              //   padding:  EdgeInsets.only(left: 12.0, top: 10, bottom: 10),
+              //   child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
+              // ),
+              // list.isNotEmpty ?
+              // Container(
+              //   height: MediaQuery.of(context).size.height,
+              //   child: Card(
+              //     color: Colors.white,
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20)
+              //     ),
+              //     elevation: 5,
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(12.0),
+              //       child: Column(
+              //         children: [
+              //           ListView.builder(
+              //               physics: const NeverScrollableScrollPhysics(),
+              //               shrinkWrap: true,
+              //               itemCount: list.length,
+              //               itemBuilder: (context, index){
+              //                 return GroupCard(
+              //                   data: list[index],
+              //                 );
+              //               }),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // )
+              //     : Center(child: CircularProgressIndicator(
+              //   color: primaryClr,
+              // )),
+            ],
+          ),
         ),
       ),
     );

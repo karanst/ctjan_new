@@ -57,6 +57,7 @@ dependencies:
   permission_handler: ^10.0.2
   image_cropper: ^3.0.1
   dots_indicator: ^2.1.0
+  flutter_branch_sdk: ^6.6.0
 
 
 dev_dependencies:

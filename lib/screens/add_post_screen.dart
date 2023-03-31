@@ -37,7 +37,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   var imagePathList;
   bool isImages = false;
   int selectIndex = 1;
-
+  var type;
   String? selectedValue;
   String _dateValue = '';
   var dateFormate;
@@ -268,6 +268,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
           Column(
             children: [
+              type == "Event" ?
               Card(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -287,7 +288,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         border: InputBorder.none),
                   ),
                 ),
-              ),
+              )
+              : const SizedBox.shrink(),
               const SizedBox(
                 height: 10,
               ),
@@ -299,28 +301,34 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(2.0),
                   child: TextFormField(
+                    minLines: 6,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     style: const TextStyle(
                         color: primaryColor
                     ),
                     controller: _descriptionController,
                     decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 8),
+                      contentPadding: EdgeInsets.only(left: 8, top: 8),
                         hintStyle: TextStyle(color: primaryColor),
-                        hintText: 'Write a caption..', border: InputBorder.none),
+                        hintText: 'Description',
+                        border: InputBorder.none),
                   ),
                 ),
               ),
             ],
           ),
-          selectIndex == 2
+          type == "Event"
               ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Card(
-                        elevation: 5,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                    Card(
+                      elevation: 5,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width/2 -20,
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: TextFormField(
@@ -333,18 +341,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             decoration: const InputDecoration(
                                 contentPadding: EdgeInsets.only(left: 10),
                                 border: InputBorder.none,
-                                hintText: 'Select Date',
+                                hintText: 'Start Date',
                                 hintStyle: TextStyle(color: primaryColor)),
                           ),
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Card(
-                        elevation: 5,
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
+                    Card(
+                      elevation: 5,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width/2 -20,
                         child: Padding(
                           padding: const EdgeInsets.all(2.0),
                           child: TextFormField(
@@ -366,10 +375,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     ),
                   ],
                 )
-              : SizedBox.shrink(),
-          SizedBox(
+              : const SizedBox.shrink(),
+          const SizedBox(
             height: 10,
           ),
+
           // Padding(
           //   padding: const EdgeInsets.all(8.0),
           //   child: InkWell(
@@ -506,8 +516,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 isLoading = true;
               });
               if(grpId != '0') {
-                if(
-                titleController.text.isNotEmpty && _descriptionController.text.isNotEmpty &&
+                if(_descriptionController.text.isNotEmpty &&
                 cameraImage != null || imagePathList != null ) {
                   uploadPost();
                 }else{
@@ -610,7 +619,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
             return Stack(
               children: [
                 Card(
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15))),
                     child: Container(
                       width: 100,
@@ -775,26 +784,308 @@ class _AddPostScreenState extends State<AddPostScreen> {
       print(response.reasonPhrase);
     }
   }
+
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
     super.initState();
-    if(widget.type == "Event"){
-      setState(() {
-        selectIndex = 2;
-      });
-    }else if(widget.type == "Public"){
-      setState(() {
-        selectIndex = 3;
-      });
-    }else{
-      setState(() {
-        selectIndex = 1;
-      });
-    }
+
+    Future.delayed(const Duration(milliseconds: 200),() async{
+     var result = await postTypeDialog();
+     if(result != null){
+       setState(() {
+         selectIndex = result;
+       });
+     }
+     print("this is selected index $selectIndex");
+      // WidgetsBinding.instance.addPostFrameCallback((_) async {
+      //   await showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return StatefulBuilder(
+      //         builder: (context, setState) {
+      //           return Padding(
+      //             padding: const EdgeInsets.symmetric(vertical: 130.0),
+      //             child: Card(
+      //               shape: RoundedRectangleBorder(
+      //                   borderRadius: BorderRadius.circular(20)
+      //               ),
+      //               color: whiteColor,
+      //               child: Column(
+      //                 mainAxisAlignment: MainAxisAlignment.center,
+      //                 crossAxisAlignment: CrossAxisAlignment.center,
+      //                 children: [
+      //                   Text("Select Post Type", style: TextStyle(
+      //                       color: primaryClr, fontSize: 18,
+      //                       fontWeight: FontWeight.w600
+      //                   ),),
+      //                   const SizedBox(height: 25,),
+      //                   Material(
+      //                     child: Container(
+      //                       padding: const EdgeInsets.only(left: 5),
+      //                       width: MediaQuery
+      //                           .of(context)
+      //                           .size
+      //                           .width - 50,
+      //                       height: 60,
+      //                       decoration: BoxDecoration(
+      //                           color: Colors.white,
+      //                           borderRadius: BorderRadius.circular(8),
+      //                           boxShadow: const [
+      //                             BoxShadow(
+      //                               color: Colors.grey,
+      //                               offset: Offset(
+      //                                 1.0,
+      //                                 1.0,
+      //                               ),
+      //                               blurRadius: 0.5,
+      //                               spreadRadius: 0.5,
+      //                             ),
+      //                           ]
+      //                       ),
+      //                       child: DropdownButtonHideUnderline(
+      //                         child: DropdownButton(
+      //                           isExpanded: true,
+      //                           // Initial Value
+      //                           value: type,
+      //                           dropdownColor: Colors.white,
+      //                           hint: const Text("Select Post Type", style: TextStyle(
+      //                               color: webBackgroundColor
+      //                           ),),
+      //                           // Down Arrow Icon
+      //                           icon: const Icon(Icons.keyboard_arrow_down,
+      //                               color: webBackgroundColor),
+      //
+      //                           // Array list of items
+      //                           items: ['Post', 'Event', 'Public Issue'].map((items) {
+      //                             return DropdownMenuItem(
+      //                               value: items
+      //                                   .toString(),
+      //                               child: Text(
+      //                                 items.toString(), style: const TextStyle(
+      //                                   color: webBackgroundColor
+      //                               ),),
+      //                             );
+      //                           }).toList(),
+      //                           // After selecting the desired option,it will
+      //                           // change button value to selected value
+      //                           onChanged: (newValue) {
+      //                             setState(() {
+      //                               type = newValue;
+      //                             });
+      //                           },
+      //                         ),
+      //                       ),
+      //                     ),
+      //                   ),
+      //                   const SizedBox(height: 20,),
+      //                   GestureDetector(
+      //                     onTap: () {
+      //                       if(type == 'Post'){
+      //                         setState((){
+      //                           selectIndex = 1;
+      //                         });
+      //                       }
+      //                       else if (type == 'Event'){
+      //                         setState((){
+      //                           selectIndex = 2;
+      //                         });
+      //                       }else {
+      //                         setState(() {
+      //                           selectIndex = 3;
+      //                         });
+      //                       }
+      //                       print("this is selected post type ${type.toString()}and $selectIndex");
+      //                       Navigator.pop(context);
+      //                       setState((){});
+      //                     },
+      //                     child: Container(
+      //                       width: MediaQuery
+      //                           .of(context)
+      //                           .size
+      //                           .width / 1.1,
+      //                       height: 52,
+      //                       alignment: Alignment.center,
+      //                       //padding: EdgeInsets.all(6),
+      //                       decoration: BoxDecoration(
+      //                           color: primaryClr,
+      //                           borderRadius: BorderRadius.circular(10)
+      //                       ),
+      //                       child:
+      //                       // isLoading ? Center(
+      //                       //   child: Container(
+      //                       //     height: 30,
+      //                       //     width: 30,
+      //                       //     child: CircularProgressIndicator(
+      //                       //       color: whiteColor,
+      //                       //     ),
+      //                       //   ),
+      //                       // ):
+      //                       const Text("Submit", style: TextStyle(
+      //                           color: Colors.white,
+      //                           fontSize: 16,
+      //                           fontWeight: FontWeight.w600
+      //                       ),),
+      //                     ),
+      //                   )
+      //                 ],
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       );
+      //     },
+      //   );
+      // });
+    });
+
+
     getProfileData();
   }
+  postTypeDialog() async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 130.0),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)
+                ),
+                color: whiteColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text("Select Post Type", style: TextStyle(
+                        color: primaryClr, fontSize: 18,
+                        fontWeight: FontWeight.w600
+                    ),),
+                    const SizedBox(height: 25,),
+                    Material(
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 5),
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width - 50,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.grey,
+                                offset: Offset(
+                                  1.0,
+                                  1.0,
+                                ),
+                                blurRadius: 0.5,
+                                spreadRadius: 0.5,
+                              ),
+                            ]
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            isExpanded: true,
+                            // Initial Value
+                            value: type,
+                            dropdownColor: Colors.white,
+                            hint: const Text("Select Post Type", style: TextStyle(
+                                color: webBackgroundColor
+                            ),),
+                            // Down Arrow Icon
+                            icon: const Icon(Icons.keyboard_arrow_down,
+                                color: webBackgroundColor),
 
+                            // Array list of items
+                            items: ['Post', 'Event', 'Public Issue'].map((items) {
+                              return DropdownMenuItem(
+                                value: items
+                                    .toString(),
+                                child: Text(
+                                  items.toString(), style: const TextStyle(
+                                    color: webBackgroundColor
+                                ),),
+                              );
+                            }).toList(),
+                            // After selecting the desired option,it will
+                            // change button value to selected value
+                            onChanged: (newValue) {
+                              setState(() {
+                                type = newValue;
+                              });
+                              if(type == "Event"){
+                                setState((){
+
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    GestureDetector(
+                      onTap: () {
+                        if(type == 'Post'){
+                          setState((){
+                            selectIndex = 1;
+                          });
+                        }
+                        else if (type == 'Event'){
+                          setState((){
+                            selectIndex = 2;
+                          });
+                        }else {
+                          setState(() {
+                            selectIndex = 3;
+                          });
+                        }
+                        print("this is selected post type ${type.toString()}and $selectIndex");
+                        Navigator.pop(context, selectIndex);
+                        setState((){});
+                      },
+                      child: Container(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width / 1.1,
+                        height: 52,
+                        alignment: Alignment.center,
+                        //padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            color: primaryClr,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        child:
+                        // isLoading ? Center(
+                        //   child: Container(
+                        //     height: 30,
+                        //     width: 30,
+                        //     child: CircularProgressIndicator(
+                        //       color: whiteColor,
+                        //     ),
+                        //   ),
+                        // ):
+                        const Text("Submit", style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600
+                        ),),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
   @override
   void dispose() {
     super.dispose();
@@ -806,6 +1097,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
       _file = null;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -111,10 +111,10 @@ class _OTPScreenState extends State<OTPScreen> {
 
           showSnackbar("${jsonResponse.message.toString()}", context);
           if(isGroupJoined == "0"){
-             Navigator.push(context, MaterialPageRoute(builder: (context) =>
+             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
                 SearchScreen()));
           }else {
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
                 BottomBar(groupJoined: isGroupJoined.toString(),)));
           }
           // Navigator.push(context, MaterialPageRoute(builder: (context) => const MobileScreenLayout()));

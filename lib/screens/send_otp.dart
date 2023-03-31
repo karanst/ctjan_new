@@ -187,7 +187,7 @@ class _SignInScreenState extends State<SignInScreen> {
           otp = jsonResponse['otp'];
           // userid = jsonResponse['data'][0]['id'];
         });
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
             OTPScreen(code: otp.toString(),mobile: mobileController.text)));
       }
       else{

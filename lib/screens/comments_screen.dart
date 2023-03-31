@@ -5,6 +5,7 @@ import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/models/comments_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ctjan/models/get_profile_model.dart';
+import 'package:ctjan/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:ctjan/resources/firestore_methods.dart';
 import 'package:ctjan/utils/colors.dart';
@@ -250,8 +251,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 ),
               ),
               InkWell(
-                onTap: () async {
-                  sendComment();
+                onTap:  () {
+                  if(_commentController.text.isNotEmpty) {
+                    sendComment();
+                  }else{
+                    showSnackbar("Please add any comment!", context);
+                  }
+
                   // await FirestoreMethods().postComments(
                   //   widget.snap['postId'],
                   //   _commentController.text,
@@ -266,10 +272,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  child: const Text(
+                  child:  Text(
                     'Post',
                     style: TextStyle(
-                      color: blueColor,
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w600
                     ),
                   ),
                 ),

@@ -26,6 +26,7 @@ class ApiPath {
   static const String faq = '${baseUrl}faq';
   static const String privacyPolicy = '${baseUrl}parivacy_policy';
   static const String termsAndConditions = '${baseUrl}terms_condition';
+  static const String getJoinedMembers = '${baseUrl}get_join_users';
 
 }
  const String imageUrl = 'https://developmentalphawizz.com/social_media/uploads/';

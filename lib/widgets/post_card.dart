@@ -58,18 +58,20 @@ class _PostCardState extends State<PostCard> {
   List<Comments> commentList = [];
   String likeStats = '';
   bool isLiked = false;
+  bool isDisliked = false;
+  bool isShortlisted = false;
 
-  likeUnlike() async {
-    String likeStatus = '';
-    if (isLiked == true) {
-      setState(() {
-        likeStatus = '1';
-      });
-    } else {
-      setState(() {
-        likeStatus = '0';
-      });
-    }
+  likeUnlike(String? likeDislike) async {
+    // String likeStatus = '';
+    // if (isLiked == true) {
+    //   setState(() {
+    //     likeStatus = '1';
+    //   });
+    // } else {
+    //   setState(() {
+    //     likeStatus = '0';
+    //   });
+    // }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userid = prefs.getString(TokenString.userid);
     var headers = {
@@ -77,7 +79,7 @@ class _PostCardState extends State<PostCard> {
     };
     var request = http.MultipartRequest('POST', Uri.parse(ApiPath.likeUnlike));
     request.fields.addAll({
-      'like_status': likeStatus.toString(),
+      'like_status': likeDislike.toString(),
       'user_id': userid.toString(),
       'post_id': widget.data!.id.toString(),
       'group_id': widget.data!.groupId.toString()
@@ -92,6 +94,7 @@ class _PostCardState extends State<PostCard> {
       final jsonResponse = json.decode(finalResponse);
       if (jsonResponse['response_code'] == '1') {
         print("like response message ${jsonResponse['message']}");
+
         // showSnackbar("${jsonResponse['message']}", context);
       } else {}
     } else {
@@ -204,6 +207,31 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+
+  int _currentPost =  0;
+  List<Widget> _buildDots() {
+    List<Widget> dots = [];
+    for (int i = 0; i < widget.data!.img!.length; i++) {
+      dots.add(
+        Container(
+          margin: EdgeInsets.all(5),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: _currentPost == i
+                ? primaryClr
+                : Colors.grey.withOpacity(0.5),
+          ),
+        ),
+      );
+    }
+    return dots;
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     // user = Provider.of<UserProvider>(context).getUser;
@@ -252,15 +280,15 @@ class _PostCardState extends State<PostCard> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 3,),
-                        Text(
-                          widget.data!.postType.toString(),
-                          style: const TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 10
-                          ),
-                        ),
+                        // const SizedBox(height: 3,),
+                        // Text(
+                        //   widget.data!.postType.toString(),
+                        //   style: const TextStyle(
+                        //     color: primaryColor,
+                        //     fontWeight: FontWeight.normal,
+                        //     fontSize: 10
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -312,7 +340,7 @@ class _PostCardState extends State<PostCard> {
               setState(() {
                 isLiked = !isLiked;
               });
-              likeUnlike();
+              likeUnlike('1');
               // await FirestoreMethods().likePost(
               //   widget.snap['postId'],
               //   user!.uid,
@@ -339,13 +367,18 @@ class _PostCardState extends State<PostCard> {
                 widget.data!.img!.length > 1
                     ? CarouselSlider(
                         options: CarouselOptions(
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentPost = index;
+                            });
+                          },
                           height: 200.0,
                           enlargeCenterPage: false,
-                          autoPlay: true,
+                          autoPlay: false,
                           aspectRatio: 1,
                           // 16 / 9,
                           autoPlayCurve: Curves.fastOutSlowIn,
-                          enableInfiniteScroll: true,
+                          enableInfiniteScroll: false,
                           autoPlayAnimationDuration:
                               Duration(milliseconds: 1000),
                           viewportFraction: 1.0,
@@ -393,6 +426,7 @@ class _PostCardState extends State<PostCard> {
                               ),
                       ),
 
+
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: isLikeAnimating ? 1 : 0,
@@ -416,8 +450,15 @@ class _PostCardState extends State<PostCard> {
               ],
             ),
           ),
+          widget.data!.img!.length > 1 ?
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildDots(),
+          )
+              : const SizedBox.shrink(),
           // Action section
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               LikeAnimation(
                 isAnimating: isLiked,
@@ -428,7 +469,7 @@ class _PostCardState extends State<PostCard> {
                     setState(() {
                       isLiked = !isLiked;
                     });
-                    likeUnlike();
+                    likeUnlike('1');
                     // await FirestoreMethods().likePost(
                     //   widget.snap['postId'],
                     //   user!.uid,
@@ -437,13 +478,42 @@ class _PostCardState extends State<PostCard> {
                   },
                   icon: isLiked
                       ? const Icon(
-                          Icons.favorite,
+                          Icons.thumb_up,
                           color: Colors.red,
                         )
                       : const Icon(
-                          Icons.favorite_outline_outlined,
+                          Icons.thumb_up_alt_outlined,
                           color: primaryColor,
                         ),
+                ),
+              ),
+              widget.data!.postType == "Normal Post" ?
+              SizedBox.shrink()
+             : LikeAnimation(
+                isAnimating: isDisliked,
+                //widget.snap['likes'].contains(user!.uid),
+                smallLike: isDisliked,
+                child: IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      isDisliked = !isDisliked;
+                    });
+                    likeUnlike('2');
+                    // await FirestoreMethods().likePost(
+                    //   widget.snap['postId'],
+                    //   user!.uid,
+                    //   widget.snap['likes'],
+                    // );
+                  },
+                  icon: isDisliked
+                      ? const Icon(
+                    Icons.thumb_down,
+                    color: Colors.red,
+                  )
+                      : const Icon(
+                    Icons.thumb_down_alt_outlined,
+                    color: primaryColor,
+                  ),
                 ),
               ),
               IconButton(
@@ -461,7 +531,7 @@ class _PostCardState extends State<PostCard> {
                   );
                 },
                 icon: const Icon(
-                  Icons.comment_outlined,
+                  Icons.mode_comment_outlined,
                   color: primaryColor,
                 ),
               ),
@@ -471,24 +541,46 @@ class _PostCardState extends State<PostCard> {
                       'Check out this awesome post on CTJan https://www.youtube.com');
                 },
                 icon: const Icon(
-                  Icons.send_outlined,
+                  Icons.share_rounded,
                   color: primaryColor,
                 ),
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: IconButton(
-                    onPressed: () {
-                      saveToWishlist();
-                    },
-                    icon: const Icon(
-                      Icons.bookmark_border,
-                      color: primaryColor,
-                    ),
+              LikeAnimation(
+                isAnimating: isShortlisted,
+                //widget.snap['likes'].contains(user!.uid),
+                smallLike: isShortlisted,
+                child: IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      isShortlisted = !isShortlisted;
+                    });
+                    saveToWishlist();
+                    // await FirestoreMethods().likePost(
+                    //   widget.snap['postId'],
+                    //   user!.uid,
+                    //   widget.snap['likes'],
+                    // );
+                  },
+                  icon: isShortlisted
+                      ? const Icon(
+                    Icons.star,
+                    color: Colors.red,
+                  )
+                      : const Icon(
+                    Icons.star_border,
+                    color: primaryColor,
                   ),
                 ),
-              )
+              ),
+              // IconButton(
+              //   onPressed: () {
+              //     saveToWishlist();
+              //   },
+              //   icon: const Icon(
+              //     Icons.star_border_purple500_outlined,
+              //     color: primaryColor,
+              //   ),
+              // )
             ],
           ),
           //Description and comment count

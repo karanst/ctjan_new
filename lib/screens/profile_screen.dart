@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:ctjan/models/myposts_model.dart';
 import 'package:ctjan/screens/bottom_bar.dart';
 import 'package:ctjan/screens/faq.dart';
-import 'package:ctjan/screens/feed_screen.dart';
+import 'package:ctjan/screens/group_screen.dart';
 import 'package:ctjan/screens/my_posts.dart';
 import 'package:ctjan/screens/privacy_policy.dart';
 import 'package:ctjan/screens/terms_conditions.dart';
@@ -34,13 +34,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int followingLen = 0;
   bool isFollowing = false;
   bool loadingData = false;
+  int selectIndex = 1;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(milliseconds: 100), (){
-      getProfileData();
+    getProfileData();
+    Future.delayed(Duration(seconds: 1), (){
       myPosts();
-
+      getProfileData();
     });
     // Future.delayed(const Duration(seconds: 1), (){
     //   myPosts();
@@ -79,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           loadingData = false;
           profileImage = jsonResponse.userId!.profilePic.toString();
           userName = jsonResponse.userId!.username.toString();
-          email = jsonResponse.userId!.email.toString();
+          email = jsonResponse.userId!.aboutUs.toString();
           grpId = jsonResponse.userId!.groupId.toString();
           // seekerProfileModel = jsonResponse;
           // firstNameController = TextEditingController(text: seekerProfileModel!.data![0].name);
@@ -112,7 +114,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var request = http.MultipartRequest('POST', Uri.parse(ApiPath.getMyPost));
     request.fields.addAll({
       'user_id': userid.toString(),
-      'group_id': '$grpId'
+      'group_id': '$grpId',
+      'post_type': selectIndex.toString()
     });
     print("this is my posts request ${request.fields.toString()}");
     request.headers.addAll(headers);
@@ -381,7 +384,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             leading:  Icon(Icons.favorite_border_outlined, size: 25,
               color: primaryClr,),
             // leading: const ImageIcon(AssetImage("images/icons/booking.png")),
-            title: const Text('Wishlist',style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500)),
+            title: const Text('Shortlist',style: TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w500)),
             // selected: index == _selectedIndex,
             onTap: () {
               Navigator.push(
@@ -443,7 +446,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () {
               Navigator.push(
                 context,
-                // MaterialPageRoute(builder: (context) => ChatPage( chatId: "1", title: "Karan")),
                 MaterialPageRoute(builder: (context)=> TermsConditions()),
               );
             },
@@ -551,7 +553,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: getDrawer(),
+      // endDrawer: getDrawer(),
       backgroundColor: MediaQuery.of(context).size.width > webScreenSize
           ? webBackgroundColor
           : mobileBackgroundColor,
@@ -568,9 +570,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const CircularProgressIndicator(
             color: Colors.white,
           )
-              : Text(userName != null || userName != ""?
-          userName.toString()
-              : 'Loading'),
+              : const Text(
+            "Profile"
+          //     userName != null || userName != ""?
+          // userName.toString()
+          //     : 'Loading'
+          ),
         ),
               centerTitle: false,
             ),
@@ -595,7 +600,106 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
 
-
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectIndex = 1;
+                            });
+                            myPosts();
+                            getProfileData();
+                          },
+                          child: Container(
+                            height: 35,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: primaryClr),
+                                borderRadius: BorderRadius.circular(10),
+                                color: selectIndex == 1 ? primaryClr : Colors.white),
+                            child:  Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: Text(
+                                    "Post",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: selectIndex == 1 ? whiteColor : primaryClr,
+                                      fontWeight: selectIndex == 1 ?  FontWeight.w600 : FontWeight.w500,),
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectIndex = 2;
+                            });
+                            myPosts();
+                            getProfileData();
+                          },
+                          child: Container(
+                            height: 35,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: primaryClr),
+                                borderRadius: BorderRadius.circular(10),
+                                color: selectIndex == 2 ? primaryClr : Colors.white),
+                            child:  Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: Text(
+                                    "Public Issues",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: selectIndex == 2 ? whiteColor : primaryClr,
+                                      fontWeight: selectIndex == 2 ?  FontWeight.w600 : FontWeight.w500,),
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectIndex = 3;
+                            });
+                            myPosts();
+                            getProfileData();
+                          },
+                          child: Container(
+                            height: 35,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: primaryClr),
+                                borderRadius: BorderRadius.circular(10),
+                                color: selectIndex == 3 ? primaryClr : Colors.white),
+                            child:  Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: Text(
+                                    "Event",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: selectIndex == 3 ?  FontWeight.w600 : FontWeight.w500,
+                                        color: selectIndex == 3 ? whiteColor : primaryClr),
+                                  )),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 // FutureBuilder(
                 //   future: myPosts(),
                 //   builder: (context, snapshot) {

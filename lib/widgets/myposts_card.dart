@@ -110,6 +110,29 @@ class _MyPostCardState extends State<MyPostCard> {
     }
   }
 
+  int _currentPost =  0;
+  List<Widget> _buildDots() {
+    List<Widget> dots = [];
+    for (int i = 0; i < widget.data!.img!.length; i++) {
+      dots.add(
+        Container(
+          margin: EdgeInsets.all(5),
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: _currentPost == i
+                ? primaryClr
+                : Colors.grey.withOpacity(0.5),
+          ),
+        ),
+      );
+    }
+    return dots;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     // user = Provider.of<UserProvider>(context).getUser;
@@ -278,15 +301,20 @@ class _MyPostCardState extends State<MyPostCard> {
                 widget.data!.img!.length > 1
                     ? CarouselSlider(
                   options: CarouselOptions(
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _currentPost = index;
+                      });
+                    },
                     height: 250,
                     enlargeCenterPage: true,
-                    autoPlay: true,
-                    aspectRatio: 16 / 9,
+                    autoPlay: false,
+                    aspectRatio: 1,
                     autoPlayCurve: Curves.fastOutSlowIn,
-                    enableInfiniteScroll: true,
+                    enableInfiniteScroll: false,
                     autoPlayAnimationDuration:
                     Duration(milliseconds: 1000),
-                    viewportFraction: 0.8,
+                    viewportFraction: 1,
                   ),
                   items: widget.data!.img!.map((item) {
                     return Builder(
@@ -366,6 +394,12 @@ class _MyPostCardState extends State<MyPostCard> {
               ],
             ),
           ),
+          widget.data!.img!.length > 1 ?
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: _buildDots(),
+          )
+              : const SizedBox.shrink(),
           // Action section
           // Row(
           //   children: [

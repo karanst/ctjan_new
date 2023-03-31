@@ -21,7 +21,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formkey1 = GlobalKey<FormState>();
-  var gender;
+
   /// seeker controllers
   TextEditingController jemailController = TextEditingController();
   TextEditingController jmobileController = TextEditingController();
@@ -35,7 +35,8 @@ class _SignUpState extends State<SignUp> {
 
   bool showPassword = false;
   bool isLoading = false;
-
+  int? _value1 = 1;
+  String gender ='Male';
 
   seekerSignUp()async{
     var headers = {
@@ -392,86 +393,75 @@ class _SignUpState extends State<SignUp> {
                                   const SizedBox(
                                     height: 8,
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Material(
-                                          elevation: 4,
-                                          borderRadius: BorderRadius.circular(10),
-                                          child: Container(
-                                            width: 40,
-                                            height: 40,
-                                            decoration: BoxDecoration(
-                                              color: primaryClr,
-                                              borderRadius: BorderRadius.circular(10)
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children:  [
-                                                Icon(Icons.male, color: mobileBackgroundColor,size: 16,),
-                                                Icon(Icons.female, color: mobileBackgroundColor,size: 16,),
-                                              ],
-                                            ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Radio(
+                                              value: 1,
+                                              fillColor: MaterialStateColor.resolveWith((states) => primaryClr),
+                                              groupValue: _value1,
+                                              onChanged: (int? value) {
+                                                setState(() {
+                                                  _value1 = value!;
+                                                  gender = "Male";
+                                                  // isUpi = false;
+                                                });
+                                              }),
+                                         const Text(
+                                            "Male",
+                                            style: TextStyle(color: primaryColor),
                                           ),
-                                        ),
-                                        const SizedBox(width: 8,),
-                                        Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.only(left: 5),
-                                            width: MediaQuery.of(context).size.width - 50,
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.circular(8),
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.grey,
-                                                    offset:  Offset(
-                                                      1.0,
-                                                      1.0,
-                                                    ),
-                                                    blurRadius: 0.5,
-                                                    spreadRadius: 0.5,
-                                                  ),
-                                                ]
-                                            ),
-                                            child: DropdownButtonHideUnderline(
-                                              child: DropdownButton(
-                                                isExpanded: true,
-                                                // Initial Value
-                                                value: gender,
-                                                dropdownColor: Colors.white,
-                                                hint: const Text("Gender", style: TextStyle(
-                                                  color: webBackgroundColor
-                                                ),),
-                                                // Down Arrow Icon
-                                                icon:  const Icon(Icons.keyboard_arrow_down,color:  webBackgroundColor),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Radio(
+                                              fillColor: MaterialStateColor.resolveWith((states) => primaryClr),
+                                              value: 2,
+                                              groupValue: _value1,
+                                              onChanged: (int? value) {
+                                                setState(() {
+                                                  _value1 = value!;
+                                                  gender = "Female";
+                                                  // roleUser = false;
+                                                  // isUpi = true;
+                                                });
+                                              }),
 
-                                                // Array list of items
-                                                items: ['Male', 'Female', 'Other'].map(( items) {
-                                                  return DropdownMenuItem(
-                                                    value: items
-                                                        .toString(),
-                                                    child: Text(items.toString(), style: TextStyle(
-                                                      color: webBackgroundColor
-                                                    ),),
-                                                  );
-                                                }).toList(),
-                                                // After selecting the desired option,it will
-                                                // change button value to selected value
-                                                onChanged: ( newValue) {
-                                                  setState(() {
-                                                    gender = newValue;
-                                                  });
-                                                },
-                                              ),
-                                            ),
+                                          const Text(
+                                            "Female",
+                                            style: TextStyle(color: primaryColor),
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Radio(
+                                              fillColor: MaterialStateColor.resolveWith((states) => primaryClr),
+                                              value: 3,
+                                              groupValue: _value1,
+                                              onChanged: (int? value) {
+                                                setState(() {
+                                                  _value1 = value!;
+                                                  gender = "Other";
+                                                  // roleUser = false;
+                                                  // isUpi = true;
+                                                });
+                                              }),
+
+                                         const Text(
+                                            "Other",
+                                            style: TextStyle(color: primaryColor),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(
                                     height: 30,
