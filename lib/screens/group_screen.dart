@@ -356,12 +356,10 @@ class _ChangeGroupScreenState extends State<ChangeGroupScreen> {
   void initState() {
     super.initState();
     callApi();
-
     // if(widget.groupJoined == "1"){
     //   Navigator.push(context, MaterialPageRoute(builder: (context)=> FeedScreen()));
     // }
   }
-
   callApi() async {
     getProfileData();
     Future.delayed(Duration(seconds: 1), () {
@@ -510,7 +508,7 @@ class _ChangeGroupScreenState extends State<ChangeGroupScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SearchScreen()));
+                                builder: (context) => const SearchScreen()));
                       },
                       icon: Icon(
                         Icons.search_outlined,
@@ -586,6 +584,7 @@ class _ChangeGroupScreenState extends State<ChangeGroupScreen> {
                                       return
                                         grpId == list[index].id ?
                                         GroupCard(
+                                          isButtonVisible: true,
                                         data: list[index],
                                       )
                                         : SizedBox.shrink()
@@ -620,7 +619,6 @@ class _ChangeGroupScreenState extends State<ChangeGroupScreen> {
                 ],
               ),
             )
-
             // : const Center(
             //   child: Text("No Groups found!", style: TextStyle(
             //     color: primaryColor

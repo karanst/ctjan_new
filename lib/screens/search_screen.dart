@@ -24,7 +24,6 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _isShowUser = false;
 
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -141,6 +140,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     // if(val.length >=4) {
                     setState(() {
                       searchGroups(val);
+                      searchList.clear();
                     });
                     // }
                   },
@@ -215,7 +215,6 @@ class _SearchScreenState extends State<SearchScreen> {
               //           );
               //         },
               //       ),
-
               searchList.isNotEmpty ?
               Container(
                 // height: MediaQuery.of(context).size.height,
@@ -235,6 +234,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             itemCount: searchList.length,
                             itemBuilder: (context, index){
                               return GroupCard(
+                                isButtonVisible: true,
                                 data: searchList[index],
                               );
                             }),
@@ -248,7 +248,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   height: MediaQuery.of(context).size.height,
                   child: const Center(
                       child:  Text("No results found!", style: TextStyle(color: primaryColor),))),
-
               // const Padding(
               //   padding:  EdgeInsets.only(left: 12.0, top: 10, bottom: 10),
               //   child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),

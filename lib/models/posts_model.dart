@@ -1,7 +1,7 @@
 /// response_code : "1"
 /// message : "Join Group Successfully"
 /// status : "success"
-/// data : [{"id":"1","username":"","email":"piyush@gmail.com","f_name":"piyush ","l_name":"jain","countrycode":"","mobile":"7828876951","dob":"2000-10-03","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"4048","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:37:24","updated_at":"2023-03-27 15:28:57","refferal_code":"","friend_code":"","about_us":"","group_id":"1","name":"new title","description":"new caption description ","img":["https://developmentalphawizz.com/social_media/uploads/1679990018File-2.jpg","https://developmentalphawizz.com/social_media/uploads/1679990018Screenshot_2023-03-03-13-29-44-321_com_heddri_user.jpg","https://developmentalphawizz.com/social_media/uploads/1679990018Screenshot_2023-03-01-15-33-48-214_com_schoolmanagement_user.jpg","https://developmentalphawizz.com/social_media/uploads/1679990018Screenshot_2023-03-01-15-26-07-548_com_schoolmanagement_user.jpg"],"user_id":"2","like_status":"1","end_date":"","start_date":"","post_type":"Normal Post","date":"28/03/2023","postid":"1","total_likes":"0","total_dislikes":"0"},{"id":"3","username":"","email":"piyush@gmail.com","f_name":"piyush ","l_name":"jain","countrycode":"","mobile":"7828876951","dob":"2000-10-03","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"4048","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-03-27 12:37:24","updated_at":"2023-03-27 15:28:57","refferal_code":"","friend_code":"","about_us":"","group_id":"1","name":"front cam test ","description":"front cam test description ","img":["https://developmentalphawizz.com/social_media/uploads/1679990108299cc956-4e07-425c-9aba-5f39d894cb842548068854283951304.jpg"],"user_id":"2","like_status":"0","end_date":"","start_date":"","post_type":"Normal Post","date":"28/03/2023","postid":"3","total_likes":"1","total_dislikes":"0"}]
+/// data : [{"group_name":"SocialMedia_grp","id":"32","username":"","email":"","f_name":"Karan","l_name":"sir","countrycode":"","mobile":"9109599779","dob":"2023-04-07","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"1680851576scaled_1c1cac88-00b8-4a94-9350-1c8303410ba07407790350758738345.jpg","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"1162","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-04-07 07:10:58","updated_at":"2023-04-07 10:43:43","refferal_code":"","friend_code":"","about_us":"I'm good player ","group_id":"20","name":"","description":"titlw\n","img":["https://developmentalphawizz.com/social_media/uploads/1680862012VID-20230407-WA0002.mp4"],"user_id":"34","like_status":"0","end_date":"","start_date":"","post_type":"Normal Post","date":"07/04/2023","postid":"32","total_likes":"1","total_dislikes":"0"},{"group_name":"SocialMedia_grp","id":"25","username":"","email":"","f_name":"RajBairagi ","l_name":"","countrycode":"","mobile":"9109599774","dob":"2023-04-06","gender":"Male","profession":"","exp_job_title":"","exp_employer":"","exp_country":"","exp_start_date":"","exp_end_date":"","exp_current_work":"","exp_description":"","edu_school_name":"","edu_degree":"","edu_field":"","edu_start_date":"","edu_end_date":"","edu_percentage":"","edu_current_study":"","skills_des":"","summary_des":"","accomplishments_des":"","finalize_des":"","password":"","profile_pic":"1680786170image_picker1167548528729956270.png","facebook_id":"","type":"","isGold":"0","address":"","city":"","country":"","device_token":"","agreecheck":"0","otp":"3524","status":"1","wallet":"0.00","oauth_provider":null,"oauth_uid":null,"last_login":null,"created_at":"2023-04-06 12:55:07","updated_at":"2023-04-06 13:02:50","refferal_code":"","friend_code":"","about_us":"","group_id":"20","name":"","description":"this","img":["https://developmentalphawizz.com/social_media/uploads/1680786089Screenshot_2023-04-06-15-20-27-79_e5a4dc567cc36c0973d81befab5d77d6.png"],"user_id":"29","like_status":"0","end_date":"","start_date":"","post_type":"Normal Post","date":"06/04/2023","postid":"25","total_likes":"3","total_dislikes":"0"}]
 
 class PostsModel {
   PostsModel({
@@ -57,14 +57,15 @@ PostsModel copyWith({  String? responseCode,
 
 }
 
-/// id : "1"
+/// group_name : "SocialMedia_grp"
+/// id : "32"
 /// username : ""
-/// email : "piyush@gmail.com"
-/// f_name : "piyush "
-/// l_name : "jain"
+/// email : ""
+/// f_name : "Karan"
+/// l_name : "sir"
 /// countrycode : ""
-/// mobile : "7828876951"
-/// dob : "2000-10-03"
+/// mobile : "9109599779"
+/// dob : "2023-04-07"
 /// gender : "Male"
 /// profession : ""
 /// exp_job_title : ""
@@ -86,7 +87,7 @@ PostsModel copyWith({  String? responseCode,
 /// accomplishments_des : ""
 /// finalize_des : ""
 /// password : ""
-/// profile_pic : ""
+/// profile_pic : "1680851576scaled_1c1cac88-00b8-4a94-9350-1c8303410ba07407790350758738345.jpg"
 /// facebook_id : ""
 /// type : ""
 /// isGold : "0"
@@ -95,33 +96,34 @@ PostsModel copyWith({  String? responseCode,
 /// country : ""
 /// device_token : ""
 /// agreecheck : "0"
-/// otp : "4048"
+/// otp : "1162"
 /// status : "1"
 /// wallet : "0.00"
 /// oauth_provider : null
 /// oauth_uid : null
 /// last_login : null
-/// created_at : "2023-03-27 12:37:24"
-/// updated_at : "2023-03-27 15:28:57"
+/// created_at : "2023-04-07 07:10:58"
+/// updated_at : "2023-04-07 10:43:43"
 /// refferal_code : ""
 /// friend_code : ""
-/// about_us : ""
-/// group_id : "1"
-/// name : "new title"
-/// description : "new caption description "
-/// img : ["https://developmentalphawizz.com/social_media/uploads/1679990018File-2.jpg","https://developmentalphawizz.com/social_media/uploads/1679990018Screenshot_2023-03-03-13-29-44-321_com_heddri_user.jpg","https://developmentalphawizz.com/social_media/uploads/1679990018Screenshot_2023-03-01-15-33-48-214_com_schoolmanagement_user.jpg","https://developmentalphawizz.com/social_media/uploads/1679990018Screenshot_2023-03-01-15-26-07-548_com_schoolmanagement_user.jpg"]
-/// user_id : "2"
-/// like_status : "1"
+/// about_us : "I'm good player "
+/// group_id : "20"
+/// name : ""
+/// description : "titlw\n"
+/// img : ["https://developmentalphawizz.com/social_media/uploads/1680862012VID-20230407-WA0002.mp4"]
+/// user_id : "34"
+/// like_status : "0"
 /// end_date : ""
 /// start_date : ""
 /// post_type : "Normal Post"
-/// date : "28/03/2023"
-/// postid : "1"
-/// total_likes : "0"
+/// date : "07/04/2023"
+/// postid : "32"
+/// total_likes : "1"
 /// total_dislikes : "0"
 
 class PostList {
   PostList({
+      String? groupName, 
       String? id, 
       String? username, 
       String? email, 
@@ -184,6 +186,7 @@ class PostList {
       String? postid, 
       String? totalLikes, 
       String? totalDislikes,}){
+    _groupName = groupName;
     _id = id;
     _username = username;
     _email = email;
@@ -249,6 +252,7 @@ class PostList {
 }
 
   PostList.fromJson(dynamic json) {
+    _groupName = json['group_name'];
     _id = json['id'];
     _username = json['username'];
     _email = json['email'];
@@ -312,6 +316,7 @@ class PostList {
     _totalLikes = json['total_likes'];
     _totalDislikes = json['total_dislikes'];
   }
+  String? _groupName;
   String? _id;
   String? _username;
   String? _email;
@@ -374,7 +379,8 @@ class PostList {
   String? _postid;
   String? _totalLikes;
   String? _totalDislikes;
-PostList copyWith({  String? id,
+PostList copyWith({  String? groupName,
+  String? id,
   String? username,
   String? email,
   String? fName,
@@ -436,7 +442,8 @@ PostList copyWith({  String? id,
   String? postid,
   String? totalLikes,
   String? totalDislikes,
-}) => PostList(  id: id ?? _id,
+}) => PostList(  groupName: groupName ?? _groupName,
+  id: id ?? _id,
   username: username ?? _username,
   email: email ?? _email,
   fName: fName ?? _fName,
@@ -499,6 +506,7 @@ PostList copyWith({  String? id,
   totalLikes: totalLikes ?? _totalLikes,
   totalDislikes: totalDislikes ?? _totalDislikes,
 );
+  String? get groupName => _groupName;
   String? get id => _id;
   String? get username => _username;
   String? get email => _email;
@@ -564,6 +572,7 @@ PostList copyWith({  String? id,
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['group_name'] = _groupName;
     map['id'] = _id;
     map['username'] = _username;
     map['email'] = _email;

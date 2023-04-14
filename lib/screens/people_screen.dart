@@ -4,15 +4,11 @@ import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/models/get_profile_model.dart';
 import 'package:ctjan/models/people_model.dart';
 import 'package:ctjan/models/posts_model.dart';
-import 'package:ctjan/screens/group_screen.dart';
-import 'package:ctjan/screens/wishlist.dart';
-import 'package:ctjan/utils/global_variables.dart';
+import 'package:ctjan/screens/people_profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:ctjan/Helper/api_path.dart';
-import 'package:ctjan/models/group_list_model.dart';
 import 'package:ctjan/utils/colors.dart';
-import 'package:ctjan/widgets/group_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PeopleScreen extends StatefulWidget {
@@ -25,6 +21,9 @@ class PeopleScreen extends StatefulWidget {
 
 class _PeopleScreenState extends State<PeopleScreen> {
 
+  bool _customTileExpanded = false;
+
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   GlobalKey<RefreshIndicatorState>();
 
@@ -32,8 +31,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
   void initState() {
     super.initState();
     callApi();
-
-
     // if(widget.groupJoined == "1"){
     //   Navigator.push(context, MaterialPageRoute(builder: (context)=> FeedScreen()));
     // }
@@ -41,6 +38,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
 
   callApi()async{
     getProfileData();
+    getFeedData();
     Future.delayed(Duration(seconds: 1), (){
       getGroupList();
     });
@@ -51,6 +49,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
 
   String? grpId;
   String? userid;
+  GetProfileModel? getpeopledata;
   getProfileData()async{
     // setState(() {
     //   loadingData = true;
@@ -66,13 +65,18 @@ class _PeopleScreenState extends State<PeopleScreen> {
       // 'seeker_email': '$userid'
     });
     print("this is profile request ${request.fields.toString()}");
+    print("this is profile request ${getpeopledata?.userId?.aboutUs}");
+    print("this is profile request ${getpeopledata?.userId?.username}");
+
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = GetProfileModel.fromJson(json.decode(finalResponse));
+      setState(() {
+        getpeopledata = jsonResponse;
+      });
       if(jsonResponse.responseCode == "1") {
-
         setState(() {
           grpId = jsonResponse.userId!.groupId.toString();
           // userName = jsonResponse.userId!.username.toString();
@@ -98,6 +102,9 @@ class _PeopleScreenState extends State<PeopleScreen> {
   List<PostList> postList = [];
   StreamController<List<PostList>> _streamController = StreamController<List<PostList>>();
 
+
+
+  PostsModel? getpeoplepost;
   Future<List<PostList>?> getFeedData()async{
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
@@ -106,12 +113,15 @@ class _PeopleScreenState extends State<PeopleScreen> {
     request.fields.addAll({
       'group_id': grpId.toString()
     });
-
     print("this is feed request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     var finalResponse = await response.stream.bytesToString();
     final jsonResponse = PostsModel.fromJson(json.decode(finalResponse));
+    setState(() {
+      getpeoplepost = jsonResponse;
+    });
+    print("_____________________${getpeoplepost?.data?.first.aboutUs}");
     if (response.statusCode == 200) {
       if(jsonResponse.responseCode == "1") {
         postList = jsonResponse.data! ;
@@ -138,7 +148,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
   List<Data> list = [];
 
   getGroupList()async{
-
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
     };
@@ -159,6 +168,7 @@ class _PeopleScreenState extends State<PeopleScreen> {
           list = jsonResponse.data!;
         });
         print("this is group list length ${list.length}");
+        print("this is group list length ${jsonResponse}");
       }else{
 
       }
@@ -260,51 +270,115 @@ class _PeopleScreenState extends State<PeopleScreen> {
                   //   child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
                   // ),
                   list.isNotEmpty ?
-                  Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)
-                    ),
-                    elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        children: [
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: list.length,
-                              itemBuilder: (context, index){
-                                return Card(
-                                  color: whiteColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: primaryClr),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: list.length,
+                            itemBuilder: (context, index){
+                              return InkWell(
+                                onTap: (){
+                                  // Navigator.push(context, MaterialPageRoute(builder: (c)=>MyStatefulWidget()
+                                  //     // PeopleprofileScreen(data: list[index])
+                                  // ));
+                                },
+                                child: ExpansionTile(
+                                  title: Card(
+                                    color: whiteColor,
+                                    shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)
                                     ),
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 20,
-                                          backgroundImage: NetworkImage('$imageUrl${list[index].profilePic.toString()}'),
-                                        ),
-                                       const SizedBox(width: 12,),
-                                       Text('${list[index].fName.toString()}',
-                                         style: const TextStyle(
-                                         color: primaryColor,
-                                         fontWeight: FontWeight.w600
-                                       ),)
-                                      ],
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: primaryClr),
+                                        borderRadius: BorderRadius.circular(15)
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 20,
+                                            backgroundImage: NetworkImage('$imageUrl${list[index].profilePic.toString()}'),
+                                          ),
+                                         const SizedBox(width: 12,),
+                                         Text('${list[index].fName.toString()}',
+                                           style: const TextStyle(
+                                           color: primaryColor,
+                                           fontWeight: FontWeight.w600
+                                         ),)
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                );
-                              }),
-                        ],
-                      ),
+                                  trailing: Icon(
+                                    _customTileExpanded
+                                        ? Icons.arrow_drop_down_circle
+                                        : Icons.arrow_drop_down,color: primaryClr,
+                                  ),
+                                  children:  <Widget>[
+                                    ListTile(title:
+                                    Container(
+                                      height :200,
+                                      child: Card(
+                                        color: whiteColor,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(15)
+                                        ),
+                                        child: Container(
+                                          padding:  EdgeInsets.all(10),
+                                          // decoration: BoxDecoration(
+                                          //     border: Border.all(color: primaryClr),
+                                          //     borderRadius: BorderRadius.circular(15)
+                                          // ),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: NetworkImage('$imageUrl${list[index].profilePic.toString()}'),
+                                              ),
+                                              const SizedBox(width: 12,),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top:15.0),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text('${list[index].fName.toString()}',
+                                                      style: const TextStyle(
+                                                          color: primaryColor,
+                                                          fontWeight: FontWeight.w600
+                                                      ),),
+                                                    Container(
+                                                      width: MediaQuery.of(context).size.width/2.1,
+                                                      child: Text('${list[index].aboutUs.toString()}',maxLines: 5,
+                                                        style: const TextStyle(
+                                                            color: primaryColor,
+                                                            fontWeight: FontWeight.w600,overflow: TextOverflow.ellipsis,
+                                                        ),),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ),
+                                  ],
+                                  // onExpansionChanged: (bool expanded) {
+                                  //   setState(() => _customTileExpanded = expanded);
+                                  // },
+
+                                ),
+                              );
+                            }),
+                      ],
                     ),
                   )
                       : Center(child: CircularProgressIndicator(
@@ -314,7 +388,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
                 ],
               ),
             )
-
           // : const Center(
           //   child: Text("No Groups found!", style: TextStyle(
           //     color: primaryColor
@@ -323,5 +396,6 @@ class _PeopleScreenState extends State<PeopleScreen> {
         )
     );
   }
+
 }
 

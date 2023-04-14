@@ -40,7 +40,6 @@ class _GroupScreenState extends State<GroupScreen> {
     super.initState();
     callApi();
 
-
     // if(widget.groupJoined == "1"){
     //   Navigator.push(context, MaterialPageRoute(builder: (context)=> FeedScreen()));
     // }
@@ -55,9 +54,11 @@ class _GroupScreenState extends State<GroupScreen> {
       loadPosts();
     });
   }
-
   String? grpId;
+  String? grpName;
   String? userid;
+  GetProfileModel? getUserData;
+
   getProfileData()async{
     // setState(() {
     //   loadingData = true;
@@ -72,6 +73,9 @@ class _GroupScreenState extends State<GroupScreen> {
       'user_id': userid.toString()
       // 'seeker_email': '$userid'
     });
+    print("This is user name...................${userName}");
+    print("This is user myname...................${getUserData?.userId?.username}");
+    print("This is user name...................${userName}");
     print("this is profile request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -81,6 +85,7 @@ class _GroupScreenState extends State<GroupScreen> {
       if(jsonResponse.responseCode == "1") {
 
         setState(() {
+          getUserData = jsonResponse;
           grpId = jsonResponse.userId!.groupId.toString();
           // userName = jsonResponse.userId!.username.toString();
           // email = jsonResponse.userId!.email.toString();
@@ -101,10 +106,8 @@ class _GroupScreenState extends State<GroupScreen> {
       print(response.reasonPhrase);
     }
   }
-
   List<PostList> postList = [];
-  StreamController<List<PostList>> _streamController = StreamController<List<PostList>>();
-
+  final StreamController<List<PostList>> _streamController = StreamController<List<PostList>>();
   Future<List<PostList>?> getFeedData()async{
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
@@ -114,7 +117,7 @@ class _GroupScreenState extends State<GroupScreen> {
       'group_id': grpId.toString(),
       'post_type': selectIndex.toString()
     });
-
+    print("This is my grpidddddddddddddddd_______________$grpId");
     print("this is feed request ${request.fields.toString()}");
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
@@ -123,9 +126,9 @@ class _GroupScreenState extends State<GroupScreen> {
     if (response.statusCode == 200) {
       if(jsonResponse.responseCode == "1") {
         postList = jsonResponse.data! ;
+        grpName = jsonResponse.data![0].groupName.toString();
         print("this is posts list ${postList.toString()}");
       }else{
-
       }
       // print("select qualification here ${selectedQualification}");
     }
@@ -134,20 +137,17 @@ class _GroupScreenState extends State<GroupScreen> {
     }
     return PostsModel.fromJson(json.decode(finalResponse)).data;
   }
-
   loadPosts() async {
     getFeedData().then((res) async {
       _streamController.add(res!);
-      return res;
+      return res!;
     });
   }
-
 
   List<GroupList> list = [];
   int selectIndex = 1;
 
   getGroupList()async{
-
     var headers = {
       'Cookie': 'ci_session=21ebc11f1bb101ac0f04e6fa13ac04dc55609d2e'
     };
@@ -177,11 +177,9 @@ class _GroupScreenState extends State<GroupScreen> {
     }
   }
 
-
   Future _refresh() async {
     return callApi();
   }
-
   String? userPic;
   String? userName;
   getDrawer() {
@@ -200,7 +198,7 @@ class _GroupScreenState extends State<GroupScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                userPic == null || userPic == "" ?
+                getUserData == null || getUserData == "" ?
                 const CircleAvatar(
                     backgroundColor: secondaryColor,
                     radius: 40,
@@ -209,11 +207,11 @@ class _GroupScreenState extends State<GroupScreen> {
                       size: 44,
                     )
                   //Image.network(userPic.toString()),
-                )
-                    :
+                ) :
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child:Image.network("$userPic",fit: BoxFit.fill, height: 80, width: 80,),
+                  child:  Image.network("${getUserData?.userId?.profilePic}",fit: BoxFit.fill, height: 80, width: 80,),
+                  // Image.network("$userPic",fit: BoxFit.fill, height: 80, width: 80,),
                 ),
                 Expanded(
                   child: Padding(
@@ -231,10 +229,9 @@ class _GroupScreenState extends State<GroupScreen> {
                           ),
                         ),
                         Text(
-                          userName == null || userName == ""?
-                          "Guest"
-                              :  "${userName.toString()}"
-                          ,
+                          getUserData == null || getUserData == ""?
+                          "Guest" :"${getUserData?.userId?.username}",
+                          // "${userName.toString()}"
                           style: TextStyle(
                               color: whiteColor, fontSize: 17),
                         ),
@@ -586,7 +583,6 @@ class _GroupScreenState extends State<GroupScreen> {
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -648,6 +644,16 @@ class _GroupScreenState extends State<GroupScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            grpName == null || grpName == ""? const Text("")
+            :
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0,left: 15),
+              child: Text(
+                "${grpName}",
+                style: TextStyle(
+                    fontSize:18,color: primaryClr,fontWeight: FontWeight.bold),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Row(
@@ -701,7 +707,7 @@ class _GroupScreenState extends State<GroupScreen> {
                           padding: const EdgeInsets.all(5.0),
                           child: Center(
                               child: Text(
-                                "Public Issue",
+                                "Event",
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: selectIndex == 2 ? whiteColor : primaryClr,
@@ -732,7 +738,7 @@ class _GroupScreenState extends State<GroupScreen> {
                           padding: const EdgeInsets.all(5.0),
                           child: Center(
                               child: Text(
-                                "Event",
+                                "Public Issue",
                                 style: TextStyle(
                                     fontSize: 14,
                                   fontWeight: selectIndex == 3 ?  FontWeight.w600 : FontWeight.w500,
@@ -785,7 +791,6 @@ class _GroupScreenState extends State<GroupScreen> {
                 );
               },
             ),
-
             // const Padding(
             //   padding:  EdgeInsets.only(left: 12.0, top: 10, bottom: 10),
             //   child:  Text("Groups", style: TextStyle(color: primaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
@@ -817,7 +822,6 @@ class _GroupScreenState extends State<GroupScreen> {
             //  : Center(child: CircularProgressIndicator(
             //   color: primaryClr,
             // )),
-
           ],
         ),
       )

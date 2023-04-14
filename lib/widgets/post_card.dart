@@ -25,19 +25,16 @@ class PostCard extends StatefulWidget {
   @override
   State<PostCard> createState() => _PostCardState();
 }
-
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   User? user;
   int commentLen = 0;
-
   @override
   void initState() {
     super.initState();
     getLikeStatus();
     // getComments();
   }
-
   // void getComments() async {
   //   try {
   //     QuerySnapshot snap = await FirebaseFirestore.instance
@@ -53,7 +50,6 @@ class _PostCardState extends State<PostCard> {
   //   }
   //   setState(() {});
   // }
-
   String? userid;
   List<Comments> commentList = [];
   String likeStats = '';
@@ -255,11 +251,11 @@ class _PostCardState extends State<PostCard> {
               children: [
                 widget.data!.profilePic.toString() == imageUrl || widget.data!.profilePic.toString() ==''?
                    const  CircleAvatar(
-                     radius: 16,
+                     radius: 20,
                       child: Icon(Icons.person, color: Colors.white,),
                     ) :
                 CircleAvatar(
-                  radius: 16,
+                  radius: 20,
                   backgroundImage: NetworkImage(
                     widget.data!.profilePic.toString(),
                   ),
@@ -268,10 +264,12 @@ class _PostCardState extends State<PostCard> {
                   child: Padding(
                     padding: const EdgeInsets.only(
                       left: 8,
+                      bottom: 10
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           '${widget.data!.fName.toString()} ${widget.data!.lName.toString()}',
@@ -280,20 +278,48 @@ class _PostCardState extends State<PostCard> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        // const SizedBox(height: 3,),
-                        // Text(
-                        //   widget.data!.postType.toString(),
-                        //   style: const TextStyle(
-                        //     color: primaryColor,
-                        //     fontWeight: FontWeight.normal,
-                        //     fontSize: 10
-                        //   ),
-                        // ),
+                        const SizedBox(height: 3,),
+                        Text(
+                          widget.data!.postType.toString(),
+                          style: const TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 10
+                          ),
+                        ),
+                        Text(
+                          widget.data!.description.toString(),
+                          style: const TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 10
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                             "${widget.data!.startDate.toString()}",
+                              style: const TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10
+                              ),
+                            ),
+                            SizedBox(width: 30,),
+                            Text(
+                             "${widget.data!.endDate.toString()}",
+                              style: const TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 10
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ),
-
                 // IconButton(
                 //   onPressed: () {
                 //     showDialog(
@@ -596,40 +622,56 @@ class _PostCardState extends State<PostCard> {
                   style: Theme.of(context).textTheme.subtitle2!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
-                  child: Text(
-                      widget.data!.totalLikes.toString() == '0' ||
-                              widget.data!.totalLikes.toString() == null
-                          ? '0 likes'
-                          : '${widget.data!.totalLikes.toString()} likes',
-                      //'${widget.data!.} likes',
-                      style: const TextStyle(
-                        color: primaryColor,
-                      )
-                      //Theme.of(context).textTheme.bodyText2,
-                      ),
-                ),
-                Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(
-                      top: 8,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.data!.name.toString(),
+                  child: Row(
+                    children: [
+                      Text(
+                          widget.data!.totalLikes.toString() == '0' ||
+                                  widget.data!.totalLikes.toString() == null
+                              ? '0 likes'
+                              : '${widget.data!.totalLikes.toString()} likes',
+                          //'${widget.data!.} likes',
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
                             color: primaryColor,
+                          )
+                          //Theme.of(context).textTheme.bodyText2,
                           ),
-                        ),
-                        Text(widget.data!.description.toString(),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: primaryColor,
-                            )),
-                      ],
-                    )),
+                      SizedBox(width: 30,),
+                      // Text(
+                      //     widget.data!.totalDislikes.toString() == '0' ||
+                      //             widget.data!.totalDislikes.toString() == null
+                      //         ? '0 Dislikes'
+                      //         : '${widget.data!.totalDislikes.toString()} Dislikes',
+                      //     //'${widget.data!.} likes',
+                      //     style: const TextStyle(
+                      //       color: primaryColor,
+                      //     )
+                      //     //Theme.of(context).textTheme.bodyText2,
+                      //     ),
+                    ],
+                  ),
+                ),
+                // Container(
+                //     width: double.infinity,
+                //     padding: const EdgeInsets.only(
+                //       top: 8,
+                //     ),
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Text(
+                //           widget.data!.name.toString(),
+                //           style: const TextStyle(
+                //             fontWeight: FontWeight.bold,
+                //             color: primaryColor,
+                //           ),
+                //         ),
+                //         Text(widget.data!.description.toString(),
+                //             style: const TextStyle(
+                //               fontSize: 12,
+                //               color: primaryColor,
+                //             )),
+                //       ],
+                //     )),
 
                 // RichText(
                 //     text: TextSpan(

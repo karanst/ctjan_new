@@ -18,12 +18,12 @@ import '../models/User.dart';
 
 class GroupCard extends StatefulWidget {
   final GroupList data;
-  const GroupCard({Key? key, required this.data}) : super(key: key);
+  final bool? isButtonVisible;
+  const GroupCard({Key? key, required this.data, this.isButtonVisible}) : super(key: key);
 
   @override
   State<GroupCard> createState() => _GroupCardState();
 }
-
 
 class _GroupCardState extends State<GroupCard> {
   bool isLikeAnimating = false;
@@ -63,7 +63,6 @@ class _GroupCardState extends State<GroupCard> {
       var finalResponse = await response.stream.bytesToString();
       final jsonResponse = GetProfileModel.fromJson(json.decode(finalResponse));
       if(jsonResponse.responseCode == "1") {
-
         setState(() {
           groupData = jsonResponse.userId!.groupId.toString();
           // loadingData = false;
@@ -88,7 +87,6 @@ class _GroupCardState extends State<GroupCard> {
       print(response.reasonPhrase);
     }
   }
-
   joinGroup(String groupId)async{
     setState(() {
       loadingData = true;
@@ -125,7 +123,6 @@ class _GroupCardState extends State<GroupCard> {
       print(response.reasonPhrase);
     }
   }
-
   // void getComments() async {
   //   try {
   //     QuerySnapshot snap = await FirebaseFirestore.instance
@@ -141,12 +138,13 @@ class _GroupCardState extends State<GroupCard> {
   //   }
   //   setState(() {});
   // }
-
   @override
   Widget build(BuildContext context) {
    return InkWell(
-     onTap: (){
-       Navigator.push(context, MaterialPageRoute(builder: (context) => GroupDetailScreen(data: widget.data,)));
+
+     onTap: () {
+       Navigator.push(context, MaterialPageRoute(
+           builder: (context) => GroupDetailScreen(data: widget.data,)));
      },
      child: Card(
        color: Colors.white,
@@ -159,7 +157,6 @@ class _GroupCardState extends State<GroupCard> {
                 color: whiteColor,
                 borderRadius: BorderRadius.circular(15)
               ),
-
         padding: const EdgeInsets.symmetric(
             vertical: 5,
         ),
@@ -194,7 +191,6 @@ class _GroupCardState extends State<GroupCard> {
                 radius: 60,
                 child: Icon(Icons.groups, color: Colors.white,),
               ),
-
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -260,24 +256,21 @@ class _GroupCardState extends State<GroupCard> {
                         ),
                       ),
                       Container(
+                        // height: 60,
+                        // width: MediaQuery.of(context).size.width/2,
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Row(
-                          children: [
-                            Text("Zipcodes : ",
-                              style:  TextStyle(
-                                fontSize: 14,
-                                color: secondaryClr,
-                              ),
-                            ),
-                            Text( widget.data.pincode.toString(), style: TextStyle(
-                                color: secondaryClr,
-                                fontSize: 14
-                            ),)
-
-                          ],
+                        child: Text("Zipcodes : ${widget.data.pincode.toString()}",
+                          maxLines: 3,
+                          style:  TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 14,
+                            color: secondaryClr,
+                          ),
                         ),
                       ),
-                      Padding(
+                    widget.isButtonVisible! ?
+                        SizedBox.shrink()
+                   : Padding(
                         padding: const EdgeInsets.only(top: 15.0),
                         child: GestureDetector(
                           onTap: (){
@@ -292,7 +285,9 @@ class _GroupCardState extends State<GroupCard> {
                               showSnackbar("Already joined an group!", context);
                             }
                           },
-                          child: Container(
+                          child:
+                          groupData == widget.data.id.toString() ?
+                                Container(
                             width: MediaQuery.of(context).size.width / 2.5,
                             height: 35,
                             alignment: Alignment.center,
@@ -302,8 +297,10 @@ class _GroupCardState extends State<GroupCard> {
                                 color: groupData != widget.data.id.toString() ? primaryClr : whiteColor,
                                 borderRadius: BorderRadius.circular(10)
                             ),
-                            child: loading ? Center(
-                              child: Container(
+                            child: loading ?
+                            Center(
+                              child:
+                              Container(
                                 height: 30,
                                 width: 30,
                                 child: CircularProgressIndicator(
@@ -319,7 +316,8 @@ class _GroupCardState extends State<GroupCard> {
                                 fontWeight: FontWeight.w600
                             ),),
 
-                          ),
+                          )
+                              : SizedBox.shrink()
                         ),
                       ),
                       // Container(

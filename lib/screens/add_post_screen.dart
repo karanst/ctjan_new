@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:ctjan/Helper/api_path.dart';
 import 'package:ctjan/Helper/token_strings.dart';
 import 'package:ctjan/models/get_profile_model.dart';
@@ -293,6 +294,28 @@ class _AddPostScreenState extends State<AddPostScreen> {
               const SizedBox(
                 height: 10,
               ),
+              type == "Public Issue"
+                  ?  Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: TextFormField(
+                    style: const TextStyle(
+                        color: primaryColor
+                    ),
+                    controller: titleController,
+                    decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10),
+                        hintText: 'Title',
+                        hintStyle: TextStyle(color: primaryColor),
+                        border: InputBorder.none),
+                  ),
+                ),
+              )
+                  : const SizedBox.shrink(),
               Card(
                 elevation: 5,
                 color: Colors.white,
@@ -376,6 +399,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   ],
                 )
               : const SizedBox.shrink(),
+          const SizedBox(
+            height: 10,
+          ),
+
           const SizedBox(
             height: 10,
           ),
@@ -531,7 +558,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 });
                 showSnackbar("Please join any group first to post!", context);
               }
-
             },
             child: Container(
               width: MediaQuery.of(context).size.width / 1.1,
@@ -600,12 +626,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
           //   ),
           // )
           // : const SizedBox.shrink(),
-
         ],
       ),
     );
   }
-
   Widget buildGridView() {
     return Container(
       height: MediaQuery.of(context).size.height / 5.0,
@@ -789,9 +813,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
   void initState()  {
     // TODO: implement initState
     super.initState();
-
     Future.delayed(const Duration(milliseconds: 200),() async{
+
      var result = await postTypeDialog();
+
      if(result != null){
        setState(() {
          selectIndex = result;
@@ -938,8 +963,6 @@ class _AddPostScreenState extends State<AddPostScreen> {
       //   );
       // });
     });
-
-
     getProfileData();
   }
   postTypeDialog() async {
@@ -1114,7 +1137,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Add Post'),
+        title:
+        type == "Event" ? Text('Event Post'): type == "Public Issue" ? Text('Public Issue Post') :  Text("Add Post"),
         centerTitle: true,
         // actions: [
         //   // TextButton(

@@ -4,6 +4,7 @@ import 'package:ctjan/screens/add_post.dart';
 import 'package:ctjan/screens/home_screen.dart';
 import 'package:ctjan/screens/people_screen.dart';
 import 'package:ctjan/screens/places_screen.dart';
+import 'package:ctjan/screens/viewallgroupscreen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,6 @@ class _BottomBarState extends State<BottomBar> {
             //   color: AppColor().colorPrimary(),
             // ),
           ),
-
           Padding(
               padding: const EdgeInsets.all(4.0),
               child: Icon(
@@ -117,7 +117,6 @@ class _BottomBarState extends State<BottomBar> {
             //   color: AppColor().colorPrimary(),
             // ),
           ),
-
           // Padding(
           //     padding: const EdgeInsets.all(4.0),
           //     child: Icon(
@@ -134,7 +133,6 @@ class _BottomBarState extends State<BottomBar> {
           //   //   color: AppColor().colorPrimary(),
           //   // ),
           // ),
-
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Icon(
@@ -177,16 +175,12 @@ class _BottomBarState extends State<BottomBar> {
       ),
     );
   }
-
-
-
-
   @override
   Widget build(BuildContext context) {
     List<dynamic> _handlePages = [
        const GroupScreen(),
       // const AddPosts(),
-      const ChangeGroupScreen(),
+      const ViewallGroup(),
       const PeopleScreen(),
       //AddPostScreen(),
       const ProfileScreen(),

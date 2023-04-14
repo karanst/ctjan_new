@@ -27,6 +27,8 @@ class _LoginScreenState extends State<EditProfileScreen> {
    TextEditingController _mobileController = TextEditingController();
    TextEditingController _bioController = TextEditingController();
    TextEditingController _userNameController = TextEditingController();
+   TextEditingController _firsNameController = TextEditingController();
+   TextEditingController _lastNameController = TextEditingController();
    TextEditingController _genderController = TextEditingController();
    TextEditingController _dobController = TextEditingController();
   File? _profileImage;
@@ -47,6 +49,8 @@ class _LoginScreenState extends State<EditProfileScreen> {
     _mobileController.dispose();
     _bioController.dispose();
     _userNameController.dispose();
+    _firsNameController.dispose();
+    _lastNameController.dispose();
   }
 
   selectImage() async {
@@ -166,7 +170,8 @@ class _LoginScreenState extends State<EditProfileScreen> {
      var request = http.MultipartRequest('POST', Uri.parse(ApiPath.updateProfile));
      request.fields.addAll({
        'user_id': userid.toString(),
-       'first_name': _userNameController.text.toString(),
+       'first_name': _firsNameController.text.toString(),
+       'last_name': _lastNameController.text.toString(),
        'mobile' : _mobileController.text.toString(),
        // 'email': _emailController.text.toString(),
      'about_us':_bioController.text.toString()
@@ -223,7 +228,9 @@ class _LoginScreenState extends State<EditProfileScreen> {
       if(jsonResponse.responseCode == "1") {
         setState(() {
           profileImage = jsonResponse.userId!.profilePic.toString();
-          _userNameController = TextEditingController(text: jsonResponse.userId!.username.toString());
+          _userNameController = TextEditingController(text: jsonResponse.userId!.username.toString());;
+          _firsNameController = TextEditingController(text: jsonResponse.userId!.fName.toString());;
+          _lastNameController = TextEditingController(text: jsonResponse.userId!.lName.toString());
           _emailController = TextEditingController(text: jsonResponse.userId!.email.toString());
           _mobileController = TextEditingController(text: jsonResponse.userId!.mobile.toString());
           _bioController = TextEditingController(text: jsonResponse.userId!.aboutUs.toString());
@@ -361,13 +368,14 @@ class _LoginScreenState extends State<EditProfileScreen> {
                 const SizedBox(
                   height: 34,
                 ),
-                CustomTextField(textEditingController: _userNameController, hintText: "Name", textInputType: TextInputType.text, title: "Name", ),
+                // CustomTextField(textEditingController: _userNameController, hintText: "Name", textInputType: TextInputType.text, title: "Name", ),
+                CustomTextField(textEditingController: _firsNameController, hintText: "First Name", textInputType: TextInputType.text, title: "First Name", ),
+                CustomTextField(textEditingController: _lastNameController, hintText: "Last Name", textInputType: TextInputType.text, title: "Last Name", ),
                 CustomTextField(textEditingController: _mobileController, hintText: "Contact No", textInputType: TextInputType.number, title: "Contact No.", maxLngth: 10,),
                 // CustomTextField(textEditingController: _emailController, hintText: "Email", textInputType: TextInputType.emailAddress, title: "Email", ),
                 CustomTextField(textEditingController: _bioController, hintText: "About me", textInputType: TextInputType.text, title: "About me", ),
                 CustomTextField(textEditingController: _genderController, hintText: "Gender", textInputType: TextInputType.text, title: "Gender", ),
                 CustomTextField(textEditingController: _dobController, hintText: "DOB", textInputType: TextInputType.text, title: "DOB", ),
-
                 const SizedBox(
                   height: 25,
                 ),

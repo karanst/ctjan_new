@@ -1,7 +1,7 @@
 /// response_code : "1"
 /// message : "Get Group Data"
 /// status : "success"
-/// data : [{"f_name":" Karan Tomar","profile_pic":"1680000264scaled_ee5311fc-f9c7-48fc-92cf-eb48e5fb3c3f8713016494170766358.jpg","l_name":""},{"f_name":"d","profile_pic":"16799982636418189b28e8c.png","l_name":"asdfsd"},{"f_name":"bhopa  ","profile_pic":"","l_name":"singh"},{"f_name":"Karan Singh","profile_pic":"1680162266scaled_41355dda-be61-4588-b4da-0bf2c51102f1257701411622086963.jpg","l_name":""},{"f_name":"vijay ","profile_pic":"","l_name":"jhaa"},{"f_name":"Karan","profile_pic":"","l_name":"Tomar"},{"f_name":"MRkhan","profile_pic":"1680175829image_picker2680611789517735869.jpg","l_name":""}]
+/// data : [{"f_name":"RajBairagi ","profile_pic":"1680786170image_picker1167548528729956270.png","l_name":"","about_us":""},{"f_name":"Ankit bairagi bairagi bairagi bairagi ","profile_pic":"1680846815scaled_8b7d9dc7-d74f-4d7a-9613-4e769290659e3269784665455632141.jpg","l_name":"bairagi ","about_us":""},{"f_name":"","profile_pic":"1680848102image_picker5091129868175507326.png","l_name":"bairagi ","about_us":""},{"f_name":"","profile_pic":"","l_name":"pandit","about_us":""},{"f_name":"","profile_pic":"1680849807scaled_a5fdb899-ee53-492f-854e-1b0b8f3bc25d8307066435848207888.jpg","l_name":"Bairagii","about_us":""},{"f_name":"Karan","profile_pic":"1680851576scaled_1c1cac88-00b8-4a94-9350-1c8303410ba07407790350758738345.jpg","l_name":"sir","about_us":"I'm good player "}]
 
 class PeopleModel {
   PeopleModel({
@@ -57,44 +57,53 @@ PeopleModel copyWith({  String? responseCode,
 
 }
 
-/// f_name : " Karan Tomar"
-/// profile_pic : "1680000264scaled_ee5311fc-f9c7-48fc-92cf-eb48e5fb3c3f8713016494170766358.jpg"
+/// f_name : "RajBairagi "
+/// profile_pic : "1680786170image_picker1167548528729956270.png"
 /// l_name : ""
+/// about_us : ""
 
 class Data {
   Data({
       String? fName, 
       String? profilePic, 
-      String? lName,}){
+      String? lName, 
+      String? aboutUs,}){
     _fName = fName;
     _profilePic = profilePic;
     _lName = lName;
+    _aboutUs = aboutUs;
 }
 
   Data.fromJson(dynamic json) {
     _fName = json['f_name'];
     _profilePic = json['profile_pic'];
     _lName = json['l_name'];
+    _aboutUs = json['about_us'];
   }
   String? _fName;
   String? _profilePic;
   String? _lName;
+  String? _aboutUs;
 Data copyWith({  String? fName,
   String? profilePic,
   String? lName,
+  String? aboutUs,
 }) => Data(  fName: fName ?? _fName,
   profilePic: profilePic ?? _profilePic,
   lName: lName ?? _lName,
+  aboutUs: aboutUs ?? _aboutUs,
 );
   String? get fName => _fName;
   String? get profilePic => _profilePic;
   String? get lName => _lName;
+  String? get aboutUs => _aboutUs;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['f_name'] = _fName;
     map['profile_pic'] = _profilePic;
     map['l_name'] = _lName;
+    map['about_us'] = _aboutUs;
     return map;
   }
 

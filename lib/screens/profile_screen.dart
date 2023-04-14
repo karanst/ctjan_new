@@ -50,6 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
   String? profileImage;
   String? userName;
+  // String? fName;
   String? email;
   String? userid;
   String? userPic;

@@ -57,7 +57,7 @@ dependencies:
   permission_handler: ^10.0.2
   image_cropper: ^3.0.1
   dots_indicator: ^2.1.0
-  flutter_branch_sdk: ^6.6.0
+#  flutter_branch_sdk: ^6.6.0
 
 
 dev_dependencies:
@@ -65,6 +65,11 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+dependency_overrides:
+  #  modal_bottom_sheet: ^3.0.0-pre
+  #  file: ^6.1.4
+  firebase_core_platform_interface: 4.5.1
+#  firebase_messaging_platform_interface: 3.1.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
