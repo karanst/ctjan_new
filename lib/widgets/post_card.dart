@@ -205,6 +205,7 @@ class _PostCardState extends State<PostCard> {
 
 
   int _currentPost =  0;
+
   List<Widget> _buildDots() {
     List<Widget> dots = [];
     for (int i = 0; i < widget.data!.img!.length; i++) {
@@ -234,507 +235,510 @@ class _PostCardState extends State<PostCard> {
     // return user == null
     //     ? Container()
     //     :
-    return Container(
-      color: mobileBackgroundColor,
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-      ),
-      child: Column(
-        children: [
-          // Header Section
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 4,
-              horizontal: 16,
-            ).copyWith(right: 0),
-            child: Row(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        color: whiteColor,
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+        ),
+        child: Column(
+          children: [
+            // Header Section
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: 16,
+              ).copyWith(right: 0),
+              child: Row(
+                children: [
+                  widget.data!.profilePic.toString() == imageUrl || widget.data!.profilePic.toString() ==''?
+                     const  CircleAvatar(
+                       radius: 20,
+                        child: Icon(Icons.person, color: Colors.white,),
+                      ) :
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(
+                      widget.data!.profilePic.toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8,
+                        bottom: 10
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${widget.data!.fName.toString()} ${widget.data!.lName.toString()}',
+                            style: const TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 3,),
+                          Text(
+                            widget.data!.postType.toString(),
+                            style: const TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 10
+                            ),
+                          ),
+                          Text(
+                            widget.data!.description.toString(),
+                            style: const TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 10
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                               "${widget.data!.startDate.toString()}",
+                                style: const TextStyle(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10
+                                ),
+                              ),
+                              SizedBox(width: 30,),
+                              Text(
+                               "${widget.data!.endDate.toString()}",
+                                style: const TextStyle(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 10
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // IconButton(
+                  //   onPressed: () {
+                  //     showDialog(
+                  //       context: context,
+                  //       builder: (context) => Dialog(
+                  //         child: ListView(
+                  //           padding: const EdgeInsets.symmetric(
+                  //             vertical: 16,
+                  //           ),
+                  //           shrinkWrap: true,
+                  //           children: ['Delete']
+                  //               .map(
+                  //                 (e) => InkWell(
+                  //                   onTap: () async {
+                  //                     // FirestoreMethods().deletePost(
+                  //                     //     widget.snap['postId']);
+                  //                     Navigator.of(context).pop();
+                  //                   },
+                  //                   child: Container(
+                  //                     padding: const EdgeInsets.symmetric(
+                  //                       vertical: 12,
+                  //                       horizontal: 16,
+                  //                     ),
+                  //                     child: Text(e),
+                  //                   ),
+                  //                 ),
+                  //               )
+                  //               .toList(),
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  //   icon: const Icon(
+                  //     Icons.more_vert,
+                  //     color: primaryColor,
+                  //   ),
+                  // )
+                ],
+              ),
+            ),
+            //Image Section
+            GestureDetector(
+              onDoubleTap: () async {
+                setState(() {
+                  isLiked = !isLiked;
+                });
+                likeUnlike('1');
+                // await FirestoreMethods().likePost(
+                //   widget.snap['postId'],
+                //   user!.uid,
+                //   widget.snap['likes'],
+                // );
+                setState(() {
+                  isLikeAnimating = true;
+                });
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // widget.data!.img!.isNotEmpty  || widget.data!.img == null ?
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.height * 0.35,
+                  //   width: double.infinity,
+                  //   child: Image.asset(
+                  //     'assets/placeholder.png',
+                  //     // widget.snap['postUrl'],
+                  //     fit: BoxFit.cover,
+                  //   ),
+                  // )
+                  // :
+                  widget.data!.img!.length > 1
+                      ? CarouselSlider(
+                          options: CarouselOptions(
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _currentPost = index;
+                              });
+                            },
+                            height: 200.0,
+                            enlargeCenterPage: false,
+                            autoPlay: false,
+                            aspectRatio: 1,
+                            // 16 / 9,
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enableInfiniteScroll: false,
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 1000),
+                            viewportFraction: 1.0,
+                          ),
+                          items: widget.data!.img!.map((item) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    // margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                    decoration: const BoxDecoration(),
+                                    child: SizedBox(
+                                      height: MediaQuery.of(context).size.height *
+                                          0.35,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: item.isEmpty || widget.data!.img![0].toString() == imageUrl
+                                          ? Image.asset(
+                                              'assets/placeholder.png',
+                                              // widget.snap['postUrl'],
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.network(
+                                              item,
+                                              // widget.snap['postUrl'],
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ));
+                              },
+                            );
+                          }).toList(),
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.35,
+                          width: double.infinity,
+                          child: widget.data!.img!.isEmpty || widget.data!.img![0].toString() == imageUrl
+                              ? Image.asset(
+                                  'assets/placeholder.png',
+                                  // widget.snap['postUrl'],
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  widget.data!.img![0].toString(),
+                                  // widget.snap['postUrl'],
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+
+
+                  AnimatedOpacity(
+                    duration: const Duration(milliseconds: 200),
+                    opacity: isLikeAnimating ? 1 : 0,
+                    child: LikeAnimation(
+                      isAnimating: isLikeAnimating,
+                      duration: const Duration(
+                        milliseconds: 400,
+                      ),
+                      child: const Icon(
+                        Icons.favorite,
+                        color: primaryColor,
+                        size: 120,
+                      ),
+                      onEnd: () {
+                        setState(() {
+                          isLikeAnimating = false;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            widget.data!.img!.length > 1 ?
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: _buildDots(),
+            )
+                : const SizedBox.shrink(),
+            // Action section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                widget.data!.profilePic.toString() == imageUrl || widget.data!.profilePic.toString() ==''?
-                   const  CircleAvatar(
-                     radius: 20,
-                      child: Icon(Icons.person, color: Colors.white,),
-                    ) :
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage(
-                    widget.data!.profilePic.toString(),
+                LikeAnimation(
+                  isAnimating: isLiked,
+                  //widget.snap['likes'].contains(user!.uid),
+                  smallLike: isLiked,
+                  child: IconButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLiked = !isLiked;
+                      });
+                      likeUnlike('1');
+                      // await FirestoreMethods().likePost(
+                      //   widget.snap['postId'],
+                      //   user!.uid,
+                      //   widget.snap['likes'],
+                      // );
+                    },
+                    icon: isLiked
+                        ? const Icon(
+                            Icons.thumb_up,
+                            color: Colors.red,
+                          )
+                        : const Icon(
+                            Icons.thumb_up_alt_outlined,
+                            color: primaryColor,
+                          ),
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 8,
-                      bottom: 10
+                widget.data!.postType == "Normal Post" ?
+                SizedBox.shrink()
+               : LikeAnimation(
+                  isAnimating: isDisliked,
+                  //widget.snap['likes'].contains(user!.uid),
+                  smallLike: isDisliked,
+                  child: IconButton(
+                    onPressed: () async {
+                      setState(() {
+                        isDisliked = !isDisliked;
+                      });
+                      likeUnlike('2');
+                      // await FirestoreMethods().likePost(
+                      //   widget.snap['postId'],
+                      //   user!.uid,
+                      //   widget.snap['likes'],
+                      // );
+                    },
+                    icon: isDisliked
+                        ? const Icon(
+                      Icons.thumb_down,
+                      color: Colors.red,
+                    )
+                        : const Icon(
+                      Icons.thumb_down_alt_outlined,
+                      color: primaryColor,
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${widget.data!.fName.toString()} ${widget.data!.lName.toString()}',
-                          style: const TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CommentsScreen(
+                          postId: widget.data!.id,
+                          groupId: widget.data!.groupId,
+
+                          // data: commentList[i],
                         ),
-                        const SizedBox(height: 3,),
-                        Text(
-                          widget.data!.postType.toString(),
-                          style: const TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 10
-                          ),
-                        ),
-                        Text(
-                          widget.data!.description.toString(),
-                          style: const TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 10
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                             "${widget.data!.startDate.toString()}",
-                              style: const TextStyle(
-                                color: primaryColor,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 10
-                              ),
-                            ),
-                            SizedBox(width: 30,),
-                            Text(
-                             "${widget.data!.endDate.toString()}",
-                              style: const TextStyle(
-                                color: primaryColor,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 10
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.mode_comment_outlined,
+                    color: primaryColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Share.share(
+                        'Check out this awesome post on CTJan https://www.youtube.com');
+                  },
+                  icon: const Icon(
+                    Icons.share_rounded,
+                    color: primaryColor,
+                  ),
+                ),
+                LikeAnimation(
+                  isAnimating: isShortlisted,
+                  //widget.snap['likes'].contains(user!.uid),
+                  smallLike: isShortlisted,
+                  child: IconButton(
+                    onPressed: () async {
+                      setState(() {
+                        isShortlisted = !isShortlisted;
+                      });
+                      saveToWishlist();
+                      // await FirestoreMethods().likePost(
+                      //   widget.snap['postId'],
+                      //   user!.uid,
+                      //   widget.snap['likes'],
+                      // );
+                    },
+                    icon: isShortlisted
+                        ? const Icon(
+                      Icons.star,
+                      color: Colors.red,
+                    )
+                        : const Icon(
+                      Icons.star_border,
+                      color: primaryColor,
                     ),
                   ),
                 ),
                 // IconButton(
                 //   onPressed: () {
-                //     showDialog(
-                //       context: context,
-                //       builder: (context) => Dialog(
-                //         child: ListView(
-                //           padding: const EdgeInsets.symmetric(
-                //             vertical: 16,
-                //           ),
-                //           shrinkWrap: true,
-                //           children: ['Delete']
-                //               .map(
-                //                 (e) => InkWell(
-                //                   onTap: () async {
-                //                     // FirestoreMethods().deletePost(
-                //                     //     widget.snap['postId']);
-                //                     Navigator.of(context).pop();
-                //                   },
-                //                   child: Container(
-                //                     padding: const EdgeInsets.symmetric(
-                //                       vertical: 12,
-                //                       horizontal: 16,
-                //                     ),
-                //                     child: Text(e),
-                //                   ),
-                //                 ),
-                //               )
-                //               .toList(),
-                //         ),
-                //       ),
-                //     );
+                //     saveToWishlist();
                 //   },
                 //   icon: const Icon(
-                //     Icons.more_vert,
+                //     Icons.star_border_purple500_outlined,
                 //     color: primaryColor,
                 //   ),
                 // )
               ],
             ),
-          ),
-          //Image Section
-          GestureDetector(
-            onDoubleTap: () async {
-              setState(() {
-                isLiked = !isLiked;
-              });
-              likeUnlike('1');
-              // await FirestoreMethods().likePost(
-              //   widget.snap['postId'],
-              //   user!.uid,
-              //   widget.snap['likes'],
-              // );
-              setState(() {
-                isLikeAnimating = true;
-              });
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // widget.data!.img!.isNotEmpty  || widget.data!.img == null ?
-                // SizedBox(
-                //   height: MediaQuery.of(context).size.height * 0.35,
-                //   width: double.infinity,
-                //   child: Image.asset(
-                //     'assets/placeholder.png',
-                //     // widget.snap['postUrl'],
-                //     fit: BoxFit.cover,
-                //   ),
-                // )
-                // :
-                widget.data!.img!.length > 1
-                    ? CarouselSlider(
-                        options: CarouselOptions(
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentPost = index;
-                            });
-                          },
-                          height: 200.0,
-                          enlargeCenterPage: false,
-                          autoPlay: false,
-                          aspectRatio: 1,
-                          // 16 / 9,
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enableInfiniteScroll: false,
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 1000),
-                          viewportFraction: 1.0,
+            //Description and comment count
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DefaultTextStyle(
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                        items: widget.data!.img!.map((item) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  // margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                  decoration: const BoxDecoration(),
-                                  child: SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.35,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: item.isEmpty || widget.data!.img![0].toString() == imageUrl
-                                        ? Image.asset(
-                                            'assets/placeholder.png',
-                                            // widget.snap['postUrl'],
-                                            fit: BoxFit.cover,
-                                          )
-                                        : Image.network(
-                                            item,
-                                            // widget.snap['postUrl'],
-                                            fit: BoxFit.cover,
-                                          ),
-                                  ));
-                            },
-                          );
-                        }).toList(),
-                      )
-                    : SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.35,
-                        width: double.infinity,
-                        child: widget.data!.img!.isEmpty || widget.data!.img![0].toString() == imageUrl
-                            ? Image.asset(
-                                'assets/placeholder.png',
-                                // widget.snap['postUrl'],
-                                fit: BoxFit.cover,
-                              )
-                            : Image.network(
-                                widget.data!.img![0].toString(),
-                                // widget.snap['postUrl'],
-                                fit: BoxFit.cover,
-                              ),
-                      ),
-
-
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 200),
-                  opacity: isLikeAnimating ? 1 : 0,
-                  child: LikeAnimation(
-                    isAnimating: isLikeAnimating,
-                    duration: const Duration(
-                      milliseconds: 400,
-                    ),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: primaryColor,
-                      size: 120,
-                    ),
-                    onEnd: () {
-                      setState(() {
-                        isLikeAnimating = false;
-                      });
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
-          widget.data!.img!.length > 1 ?
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: _buildDots(),
-          )
-              : const SizedBox.shrink(),
-          // Action section
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              LikeAnimation(
-                isAnimating: isLiked,
-                //widget.snap['likes'].contains(user!.uid),
-                smallLike: isLiked,
-                child: IconButton(
-                  onPressed: () async {
-                    setState(() {
-                      isLiked = !isLiked;
-                    });
-                    likeUnlike('1');
-                    // await FirestoreMethods().likePost(
-                    //   widget.snap['postId'],
-                    //   user!.uid,
-                    //   widget.snap['likes'],
-                    // );
-                  },
-                  icon: isLiked
-                      ? const Icon(
-                          Icons.thumb_up,
-                          color: Colors.red,
-                        )
-                      : const Icon(
-                          Icons.thumb_up_alt_outlined,
-                          color: primaryColor,
-                        ),
-                ),
-              ),
-              widget.data!.postType == "Normal Post" ?
-              SizedBox.shrink()
-             : LikeAnimation(
-                isAnimating: isDisliked,
-                //widget.snap['likes'].contains(user!.uid),
-                smallLike: isDisliked,
-                child: IconButton(
-                  onPressed: () async {
-                    setState(() {
-                      isDisliked = !isDisliked;
-                    });
-                    likeUnlike('2');
-                    // await FirestoreMethods().likePost(
-                    //   widget.snap['postId'],
-                    //   user!.uid,
-                    //   widget.snap['likes'],
-                    // );
-                  },
-                  icon: isDisliked
-                      ? const Icon(
-                    Icons.thumb_down,
-                    color: Colors.red,
-                  )
-                      : const Icon(
-                    Icons.thumb_down_alt_outlined,
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CommentsScreen(
-                        postId: widget.data!.id,
-                        groupId: widget.data!.groupId,
-
-                        // data: commentList[i],
-                      ),
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.mode_comment_outlined,
-                  color: primaryColor,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  Share.share(
-                      'Check out this awesome post on CTJan https://www.youtube.com');
-                },
-                icon: const Icon(
-                  Icons.share_rounded,
-                  color: primaryColor,
-                ),
-              ),
-              LikeAnimation(
-                isAnimating: isShortlisted,
-                //widget.snap['likes'].contains(user!.uid),
-                smallLike: isShortlisted,
-                child: IconButton(
-                  onPressed: () async {
-                    setState(() {
-                      isShortlisted = !isShortlisted;
-                    });
-                    saveToWishlist();
-                    // await FirestoreMethods().likePost(
-                    //   widget.snap['postId'],
-                    //   user!.uid,
-                    //   widget.snap['likes'],
-                    // );
-                  },
-                  icon: isShortlisted
-                      ? const Icon(
-                    Icons.star,
-                    color: Colors.red,
-                  )
-                      : const Icon(
-                    Icons.star_border,
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-              // IconButton(
-              //   onPressed: () {
-              //     saveToWishlist();
-              //   },
-              //   icon: const Icon(
-              //     Icons.star_border_purple500_outlined,
-              //     color: primaryColor,
-              //   ),
-              // )
-            ],
-          ),
-          //Description and comment count
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DefaultTextStyle(
-                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                  child: Row(
-                    children: [
-                      Text(
-                          widget.data!.totalLikes.toString() == '0' ||
-                                  widget.data!.totalLikes.toString() == null
-                              ? '0 likes'
-                              : '${widget.data!.totalLikes.toString()} likes',
-                          //'${widget.data!.} likes',
-                          style: const TextStyle(
-                            color: primaryColor,
-                          )
-                          //Theme.of(context).textTheme.bodyText2,
-                          ),
-                      SizedBox(width: 30,),
-                      // Text(
-                      //     widget.data!.totalDislikes.toString() == '0' ||
-                      //             widget.data!.totalDislikes.toString() == null
-                      //         ? '0 Dislikes'
-                      //         : '${widget.data!.totalDislikes.toString()} Dislikes',
-                      //     //'${widget.data!.} likes',
-                      //     style: const TextStyle(
-                      //       color: primaryColor,
-                      //     )
-                      //     //Theme.of(context).textTheme.bodyText2,
-                      //     ),
-                    ],
-                  ),
-                ),
-                // Container(
-                //     width: double.infinity,
-                //     padding: const EdgeInsets.only(
-                //       top: 8,
-                //     ),
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         Text(
-                //           widget.data!.name.toString(),
-                //           style: const TextStyle(
-                //             fontWeight: FontWeight.bold,
-                //             color: primaryColor,
-                //           ),
-                //         ),
-                //         Text(widget.data!.description.toString(),
-                //             style: const TextStyle(
-                //               fontSize: 12,
-                //               color: primaryColor,
-                //             )),
-                //       ],
-                //     )),
-
-                // RichText(
-                //     text: TextSpan(
-                //         style: const TextStyle(color: primaryColor),
-                //         children: [
-                //       TextSpan(
-                //         text: widget.data!.name.toString(),
-                //         style: const TextStyle(
-                //           fontWeight: FontWeight.bold,
-                //           color: primaryColor,
-                //         ),
-                //       ),
-                //       TextSpan(
-                //           text: '  ${widget.data!.description.toString()}',
-                //           style: const TextStyle(
-                //             color: primaryColor,
-                //           )),
-                //     ])),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: GestureDetector(
-                      onTap: () {
-                        //   Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => CommentsScreen(
-                        //       snap: widget.snap,
-                        //     ),
-                        //   ),
-                        // );
-                      },
-                      child: commentLen > 0
-                          ? Text(
-                              'View all $commentLen comments',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: secondaryColor,
-                              ),
+                    child: Row(
+                      children: [
+                        Text(
+                            widget.data!.totalLikes.toString() == '0' ||
+                                    widget.data!.totalLikes.toString() == null
+                                ? '0 likes'
+                                : '${widget.data!.totalLikes.toString()} likes',
+                            //'${widget.data!.} likes',
+                            style: const TextStyle(
+                              color: primaryColor,
                             )
-                          : Container(),
+                            //Theme.of(context).textTheme.bodyText2,
+                            ),
+                        SizedBox(width: 30,),
+                        // Text(
+                        //     widget.data!.totalDislikes.toString() == '0' ||
+                        //             widget.data!.totalDislikes.toString() == null
+                        //         ? '0 Dislikes'
+                        //         : '${widget.data!.totalDislikes.toString()} Dislikes',
+                        //     //'${widget.data!.} likes',
+                        //     style: const TextStyle(
+                        //       color: primaryColor,
+                        //     )
+                        //     //Theme.of(context).textTheme.bodyText2,
+                        //     ),
+                      ],
                     ),
                   ),
-                ),
-                // Container(
-                //   padding: const EdgeInsets.symmetric(vertical: 4),
-                //   child: Text(
-                //     widget.data!.date.toString(),
-                //     // DateFormat.yMMMd().format(
-                //     //   widget.data!.date.
-                //     //  // widget.snap['datePublished'].toDate(),
-                //     // ),
-                //     style: const TextStyle(
-                //       fontSize: 12,
-                //       color: secondaryColor,
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
-          )
-        ],
+                  // Container(
+                  //     width: double.infinity,
+                  //     padding: const EdgeInsets.only(
+                  //       top: 8,
+                  //     ),
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           widget.data!.name.toString(),
+                  //           style: const TextStyle(
+                  //             fontWeight: FontWeight.bold,
+                  //             color: primaryColor,
+                  //           ),
+                  //         ),
+                  //         Text(widget.data!.description.toString(),
+                  //             style: const TextStyle(
+                  //               fontSize: 12,
+                  //               color: primaryColor,
+                  //             )),
+                  //       ],
+                  //     )),
+
+                  // RichText(
+                  //     text: TextSpan(
+                  //         style: const TextStyle(color: primaryColor),
+                  //         children: [
+                  //       TextSpan(
+                  //         text: widget.data!.name.toString(),
+                  //         style: const TextStyle(
+                  //           fontWeight: FontWeight.bold,
+                  //           color: primaryColor,
+                  //         ),
+                  //       ),
+                  //       TextSpan(
+                  //           text: '  ${widget.data!.description.toString()}',
+                  //           style: const TextStyle(
+                  //             color: primaryColor,
+                  //           )),
+                  //     ])),
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: GestureDetector(
+                        onTap: () {
+                          //   Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => CommentsScreen(
+                          //       snap: widget.snap,
+                          //     ),
+                          //   ),
+                          // );
+                        },
+                        child: commentLen > 0
+                            ? Text(
+                                'View all $commentLen comments',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: secondaryColor,
+                                ),
+                              )
+                            : Container(),
+                      ),
+                    ),
+                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(vertical: 4),
+                  //   child: Text(
+                  //     widget.data!.date.toString(),
+                  //     // DateFormat.yMMMd().format(
+                  //     //   widget.data!.date.
+                  //     //  // widget.snap['datePublished'].toDate(),
+                  //     // ),
+                  //     style: const TextStyle(
+                  //       fontSize: 12,
+                  //       color: secondaryColor,
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
